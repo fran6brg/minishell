@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 02:42:37 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 03:14:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 03:43:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,36 @@ void    print_str_split(char **s)
     {
         ft_printf("split[%d] = -%s-\n", i, s[i]);
     }
+}
+
+/*
+** free cmds
+*/
+
+void	free_cmds(char *cmd, char **cmd_tab)
+{
+	int i;
+
+    i = -1;
+    while (cmd_tab[++i])
+    	ft_strdel(&cmd_tab[i]);
+    free(cmd_tab);		
+    ft_strdel(&cmd);		
+}
+
+/*
+** free env list
+*/
+
+void   free_env(t_env *elem)
+{
+    t_env *tmp;
+
+	while (elem)
+	{
+		tmp = elem->next;
+		ft_strdel(&elem->name);
+		ft_strdel(&elem->value);
+		elem = tmp;
+	}
 }

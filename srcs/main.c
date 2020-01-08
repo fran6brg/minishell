@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 03:25:11 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 03:38:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ void	root(t_env *env, char *path, char **cmd_tab)
 		;
 	print_str_split(cmd_tab);
 	if (!ft_strcmp(cmd_tab[0], "exit"))
-		;
+	{
+		free_env(env);
+		exit(0);
+	}
 	else if (!ft_strcmp(cmd_tab[0], "env"))
 		;
 	else if (!ft_strcmp(cmd_tab[0], "setenv"))
@@ -74,7 +77,7 @@ int		store_env(char **env_tab, t_env **env)
 		var->name = ft_substr(env_tab[i], 0, (int)(ft_strchr(env_tab[i], '=') - env_tab[i]));
 		var->value = ft_substr(env_tab[i], (int)(ft_strchr(env_tab[i], '=') - env_tab[i]) + 1, ft_strlen(env_tab[i]));
 		var->next = NULL;
-		printf("----------------\n[%s] = [%s]\n", var->name, var->value);
+		// printf("----------------\n[%s] = [%s]\n", var->name, var->value);
 		if (last)
 			last->next = var;
 		else
@@ -93,6 +96,7 @@ int		main(int argc, char **argv, char **env_tab)
 {
 	t_env	*env;
 	char	*cmd;
+	char	**cmd_tab;
 	
   	(void)argc;
   	(void)argv;
@@ -103,8 +107,9 @@ int		main(int argc, char **argv, char **env_tab)
 	{
 		ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1);
 		get_next_line(0, &cmd);
-		root(env, var_value(env, "PATH"), ft_split(cmd, ' '));
-		ft_strdel(&cmd);
+		cmd_tab = ft_split(cmd, ' ');
+		root(env, var_value(env, "PATH"), cmd_tab);
+		free_cmds(cmd, cmd_tab);
 	}
 	return (0);
 }

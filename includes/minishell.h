@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 03:13:04 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 03:41:11 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ int		main(int argc, char **argv, char **env);
 **	------------ utils/.c
 */
 
-void	print_env(t_env *env_list);
+void	print_env(t_env *env);
 void    print_str_split(char **s);
+void	free_cmds(char *cmd, char **cmd_tab);
+void	free_env(t_env *env);
 
 #endif
