@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 04:53:06 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 05:16:29 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef	struct		s_env
 **	------------ main.c
 */
 
+char	*var_value(t_env *env, char *name);
 int		main(int argc, char **argv, char **env);
 
 /*
@@ -53,7 +54,7 @@ void	builtin_env(char **cmd_tab);
 void	builtin_setenv(char **cmd_tab);
 void	builtin_unsetenv(char **cmd_tab);
 void	builtin_echo(char **cmd_tab);
-void	builtin_cd(char **cmd_tab);
+void	builtin_cd(t_env *env, char *path, char **cmd_tab);
 
 /*
 **	------------ executables/.c

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 05:04:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 05:08:13 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	root(t_env *env, char *path, char **cmd_tab)
 	if (!ft_strcmp(cmd_tab[0], "echo"))
 		builtin_echo(cmd_tab);
 	else if (!ft_strcmp(cmd_tab[0], "cd"))
-		builtin_cd(cmd_tab);
+		builtin_cd(env, path, cmd_tab);
 	else if (!ft_strcmp(cmd_tab[0], "pwd"))
 		builtin_cd(cmd_tab);
 	else if (!ft_strcmp(cmd_tab[0], "export"))
