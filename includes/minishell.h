@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/07 19:38:50 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 02:11:25 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define	MINISHELL_H
 
 # include "libft.h"
+
 /*
 **	http://manpagesfr.free.fr/man/man2/wait.2.html
 */

@@ -6,31 +6,45 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2019/12/29 21:00:28 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 02:06:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+/*
+** ***************************** includes *************************************
+*/
+
+/*
+** libft ----------------------------------------------------------------------
+*/
+
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+
+/*
+** GNL ------------------------------------------------------------------------
+*/
+
 # include <limits.h>
 # include <fcntl.h>
 
 /*
-** GNL
+** printf ---------------------------------------------------------------------
 */
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
-
-int					get_next_line(const int fd, char **line);
+# include <string.h>
+# include <stdarg.h>
 
 /*
-** struct
+** ***************************** functions ************************************
+*/
+
+/*
+** libft ----------------------------------------------------------------------
 */
 
 typedef struct		s_list
@@ -145,5 +159,80 @@ void				ft_lstclear(t_list **lst, void (*del)(void*));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 					void (*del)(void *));
+
+
+/*
+** GNL ------------------------------------------------------------------------
+*/
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
+
+int					get_next_line(const int fd, char **line);
+
+/*
+** printf ---------------------------------------------------------------------
+*/
+
+typedef struct						s_options
+{
+	char							type;
+	char							*flags;
+	int								fpos;
+	int								flen;
+	int								neg;
+	int								left_justify;
+	int								sign;
+	int								space;
+	int								hashtag;
+	int								left_zeros;
+	int								point;
+	int								width;
+	int								width_zero;
+	int								precision;
+	int								precision_zero;
+	int								wildcard;
+	int								h;
+	int								hh;
+	int								l;
+	int								ll;
+	int								j;
+	int								z;
+	int								sign_is_print;
+	char							*output;
+	int								writezero;
+	int								ret;
+	struct s_options				*next;
+}									t_options;
+
+# define NB_ACCEPTED_OPTIONS (13)
+
+typedef struct			s_func
+{
+	char	option;
+	int		(*f)(t_options*, va_list*);
+}						t_functions_pointers;
+
+int			ft_printf(const char *f, ...);
+int			extract_options(const char *f, t_options **opts, va_list *args);
+int			init_option(const char *f, t_options *new, int i, va_list *args);
+int			compute_flen(const char *formt, int i);
+int			ft_print_char(t_options *opt, va_list *args);
+int			ft_print_modulo(t_options *opt, va_list *args);
+int			handle_single_percent(const char *f, int i);
+int			ft_print_string(t_options *opt, va_list *args);
+int			helper_str_pad(t_options *opt, int ln, int aftr);
+int			ft_print_integer(t_options *opt, va_list *args);
+int			ft_print_base(t_options *opt, va_list *args);
+int			get_base(t_options *opt);
+int			helper_nb_pad(t_options *opt, int l, int a, long long n);
+int			ft_print_floats(t_options *opt, va_list *args);
+int			add_nchar_ret(t_options *opt, char c, int n);
+int			add_str_ret(t_options *opt, char *str);
+int			add_nstr_ret(t_options *opt, char *str, int n);
+int			add_nbr_to_output(t_options *option, intmax_t nbr, char *base);
+int			add_unbr_to_output(t_options *option, uintmax_t nbr, char *base);
+void		ft_print_output(t_options *option);
 
 #endif

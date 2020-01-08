@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2019/12/29 20:59:03 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/08 02:19:48 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,7 +92,17 @@ SRCS=ft_putchar.c \
 	ft_lstiter.c \
 	ft_lstmap.c \
 	ft_str_end_with.c \
-	get_next_line.c
+	ft_get_next_line.c \
+	ft_format_parse.c \
+	ft_printf.c \
+	ft_print_cs.c \
+	ft_print_di.c \
+	ft_print_base.c \
+	ft_print_f.c \
+	ft_print_nbr_padding.c \
+	ft_output_utils.c \
+	ft_set_option.c
+
 
 OBJS=${SRCS:.c=.o}
 

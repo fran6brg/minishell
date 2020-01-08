@@ -6,11 +6,13 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/07 18:43:59 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/08 02:24:39 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
+
+CC = gcc
 
 FLAGS = -Wall -Wextra -Werror
 
@@ -18,7 +20,7 @@ SRCS = srcs/main.c # srcs/builtins/*.c srcs/executables/*.c
 
 OBJS = ${SRCS:.c=.o}
 
-LIBS = -L. libftprintf.a
+LIB = -L. libft/libft.a
 
 HEADER = -I ./includes/
 
@@ -28,13 +30,18 @@ all: $(NAME)
 	gcc $(FLAGS) $(HEADER) -c $< -o $@
 
 $(NAME): $(OBJS)
-	gcc $(OBJS) -o $(NAME) $(LIBS)
+	gcc $(OBJS) -o $(NAME) $(LIB)
+
+libft:
+	@make -C libft
 
 clean:
-	rm -f srcs/*.o
+	@/bin/rm -f $(OBJS)
+	@make clean -C libft
 
 fclean: clean
-	rm -f $(NAME)
+	@/bin/rm -f $(NAME)
+	@make fclean -C libft
 
 re: fclean all
 
