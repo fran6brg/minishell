@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/08 02:24:39 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/08 02:54:42 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = gcc
 
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = srcs/main.c # srcs/builtins/*.c srcs/executables/*.c
+SRCS = srcs/main.c srcs/utils/utils.c # srcs/builtins/*.c srcs/executables/*.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -27,22 +27,18 @@ HEADER = -I ./includes/
 all: $(NAME)
 
 .c.o:
-	gcc $(FLAGS) $(HEADER) -c $< -o $@
+	@gcc $(FLAGS) $(HEADER) -c $< -o $@
 
 $(NAME): $(OBJS)
-	gcc $(OBJS) -o $(NAME) $(LIB)
-
-libft:
-	@make -C libft
+	# @make -C libft
+	@gcc $(OBJS) -o $(NAME) $(LIB)
 
 clean:
 	@/bin/rm -f $(OBJS)
-	@make clean -C libft
+	# @make clean -C libft
 
 fclean: clean
 	@/bin/rm -f $(NAME)
-	@make fclean -C libft
+	# @make fclean -C libft
 
 re: fclean all
-
-.PHONY: all clean fclean re

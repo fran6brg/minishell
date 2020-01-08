@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 02:11:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 03:13:04 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,25 @@ typedef	struct		s_env
 }					t_env;
 
 /*
-**	------------ main.c         ------------
+**	------------ main.c
 */
 
-int	main(int argc, char **argv, char **env);
+int		main(int argc, char **argv, char **env);
 
 /*
-**	------------ builtins/.c    ------------
+**	------------ builtins/.c
 */
 
 
 /*
-**	------------ executables/.c ------------
+**	------------ executables/.c
 */
+
+/*
+**	------------ utils/.c
+*/
+
+void	print_env(t_env *env_list);
+void    print_str_split(char **s);
 
 #endif
