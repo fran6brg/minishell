@@ -6,23 +6,26 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/08 02:54:42 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/08 04:28:48 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell
+NAME 	= minishell
 
-CC = gcc
+CC		= gcc
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS 	= -Wall -Wextra -Werror
 
-SRCS = srcs/main.c srcs/utils/utils.c # srcs/builtins/*.c srcs/executables/*.c
+SRCS 	= srcs/main.c \
+		srcs/builtins/echo.c srcs/builtins/cd.c srcs/builtins/env.c \
+		srcs/executables/exec.c \
+		srcs/utils/utils.c
 
-OBJS = ${SRCS:.c=.o}
+OBJS 	= ${SRCS:.c=.o}
 
-LIB = -L. libft/libft.a
+LIB 	= -L. libft/libft.a
 
-HEADER = -I ./includes/
+HEADER 	= -I ./includes/
 
 all: $(NAME)
 

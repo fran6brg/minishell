@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 03:38:35 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/08 05:04:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,25 @@ void	root(t_env *env, char *path, char **cmd_tab)
 {
 	if (env || path)
 		;
-	print_str_split(cmd_tab);
-	if (!ft_strcmp(cmd_tab[0], "exit"))
+	if (!ft_strcmp(cmd_tab[0], "echo"))
+		builtin_echo(cmd_tab);
+	else if (!ft_strcmp(cmd_tab[0], "cd"))
+		builtin_cd(cmd_tab);
+	else if (!ft_strcmp(cmd_tab[0], "pwd"))
+		builtin_cd(cmd_tab);
+	else if (!ft_strcmp(cmd_tab[0], "export"))
+		builtin_export(cmd_tab);
+	else if (!ft_strcmp(cmd_tab[0], "unset"))
+		builtin_unset(cmd_tab);
+	else if (!ft_strcmp(cmd_tab[0], "env"))
+		builtin_env(cmd_tab);
+	else if (!ft_strcmp(cmd_tab[0], "exit"))
 	{
 		free_env(env);
 		exit(0);
 	}
-	else if (!ft_strcmp(cmd_tab[0], "env"))
-		;
-	else if (!ft_strcmp(cmd_tab[0], "setenv"))
-		;
-	else if (!ft_strcmp(cmd_tab[0], "unsetenv"))
-		;
-	else if (!ft_strcmp(cmd_tab[0], "echo"))
-		;
-	else if (!ft_strcmp(cmd_tab[0], "cd"))
-		;
 	else
-		;
+		exec(cmd_tab);
 }
 
 /*
