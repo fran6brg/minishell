@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 05:08:13 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/09 01:49:13 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,24 @@
 
 void	root(t_env *env, char *path, char **cmd_tab)
 {
-	if (env || path)
-		;
+    // print_str_split(cmd_tab);
 	if (!ft_strcmp(cmd_tab[0], "echo"))
 		builtin_echo(cmd_tab);
 	else if (!ft_strcmp(cmd_tab[0], "cd"))
-		builtin_cd(env, path, cmd_tab);
+		builtin_cd(env, cmd_tab);
 	else if (!ft_strcmp(cmd_tab[0], "pwd"))
-		builtin_cd(cmd_tab);
-	else if (!ft_strcmp(cmd_tab[0], "export"))
-		builtin_export(cmd_tab);
+		builtin_pwd(env, path, cmd_tab);
+	else if (!ft_strcmp(cmd_tab[0], "setenv")
+	|| !ft_strcmp(cmd_tab[0], "export"))
+		builtin_setenv(cmd_tab, env);
 	else if (!ft_strcmp(cmd_tab[0], "unset"))
-		builtin_unset(cmd_tab);
+		builtin_unsetenv(cmd_tab, env);
 	else if (!ft_strcmp(cmd_tab[0], "env"))
 		builtin_env(cmd_tab);
 	else if (!ft_strcmp(cmd_tab[0], "exit"))
 	{
 		free_env(env);
-		exit(0);
+		exit(1);
 	}
 	else
 		exec(cmd_tab);

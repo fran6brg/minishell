@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/09 01:50:51 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/09 00:36:06 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/09 00:37:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	exec(char **cmd_tab)
+void	builtin_pwd(t_env *env, char *path, char **cmd_tab)
 {
-    print_str_split(cmd_tab);
+	if (env || path || cmd_tab)
+        ;
 }

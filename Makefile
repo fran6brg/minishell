@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/08 04:28:48 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/09 01:36:25 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ FLAGS 	= -Wall -Wextra -Werror
 
 SRCS 	= srcs/main.c \
 		srcs/builtins/echo.c srcs/builtins/cd.c srcs/builtins/env.c \
+		srcs/builtins/pwd.c \
 		srcs/executables/exec.c \
 		srcs/utils/utils.c
 
