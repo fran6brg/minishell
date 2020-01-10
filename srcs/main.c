@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 21:55:52 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 22:34:39 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int		store_env(char **env_tab, t_env **env)
 		var->name = ft_substr(env_tab[i], 0, (int)(ft_strchr(env_tab[i], '=') - env_tab[i]));
 		var->value = ft_substr(env_tab[i], (int)(ft_strchr(env_tab[i], '=') - env_tab[i]) + 1, ft_strlen(env_tab[i]));
 		var->next = NULL;
-		// printf("----------------\n[%s] = [%s]\n", var->name, var->value);
 		if (last)
 			last->next = var;
 		else
@@ -116,6 +115,6 @@ int		main(int argc, char **argv, char **env_tab)
 
 /*
 ** TODO
-** s assuer que ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1); work at home
+** s'assuer que ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1); work at home
 ** remove # include <stdio.h> in .h
 */

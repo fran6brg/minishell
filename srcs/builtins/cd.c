@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 20:38:09 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 22:08:45 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@
 
 int		change_dir(char **cmd_tab, char *dest)
 {
-	if (chdir(dest) == 0)
+	int ret = chdir(dest);
+	printf("chdir(%s) = %d\n", dest, chdir(dest));
+	if (ret == 0)
 		return (1);
 	else
 	{
@@ -65,7 +67,7 @@ void	go_home(t_env *env, char *home, char **cmd_tab)
   	builtin_setenv(ft_split(ft_strjoin("cd OLDPWD ", tmp_path), ' '), env);
   	tmp_path = getcwd(buf, PATH_MAX - 1);
   	builtin_setenv(ft_split(ft_strjoin("setenv PWD ", tmp_path), ' '), env);
-	ft_strdel(&tmp_path);
+	// ft_strdel(&tmp_path);
 }
 
 /*
@@ -117,24 +119,20 @@ void	go_path(t_env *env, char **cmd_tab)
 ** int chdir(const char *path);
 ** renvoie 0 s'il réussi, ou -1 s'il échoue
 ** http://manpagesfr.free.fr/man/man2/chdir.2.html
-**
-** nb_arg = -1; de sorte qu'on ne compte pas 'cd' qui est la cmd
 */
 
 void	builtin_cd(t_env *env, char **cmd_tab)
 {
-	int nb_arg;
+	int nbarg;
 
 	print_str_split(cmd_tab);
-	nb_arg = -1;
-	while (cmd_tab[nb_arg] != 0)
-		nb_arg++;
-	printf("nb_arg = %d\n", nb_arg);
+	nbarg = nb_arg(cmd_tab);
+	printf("nbarg = %d\n", nbarg);
 	// error
-	if (nb_arg == 2)
+	if (nbarg == 3)
 		ft_printf("cd: string not in pwd: %s\n", cmd_tab[1]);
 	// error
-	else if (nb_arg > 2)
+	else if (nbarg > 3)
 		ft_printf("cd: too many arguments\n");
 	// <rien> ou ~
 	else if (!cmd_tab[1]
