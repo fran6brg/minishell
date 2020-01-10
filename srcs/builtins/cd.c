@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/09 02:06:14 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 20:38:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,28 @@ int		change_dir(char **cmd_tab, char *dest)
 
 void	go_home(t_env *env, char *home, char **cmd_tab)
 {
-	char *cwd;
+	char *tmp_path;
   	char buf[PATH_MAX - 1];
 
-	cwd = getcwd(buf, PATH_MAX - 1);
+	tmp_path = getcwd(buf, PATH_MAX - 1);
 	if (!change_dir(cmd_tab, home))
     	return ;
-  	builtin_setenv(ft_split(ft_strjoin("cd OLDPWD ", cwd), ' '), env);
-  	cwd = getcwd(buf, PATH_MAX - 1);
-  	builtin_setenv(ft_split(ft_strjoin("setenv PWD ", cwd), ' '), env);
+  	builtin_setenv(ft_split(ft_strjoin("cd OLDPWD ", tmp_path), ' '), env);
+  	tmp_path = getcwd(buf, PATH_MAX - 1);
+  	builtin_setenv(ft_split(ft_strjoin("setenv PWD ", tmp_path), ' '), env);
+	ft_strdel(&tmp_path);
+}
+
+/*
+** int chdir(const char *path);
+** renvoie 0 s'il réussi, ou -1 s'il échoue
+** http://manpagesfr.free.fr/man/man2/chdir.2.html
+*/
+
+void	go_slash(t_env *env, char **cmd_tab)
+{
+	if (env || cmd_tab)
+		;
 }
 
 /*
@@ -100,20 +113,38 @@ void	go_path(t_env *env, char **cmd_tab)
 	builtin_setenv(ft_split(ft_strjoin("setenv PWD ", cwd), ' '), env);
 }
 
+/*
+** int chdir(const char *path);
+** renvoie 0 s'il réussi, ou -1 s'il échoue
+** http://manpagesfr.free.fr/man/man2/chdir.2.html
+**
+** nb_arg = -1; de sorte qu'on ne compte pas 'cd' qui est la cmd
+*/
+
 void	builtin_cd(t_env *env, char **cmd_tab)
 {
-	int i;
+	int nb_arg;
 
 	print_str_split(cmd_tab);
-	i = -1;
-	while (cmd_tab[++i])
-		;
-	if (i == 3)
+	nb_arg = -1;
+	while (cmd_tab[nb_arg] != 0)
+		nb_arg++;
+	printf("nb_arg = %d\n", nb_arg);
+	// error
+	if (nb_arg == 2)
 		ft_printf("cd: string not in pwd: %s\n", cmd_tab[1]);
-	else if (i > 3)
+	// error
+	else if (nb_arg > 2)
 		ft_printf("cd: too many arguments\n");
-	else if (!cmd_tab[1] || cmd_tab[1][0] == '~')
+	// <rien> ou ~
+	else if (!cmd_tab[1]
+	|| (cmd_tab[1][0] == '~' && cmd_tab[1][1] == '\0'))
 		go_home(env, var_value(env, "HOME"), cmd_tab);
+	// ~/ ou ~/...
+	else if ((cmd_tab[1][0] == '~' && cmd_tab[1][1] == '\0')
+	|| (cmd_tab[1][0] == '~' && cmd_tab[1][1] == '/'))
+		go_slash(env, cmd_tab);
+	// path/... ou /path/...
 	else
 		go_path(env, cmd_tab);
 }

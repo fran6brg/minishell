@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/09 01:49:13 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 20:48:43 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,26 @@
 
 void	root(t_env *env, char *path, char **cmd_tab)
 {
-    // print_str_split(cmd_tab);
-	if (!ft_strcmp(cmd_tab[0], "echo"))
+	if (ft_strequ(cmd_tab[0], "echo"))
 		builtin_echo(cmd_tab);
-	else if (!ft_strcmp(cmd_tab[0], "cd"))
+	else if (ft_strequ(cmd_tab[0], "cd"))
 		builtin_cd(env, cmd_tab);
-	else if (!ft_strcmp(cmd_tab[0], "pwd"))
-		builtin_pwd(env, path, cmd_tab);
-	else if (!ft_strcmp(cmd_tab[0], "setenv")
-	|| !ft_strcmp(cmd_tab[0], "export"))
+	else if (ft_strequ(cmd_tab[0], "pwd"))
+		builtin_pwd(env);
+	else if (ft_strequ(cmd_tab[0], "setenv")
+	|| ft_strequ(cmd_tab[0], "export"))
 		builtin_setenv(cmd_tab, env);
-	else if (!ft_strcmp(cmd_tab[0], "unset"))
+	else if (ft_strequ(cmd_tab[0], "unset"))
 		builtin_unsetenv(cmd_tab, env);
-	else if (!ft_strcmp(cmd_tab[0], "env"))
-		builtin_env(cmd_tab);
-	else if (!ft_strcmp(cmd_tab[0], "exit"))
+	else if (ft_strequ(cmd_tab[0], "env"))
+		builtin_env(env);
+	else if (ft_strequ(cmd_tab[0], "exit"))
 	{
 		free_env(env);
 		exit(1);
 	}
 	else
-		exec(cmd_tab);
+		exec(cmd_tab, path);
 }
 
 /*
@@ -73,7 +72,7 @@ int		store_env(char **env_tab, t_env **env)
 	last = NULL;
 	while (env_tab[++i])
 	{
-		if (!(var = (t_env *)malloc(sizeof(t_env) * 1)))
+		if (!(var = (t_env *)malloc(sizeof(t_env))))
 			return (0);
 		var->name = ft_substr(env_tab[i], 0, (int)(ft_strchr(env_tab[i], '=') - env_tab[i]));
 		var->value = ft_substr(env_tab[i], (int)(ft_strchr(env_tab[i], '=') - env_tab[i]) + 1, ft_strlen(env_tab[i]));
@@ -114,3 +113,9 @@ int		main(int argc, char **argv, char **env_tab)
 	}
 	return (0);
 }
+
+/*
+** TODO
+** s assuer que ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1); work at home
+** remove # include <stdio.h> in .h
+*/

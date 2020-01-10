@@ -6,14 +6,17 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 04:45:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 19:13:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** echo et l’option ’-n’
+** echo écrit chaque message sur la sortie standard, avec  un
+** espace  entre  chacun  d'eux, et un saut de ligne après le
+** dernier.
+** option ’-n’ = ne pas effectuer le saut de ligne final.
 ** cas particuliers :
 ** . echo -n -n n'affiche rien
 */

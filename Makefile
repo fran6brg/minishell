@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/09 01:36:25 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/10 20:32:30 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS 	= srcs/main.c \
 		srcs/builtins/echo.c srcs/builtins/cd.c srcs/builtins/env.c \
 		srcs/builtins/pwd.c \
 		srcs/executables/exec.c \
-		srcs/utils/utils.c
+		srcs/utils/free.c srcs/utils/utils.c
 
 OBJS 	= ${SRCS:.c=.o}
 
