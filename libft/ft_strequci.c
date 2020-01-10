@@ -6,11 +6,15 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 20:50:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 21:19:48 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 21:51:25 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+/*
+** str equal case insensitive
+*/
 
 int		ft_strequci(char *s1, char *s2)
 {

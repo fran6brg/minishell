@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/01/08 02:19:48 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/10 21:26:14 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -101,7 +101,9 @@ SRCS=ft_putchar.c \
 	ft_print_f.c \
 	ft_print_nbr_padding.c \
 	ft_output_utils.c \
-	ft_set_option.c
+	ft_set_option.c \
+	ft_letterequci.c \
+	ft_strequci.c
 
 
 OBJS=${SRCS:.c=.o}
