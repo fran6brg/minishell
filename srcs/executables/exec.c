@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 00:18:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 02:28:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,17 @@ char	*check(char **cmd_tab, struct stat *s, char *path, char *exec_path)
 ** int execv(const char *path, char *const argv[]);
 ** http://manpagesfr.free.fr/man/man3/exec.3.html
 **
-** pid_t wait(int *status);
+** pid_t fork(void);
+** En cas de succès, le PID du fils est renvoyé au processus parent, et 0 est
+** renvoyé au processus fils. En cas d'échec -1 est renvoyé dans le contexte du
+** parent, aucun processus fils n'est créé, et errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man2/fork.2.html
+**
 ** pid_t waitpid(pid_t pid, int *status, int options);
 ** http://manpages.ubuntu.com/manpages/xenial/fr/man2/wait.2.html
+**
+** int kill(pid_t pid, int sig);
+** http://manpagesfr.free.fr/man/man2/kill.2.html
 */
 
 int		execute(char **cmd_tab, char *path)
@@ -79,6 +87,7 @@ int		execute(char **cmd_tab, char *path)
 	pid_t pid;
 	char *exec_path;
 	struct stat s;
+	int	status;
 
 	exec_path = 0;
 	if (!(exec_path = check(cmd_tab, &s, path, exec_path)))
@@ -92,6 +101,8 @@ int		execute(char **cmd_tab, char *path)
 		ft_putstr("Fork Failed\n");
 		return (-1);
 	}
-	wait(&pid);
+	status = 0;
+	waitpid(pid, &status, 0);
+	kill(pid, SIGTERM);
 	return (0);
 }

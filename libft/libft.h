@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 21:25:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 02:44:13 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 char				*ft_strmap(char const *s, char (*f)(char));
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				**ft_split(char const *s, char c);
+char				**ft_split_set(char const *s, char *separators);
 int					ft_str_end_with(char *str, char *end);
 int					ft_letterequci(char c1, char c2);
 int					ft_strequci(char *s1, char *s2);

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 23:46:06 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 04:39:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <stdio.h>
+# include <signal.h>
 
 /*
 **	structs
@@ -89,7 +90,8 @@ int		nb_arg(char **s);
 **	free.c
 */
 
-void	free_cmds(char *cmd, char **cmd_tab);
+void	free_str_tab(char **str_tab);
+void	free_cmds(char *line, char **cmds);
 void	free_env(t_env *env);
 
 #endif
