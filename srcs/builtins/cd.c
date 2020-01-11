@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 07:08:59 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 07:26:28 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int		change_dir(char **cmd_tab, char *dest)
 		return (1);
 	else
 	{
-		printf("2) chdir(%s) = %d\n", dest, chdir(dest));
+		// printf("2) chdir(%s) = %d\n", dest, chdir(dest)); // pour debug
 		ft_printf("cd: ");
 		if (access(dest, F_OK) == -1)
 			ft_printf("no such file or directory: ");
@@ -145,8 +145,7 @@ void	builtin_cd(t_env *env, char **cmd_tab)
 
 	// print_str_split(cmd_tab); // pour debug
 	nb_arg = count_arg(cmd_tab);
-	printf("nb_arg = %d\n", nb_arg);
-	// error
+	// printf("nb_arg = %d\n", nb_arg); // pour debug
 	if (nb_arg >= 3)
 		return (print_cd_error(nb_arg, cmd_tab));
 	// cd <rien> || cd ~ || cd $HOME
