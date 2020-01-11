@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 22:34:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 23:46:27 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	root(t_env *env, char *path, char **cmd_tab)
 		exit(1);
 	}
 	else
-		exec(cmd_tab, path);
+		execute(cmd_tab, path);
 }
 
 /*

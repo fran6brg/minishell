@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 21:28:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/10 23:46:06 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	builtin_setenv(char **cmds, t_env *env);
 **	exec.c
 */
 
-void	exec(char **cmd_tab, char *path);
+int		execute(char **cmd_tab, char *path);
 
 /*
 **	free.c
