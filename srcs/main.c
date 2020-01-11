@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 04:44:58 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 05:52:51 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	root(t_env *env, char *path, char **cmd_tab)
 {
 	// print_str_split(cmd_tab);
 	if (ft_strequci(cmd_tab[0], "echo"))
-		builtin_echo(cmd_tab);
+		builtin_echo(env, cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "cd"))
 		builtin_cd(env, cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "pwd"))
@@ -87,59 +87,6 @@ int		store_env(char **env_tab, t_env **env)
 	return (1);
 }
 
-// int		ft_split_cmd_tab(char **cmd_tab)
-// {
-// 	int		i;
-// 	int		j;
-// 	int		semicolon;
-// 	int		k;
-// 	int		l;
-// 	char	***cmd_tabs;
-// 	char	**tmp;
-
-// 	i = -1;
-// 	semicolon = 0;
-// 	while (cmd_tab[++i])
-// 	{
-// 		j = -1;
-// 		while (cmd_tab[i][++j])
-// 		{
-// 			if (cmd_tab[i][j] == ';')
-// 					semicolon += 1;
-// 		}
-// 	}
-// 	if (semicolon >= 1)
-// 	{
-// 		cmd_tabs = malloc(sizeof(char **) * (semicolon + 1 + 1));
-// 		k = -1;
-// 		while (++k < semicolon + 1)
-// 		{
-// 			i = -1;
-// 			while (cmd_tab[i][++j])
-// 			{
-// 				if (cmd_tab[i][j] == ';')
-// 				{
-// 					cmd_tabs[k] = malloc(sizeof(char **) * (i + 1 + (ft_str_end_with(cmd_tab[j], ";") ? 0 : 1) + 1));
-// 					l = -1;
-// 					while (++l < i - 1)
-// 					{
-// 						cmd_tabs[k][l] = ft_strdup(cmd_tab[l]);
-// 					}
-// 					if ((int)(ft_strrchr(cmd_tab[l], ';') - cmd_tab[l][0]) == 0)
-// 					{
-// 						cmd_tabs[k][l] = ft_strdup(";");
-// 					}
-// 					else
-// 						cmd_tabs[k][l] = ft_substr(cmd_tab[l], 0, (int)(ft_strrchr(cmd_tab[l], ';') - cmd_tab[l][0]));
-// 					if (!ft_str_end_with(cmd_tab[l], ";"))
-// 						cmd_tabs[k][++l] = ft_substr(cmd_tab[l], (int)(ft_strrchr(cmd_tab[l], ';') - cmd_tab[l][0]), ft_strlen(cmd_tab[l]));
-// 				}
-// 			}
-// 			cmd_tabs[k + 1] = 0;
-// 		}
-// 	}
-// }
-
 /*
 ** 3e argument de la fonction main == l’ensemble des variables d’environment
 */
@@ -152,11 +99,10 @@ int		main(int argc, char **argv, char **env_tab)
 	char	**cmd_tab;
 	int		i;
 	
-  	(void)argc;
-  	(void)argv;
-	env = NULL;
+	if (argc > 1 && argv[argc - 1])
+		;
 	store_env(env_tab, &env);
-	while (1)
+	while (42)
 	{
 		ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1);
 		get_next_line(0, &line);
@@ -165,7 +111,6 @@ int		main(int argc, char **argv, char **env_tab)
 		else
 		{
 			cmds = ft_split_set(line, ";");
-			// print_str_split(cmds);
 			i = -1;
 			while (cmds[++i])
 			{
@@ -174,7 +119,7 @@ int		main(int argc, char **argv, char **env_tab)
 				free_str_tab(cmd_tab);
 			}
 			free_cmds(line, cmds);
-		}		
+		}
 	}
 	return (0);
 }
@@ -184,4 +129,5 @@ int		main(int argc, char **argv, char **env_tab)
 ** s'assuer que ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1); work at home
 ** remove # include <stdio.h> in .h
 ** free str tab dans libft
+** ls $VAR
 */

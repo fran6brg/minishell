@@ -6,11 +6,34 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 23:49:10 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 06:16:43 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/*
+** is_env_var()
+*/
+
+int		is_env_var(t_env *env, char *arg)
+{
+	t_env   *var;
+	
+	var = env;
+	while (var)
+	{
+		if (ft_strequci(var->name, arg))
+			return (1);
+		var = var->next;
+	}
+	return (0);
+}
+
+/*
+** builtin_env()
+** print toutes les var d'env
+*/
 
 void	builtin_env(t_env *env)
 {
@@ -26,9 +49,11 @@ void	builtin_env(t_env *env)
 
 /*
 ** builtin_setenv() ajoute une var d'env
-** Si elle existe déja, la valeur de la variable est modifiée
-** Autrement, une nouvelle variable est créée
-** NB : setenv n'existe pas sur ZSH, à la place il y a export Name=Value
+** si elle existe déja, la valeur de la variable est modifiée
+** autrement, une nouvelle variable est créée
+**
+** observations : 
+** setenv n'existe pas sur ZSH, à la place il y a export Name=Value
 */
 
 void    builtin_setenv(char **cmd_tab, t_env *env)
@@ -36,7 +61,7 @@ void    builtin_setenv(char **cmd_tab, t_env *env)
 	t_env   *var;
 	t_env   *new;
 
-	if (nb_arg(cmd_tab) != 3)
+	if (count_arg(cmd_tab) != 3)
 		return ;
 	var = env;
 	while (var)
@@ -71,7 +96,7 @@ void	 builtin_unsetenv(char **cmd_tab, t_env *env)
 	t_env	 *current;
 	t_env	 *next;
 
-	if (nb_arg(cmd_tab) != 2)
+	if (count_arg(cmd_tab) != 2)
 		return ;
 	current = env;
 	previous = env;

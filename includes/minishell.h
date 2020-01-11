@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 04:39:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 06:18:13 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		main(int argc, char **argv, char **env);
 **	echo.c
 */
 
-void	builtin_echo(char **cmd_tab);
+void	builtin_echo(t_env *env, char **cmd_tab);
 
 /*
 **	cd.c
@@ -57,6 +57,7 @@ void	builtin_echo(char **cmd_tab);
 int		change_dir(char **cmd_tab, char *dest);
 void	go_home(t_env *env, char *home, char **cmd_tab);
 void	go_path(t_env *env, char **cmd_tab);
+void	print_cd_error(int nb_arg, char **cmd_tab);
 void	builtin_cd(t_env *env, char **cmd_tab);
 
 /*
@@ -69,6 +70,7 @@ void	builtin_pwd(t_env *env);
 **	env.c
 */
 
+int		is_env_var(t_env *env, char *arg);
 void	builtin_env(t_env *env);
 void	builtin_unsetenv(char **cmds, t_env *env);
 void	builtin_setenv(char **cmds, t_env *env);
@@ -84,7 +86,7 @@ int		execute(char **cmd_tab, char *path);
 */
 
 void    print_str_split(char **s);
-int		nb_arg(char **s);
+int		count_arg(char **s);
 
 /*
 **	free.c

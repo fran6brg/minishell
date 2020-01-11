@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 02:42:37 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 04:33:16 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 06:16:43 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void    print_str_split(char **s)
 ** count_arg
 */
 
-int    nb_arg(char **s)
+int    count_arg(char **s)
 {
     int i;
 

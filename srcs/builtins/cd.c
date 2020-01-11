@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/10 22:08:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 06:20:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@
 int		change_dir(char **cmd_tab, char *dest)
 {
 	int ret = chdir(dest);
-	printf("chdir(%s) = %d\n", dest, chdir(dest));
+	printf("1) chdir(%s) = %d\n", dest, ret);
 	if (ret == 0)
 		return (1);
 	else
 	{
-		printf("chdir(%s) == %d\n", dest, chdir(dest));
+		printf("2) chdir(%s) = %d\n", dest, chdir(dest));
 		ft_printf("cd: ");
 		if (access(dest, F_OK) == -1)
 			ft_printf("no such file or directory: ");
@@ -76,43 +76,25 @@ void	go_home(t_env *env, char *home, char **cmd_tab)
 ** http://manpagesfr.free.fr/man/man2/chdir.2.html
 */
 
-void	go_slash(t_env *env, char **cmd_tab)
-{
-	if (env || cmd_tab)
-		;
-}
-
-/*
-** int chdir(const char *path);
-** renvoie 0 s'il réussi, ou -1 s'il échoue
-** http://manpagesfr.free.fr/man/man2/chdir.2.html
-*/
-
 void	go_path(t_env *env, char **cmd_tab)
 {
-	int slash;
 	char *cwd;
 	char buf[PATH_MAX - 1];
 
-	// ?
-	if (cmd_tab[1] && cmd_tab[1][0] == '~')
-	{
-		chdir(var_value(env, "HOME"));
-		slash = 2;
-	}
-	// ?
-	else if (cmd_tab[1] && cmd_tab[1][0] == '/' && cmd_tab[1][1])
-		slash = 1;
-	else
-	// ?
-		slash = 0;
 	cwd = getcwd(buf, PATH_MAX - 1);
-	// ?
-	if (!change_dir(cmd_tab, cmd_tab[1] + slash))
+	if (!change_dir(cmd_tab, cmd_tab[1]))
 		return ;
 	builtin_setenv(ft_split(ft_strjoin("cd OLDPWD ", cwd), ' '), env);
 	cwd = getcwd(buf, PATH_MAX - 1);
 	builtin_setenv(ft_split(ft_strjoin("setenv PWD ", cwd), ' '), env);
+}
+
+void	print_cd_error(int nb_arg, char **cmd_tab)
+{
+	if (nb_arg == 3)
+		ft_printf("cd: string not in pwd: %s\n", cmd_tab[1]);
+	else if (nb_arg > 3)
+		ft_printf("cd: too many arguments\n");
 }
 
 /*
@@ -123,25 +105,23 @@ void	go_path(t_env *env, char **cmd_tab)
 
 void	builtin_cd(t_env *env, char **cmd_tab)
 {
-	int nbarg;
+	int nb_arg;
 
-	print_str_split(cmd_tab);
-	nbarg = nb_arg(cmd_tab);
-	printf("nbarg = %d\n", nbarg);
+	// print_str_split(cmd_tab);
+	nb_arg = count_arg(cmd_tab);
+	printf("nb_arg = %d\n", nb_arg);
 	// error
-	if (nbarg == 3)
-		ft_printf("cd: string not in pwd: %s\n", cmd_tab[1]);
-	// error
-	else if (nbarg > 3)
-		ft_printf("cd: too many arguments\n");
-	// <rien> ou ~
+	if (nb_arg >= 3)
+		return (print_cd_error(nb_arg, cmd_tab));
+	// <rien> ou ~ ou $HOME
 	else if (!cmd_tab[1]
-	|| (cmd_tab[1][0] == '~' && cmd_tab[1][1] == '\0'))
+	|| (cmd_tab[1][0] == '~' && !ft_isalpha(cmd_tab[1][1]))
+	|| ft_strequci(cmd_tab[1], "$HOME"))
 		go_home(env, var_value(env, "HOME"), cmd_tab);
 	// ~/ ou ~/...
 	else if ((cmd_tab[1][0] == '~' && cmd_tab[1][1] == '\0')
 	|| (cmd_tab[1][0] == '~' && cmd_tab[1][1] == '/'))
-		go_slash(env, cmd_tab);
+		;
 	// path/... ou /path/...
 	else
 		go_path(env, cmd_tab);
