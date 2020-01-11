@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 05:52:51 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 07:16:08 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		main(int argc, char **argv, char **env_tab)
 	store_env(env_tab, &env);
 	while (42)
 	{
-		ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1);
+		ft_printf("~ %s%s%s > ", COL_GRN, ft_strrchr(var_value(env, "PWD"), '/') + 1, COL_NRM);
 		get_next_line(0, &line);
 		if (ft_strstr(line, ";;"))
 			ft_printf("zsh: parse error near `;;'\n");
@@ -126,8 +126,7 @@ int		main(int argc, char **argv, char **env_tab)
 
 /*
 ** TODO
-** s'assuer que ft_printf("~ %s > ", ft_strrchr(var_value(env, "PWD"), '/') + 1); work at home
 ** remove # include <stdio.h> in .h
-** free str tab dans libft
-** ls $VAR
+** mettre free str tab dans libft
+** ls $VAR ; ls ~
 */

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 06:20:52 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 07:08:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 int		change_dir(char **cmd_tab, char *dest)
 {
 	int ret = chdir(dest);
-	printf("1) chdir(%s) = %d\n", dest, ret);
+	// printf("1) chdir(%s) = %d\n", dest, ret); // pour debug
 	if (ret == 0)
 		return (1);
 	else
@@ -51,6 +51,13 @@ int		change_dir(char **cmd_tab, char *dest)
 
 /*
 ** char *getcwd(char *buf, size_t size);
+**
+** RETURN VALUES :
+** En cas de réussite buf est renvoyé.
+** NULL en cas d'échec, avec errno contenant le code d'erreur.
+** Le contenu de la chaîne pointée par buf est indéfini en cas d'erreur.  
+**
+** NB :
 ** PATH_MAX = Maximum number of bytes in a pathname, including the
 ** terminating null character.
 ** http://manpagesfr.free.fr/man/man3/getcwd.3.html
@@ -58,15 +65,29 @@ int		change_dir(char **cmd_tab, char *dest)
 
 void	go_home(t_env *env, char *home, char **cmd_tab)
 {
-	char *tmp_path;
-  	char buf[PATH_MAX - 1];
+	char	*tmp_path;
+  	char	buf[PATH_MAX - 1];
+	char	*cmd;
+	char	**cmd_tab_tmp;
 
 	tmp_path = getcwd(buf, PATH_MAX - 1);
 	if (!change_dir(cmd_tab, home))
     	return ;
-  	builtin_setenv(ft_split(ft_strjoin("cd OLDPWD ", tmp_path), ' '), env);
+	cmd = ft_strjoin("cd OLDPWD ", tmp_path);
+	cmd_tab_tmp = ft_split(cmd, ' ');
+  	builtin_setenv(cmd_tab_tmp, env);
+
+	ft_strdel(&cmd);
+	free_str_tab(cmd_tab_tmp);
+	// ft_strdel(&tmp_path);
+	
   	tmp_path = getcwd(buf, PATH_MAX - 1);
-  	builtin_setenv(ft_split(ft_strjoin("setenv PWD ", tmp_path), ' '), env);
+	cmd = ft_strjoin("setenv PWD ", tmp_path);
+	cmd_tab_tmp = ft_split(cmd, ' ');
+  	builtin_setenv(cmd_tab_tmp, env);
+	
+	ft_strdel(&cmd);
+	free_str_tab(cmd_tab_tmp);
 	// ft_strdel(&tmp_path);
 }
 
@@ -78,15 +99,30 @@ void	go_home(t_env *env, char *home, char **cmd_tab)
 
 void	go_path(t_env *env, char **cmd_tab)
 {
-	char *cwd;
-	char buf[PATH_MAX - 1];
+	char	*tmp_path;
+	char	buf[PATH_MAX - 1];
+	char	*cmd;
+	char	**cmd_tab_tmp;
 
-	cwd = getcwd(buf, PATH_MAX - 1);
+	tmp_path = getcwd(buf, PATH_MAX - 1);
 	if (!change_dir(cmd_tab, cmd_tab[1]))
 		return ;
-	builtin_setenv(ft_split(ft_strjoin("cd OLDPWD ", cwd), ' '), env);
-	cwd = getcwd(buf, PATH_MAX - 1);
-	builtin_setenv(ft_split(ft_strjoin("setenv PWD ", cwd), ' '), env);
+	cmd = ft_strjoin("cd OLDPWD ", tmp_path);
+	cmd_tab_tmp = ft_split(cmd, ' ');
+	builtin_setenv(cmd_tab_tmp, env);
+
+	ft_strdel(&cmd);
+	free_str_tab(cmd_tab_tmp);
+	// ft_strdel(&tmp_path);
+	
+	tmp_path = getcwd(buf, PATH_MAX - 1);
+	cmd = ft_strjoin("setenv PWD ", tmp_path);
+	cmd_tab_tmp = ft_split(cmd, ' ');
+	builtin_setenv(cmd_tab_tmp, env);
+
+	ft_strdel(&cmd);
+	free_str_tab(cmd_tab_tmp);
+	// ft_strdel(&tmp_path);
 }
 
 void	print_cd_error(int nb_arg, char **cmd_tab)
@@ -107,22 +143,19 @@ void	builtin_cd(t_env *env, char **cmd_tab)
 {
 	int nb_arg;
 
-	// print_str_split(cmd_tab);
+	// print_str_split(cmd_tab); // pour debug
 	nb_arg = count_arg(cmd_tab);
 	printf("nb_arg = %d\n", nb_arg);
 	// error
 	if (nb_arg >= 3)
 		return (print_cd_error(nb_arg, cmd_tab));
-	// <rien> ou ~ ou $HOME
+	// cd <rien> || cd ~ || cd $HOME
 	else if (!cmd_tab[1]
 	|| (cmd_tab[1][0] == '~' && !ft_isalpha(cmd_tab[1][1]))
 	|| ft_strequci(cmd_tab[1], "$HOME"))
 		go_home(env, var_value(env, "HOME"), cmd_tab);
-	// ~/ ou ~/...
-	else if ((cmd_tab[1][0] == '~' && cmd_tab[1][1] == '\0')
-	|| (cmd_tab[1][0] == '~' && cmd_tab[1][1] == '/'))
-		;
-	// path/... ou /path/...
+	// cd ~/ || cd ~/[...]
 	else
 		go_path(env, cmd_tab);
+	// a gerer : cd ~/..
 }

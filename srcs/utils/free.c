@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 20:22:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 04:40:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 07:01:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ void	free_str_tab(char **str_tab)
     while (str_tab && str_tab[++i])
     	ft_strdel(&str_tab[i]);
     if (str_tab)
+	{
 		free(str_tab);
+		str_tab = NULL;
+	}
 }
 
 /*

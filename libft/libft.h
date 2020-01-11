@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 02:44:13 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/11 07:15:42 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ char				*ft_strcat(char *dest, const char *src);
 char				*ft_strncat(char *dest, const char *src, size_t n);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
 char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoin_free(char *s1, char *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				*ft_strfulltrim(char const *s1, char const *set);
 char				*ft_strtrim_ws(char const *s1);
@@ -177,6 +178,15 @@ int					get_next_line(const int fd, char **line);
 /*
 ** printf ---------------------------------------------------------------------
 */
+
+#define COL_NRM  "\x1B[0m"
+#define COL_RED  "\x1B[31m"
+#define COL_GRN  "\x1B[32m"
+#define COL_YEL  "\x1B[33m"
+#define COL_BLU  "\x1B[34m"
+#define COL_MAG  "\x1B[35m"
+#define COL_CYN  "\x1B[36m"
+#define COL_WHT  "\x1B[37m"
 
 typedef struct						s_options
 {
