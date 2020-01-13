@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/01/13 12:11:55 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/13 15:48:41 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,6 +93,7 @@ SRCS=ft_putchar.c \
 	ft_lstclear.c \
 	ft_lstiter.c \
 	ft_lstmap.c \
+	ft_str_start_with.c \
 	ft_str_end_with.c \
 	ft_get_next_line.c \
 	ft_format_parse.c \

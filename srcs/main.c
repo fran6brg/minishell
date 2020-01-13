@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 07:16:08 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 16:06:25 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 void	root(t_env *env, char *path, char **cmd_tab)
 {
 	// print_str_split(cmd_tab);
+	// printf("path = %s\n", path);
 	if (ft_strequci(cmd_tab[0], "echo"))
 		builtin_echo(env, cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "cd"))
@@ -37,7 +38,7 @@ void	root(t_env *env, char *path, char **cmd_tab)
 		free_env(env);
 		exit(1);
 	}
-	else
+	else if (cmd_tab[0]) // pour protéger contre la commade chaine d'espaces + enter
 		execute(cmd_tab, path);
 }
 

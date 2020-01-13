@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 13:21:14 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 15:50:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void apply_redirect(char **cmd_tab, int pos)
 	char	*filename;
 	int		append;
 	int		fd;
+	int		n_option;
 
 	printf("cmd_tab[pos] = %s\n", cmd_tab[pos]);
 	i = 0;
@@ -59,21 +60,42 @@ void apply_redirect(char **cmd_tab, int pos)
 		else // par ex : 'echo abc >'
 		{
 			ft_printf("zsh: parse error near `\\n'\n");
-			return ;
+			return (ft_strdel(&filename));
 		}
 	}
 	printf("filename = %s\n", filename);
-	if (access(filename, F_OK) == -1)
-		fd = open(filename, O_CREAT | O_WRONLY, 0777);
-	else
-		fd = open(filename, (append ? O_APPEND : 0) | O_WRONLY, 0777);
-	if (fd == -1)
-		return ; // erreur fd
+	if ((fd = open(filename, O_CREAT | O_WRONLY | (append ? O_APPEND : O_TRUNC), 0777)) == -1)
+		return (ft_strdel(&filename)); // erreur fd
 	i = 0;
+	n_option = 0;
 	while (cmd_tab[++i])
 	{
-		printf("%s %s in %d\n", append ? "append" : "overwrite", cmd_tab[i], fd);
-		write(fd, cmd_tab[i], ft_strlen(cmd_tab[i]));
+		if (i == 1 && ft_str_start_with(cmd_tab[i], "-n"))
+			n_option = 1;
+		else if (i > 1 && ft_str_start_with(cmd_tab[i - 1], "-n") && ft_str_start_with(cmd_tab[i], "-n"))
+			;
+		else
+		{
+			// ne pas afficher d'espace si cmd_tab[1] == -n || cmd_tab[1] == -n && cmd_tab[2] == -n 
+			if (i >= 2 + n_option)
+				;
+			else if (!ft_strequ(cmd_tab[i + 1], filename))
+				;
+			else
+			{
+				printf("%s -%s-   in -%s- before -%s-\n", append ? "append" : "overwrite", " ", filename, cmd_tab[i + 1]);
+				write(fd, " ", 1);
+			}
+			printf("%s -%.*s- in %s\n", append ? "append" : "overwrite", (int)ft_next_char_pos(cmd_tab[i], ">"), cmd_tab[i], filename);
+			write(fd, cmd_tab[i], ft_next_char_pos(cmd_tab[i], ">"));
+			if (ft_strchr(cmd_tab[i], '>') || ft_strequ(cmd_tab[i], filename))
+				i += 1;
+		}
+	}
+	if (!n_option)
+	{
+		printf("newline\n");
+		write(fd, "\n", 1);
 	}
 	close(fd);
 	ft_strdel(&filename);
@@ -109,8 +131,8 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 		i = 0;
 		while (cmd_tab[++i])
 		{
-			if ((i == 1 || (i > 1 && !ft_strcmp(cmd_tab[i - 1], "-n")))
-			&& !ft_strcmp(cmd_tab[i], "-n"))
+			if ((i == 1 || (i > 1 && ft_strequ(cmd_tab[i - 1], "-n")))
+			&& ft_strequ(cmd_tab[i], "-n"))
 				n_option = 1;
 			else
 			{

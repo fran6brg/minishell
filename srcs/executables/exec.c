@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 02:28:57 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 16:04:04 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,11 @@ int		execute(char **cmd_tab, char *path)
 	int	status;
 
 	exec_path = 0;
+	if (!path) // si 'unset PATH' a été lancé
+	{
+		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
+		return (-1);		
+	}
 	if (!(exec_path = check(cmd_tab, &s, path, exec_path)))
 		return (-1);
 	pid = 0;
