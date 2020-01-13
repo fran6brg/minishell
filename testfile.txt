@@ -1,149 +1,149 @@
-unsetenv le PATH et lancer une commande
-unsetenv le HOME et cd
-unsetenv sans argument
-juste apuiyer sur entree
-espace puis entree
+k unsetenv le PATH et lancer une commande
+k unsetenv le HOME et cd
+k unsetenv sans argument
+k juste apuiyer sur entree
+k espace puis entree
 ctrl + c
 ctrl + d
 via signal catcher les segfault pour les afficher ce qui permet de veriffier que le fils segfault pas car si le fils segfault c'est quand meme un segfault et ca vaux 0
 enlever les droit d'un dossier et essayer d'y entre avec cd
 verifier la valeur de sortie du term "echo $?"
-lancer le shell avec env -i
-Tests commande de base
-ls (affiche le résultat de la commande ls)
-ls -la (affiche le résultat de la commande ls -la)
-ls -la -z (affiche ls: illegal option -- z)
-/bin/ls (affiche le résultat de la commande ls)
-ls ~ (affiche le résultat de la commande ls pour le repertoire HOME)
-ls ~- / ls ~+ (compare avec le vrais)
-truc (affiche une erreur, exemple : zsh: command not found: truc)
+? lancer le shell avec env -i
+k Tests commande de base
+k ls (affiche le résultat de la commande ls)
+k ls -la (affiche le résultat de la commande ls -la)
+k ls -la -z (affiche ls: illegal option -- z)
+ko /bin/ls (affiche le résultat de la commande ls)
+ko ls ~ (affiche le résultat de la commande ls pour le repertoire HOME)
+ko ls ~- / ls ~+ (compare avec le vrais)
+k truc (affiche une erreur, exemple : zsh: command not found: truc)
 
 Tests cd de base
-cd truc test machin (afficher une erreur, exemple : "cd:cd:13: too many arguments", variables d'env non modifiées)
-cd .. (renvoi au repertoire parent, les variables d'env sont bien modifiées en conséquence)
-cd (renvoi au repertoire HOME, les variables d'env sont bien modifiées en conséquence)
-cd ~ (renvoi au repertoire HOME, les variables d'env sont bien modifiées en conséquence)
-cd / (renvoi à la racine du disque, les variables d'env sont bien modifiées en conséquence)
-cd . (reste sur le repertoire courant, la variable OLDPWD est bien modifiée)
+k cd truc test machin (afficher une erreur, exemple : "cd:cd:13: too many arguments", variables d'env non modifiées)
+k cd .. (renvoi au repertoire parent, les variables d'env sont bien modifiées en conséquence)
+k cd (renvoi au repertoire HOME, les variables d'env sont bien modifiées en conséquence)
+k cd ~ (renvoi au repertoire HOME, les variables d'env sont bien modifiées en conséquence)
+k cd / (renvoi à la racine du disque, les variables d'env sont bien modifiées en conséquence)
+k cd . (reste sur le repertoire courant, la variable OLDPWD est bien modifiée)
 
 Tests builtins de base
 1. Pour setenv name value [overwrite]
-setenv USER machin 1 (la variable d'env USER est bien devenu machin)
-setenv coucou 1 (la variable d'env coucou a bien été crée avec pour valeur 1)
-setenv coucou 2 (la variable d'env coucou n'a pas été modifiée)
+k setenv USER machin 1 (la variable d'env USER est bien devenu machin)
+k setenv coucou 1 (la variable d'env coucou a bien été crée avec pour valeur 1)
+k setenv coucou 2 (la variable d'env coucou n'a pas été modifiée)
 2. Pour setenv name=value
-setenv USER=machin (la variable d'env USER est bien devenu machin)
-setenv coucou=1 (la variable d'env coucou a bien été crée avec valeur 1)
+ko setenv USER=machin (la variable d'env USER est bien devenu machin)
+ko setenv coucou=1 (la variable d'env coucou a bien été crée avec valeur 1)
 
-env (affiche l'env)
-exit (quitte le shell)
+k env (affiche l'env)
+k exit (quitte le shell)
 
 Tests d'un editeur
-emacs coucou (lance emacs avec le fichier coucou en écriture)
+k emacs coucou (lance emacs avec le fichier coucou en écriture)
 
 Tests cd un peu plus complexe
-cd ../directory (rentre bien dans le directory du répertoire parent, change bien les variables d'env)
-cd ~/sh1 (rentre bien dans le directory "sh1" du répertoire HOME, change bien les variables d'env)
-cd -/directory (rentre bien dans le directory du repertoire precedent, change bien les variables d'env)
-cd /Dev (rentre bien dans le directory Dev à la racine du disque, change bien les variables d'env)
-cd ./directory (rentre bien dans le directory du répertoire courant, change bien les variables d'env)
+k cd ../directory (rentre bien dans le directory du répertoire parent, change bien les variables d'env)
+ko cd ~/sh1 (rentre bien dans le directory "sh1" du répertoire HOME, change bien les variables d'env)
+k cd -/directory (rentre bien dans le directory du repertoire precedent, change bien les variables d'env)
+k cd /Dev (rentre bien dans le directory Dev à la racine du disque, change bien les variables d'env)
+k cd ./directory (rentre bien dans le dircectory du répertoire courant, change bien les variables d'env)
 
 Enormes tests d'exit
-exit 10 (la valeur 10 est retourné, 'echo $?' pour verifier dans ton "vrais" shell)
+k exit 10 (la valeur 10 est retourné, 'echo $?' pour verifier dans ton "vrais" shell)
 
 zsh
-exit a (la valeur 0 est retourné)
+k exit a (la valeur 0 est retourné)
 
 csh
-exit a (renvoi une erreur)
+k exit a (renvoi une erreur)
 
-exit 10 30 (affiche une erreur, exemple : "exit: too many arguments")
+k exit 10 30 (affiche une erreur, exemple : "exit: too many arguments")
 
 Tests du spameur
-spamer la touche entré (réécris le prompt)
-spamer les touches espaces et tab puis entré (réécris le prompt)
-spamer les touches espaces et tab puis ls (affiche le résultat de ls)
-spamer les touches espaces et tab puis exit (quitte le shell)
-spamer les touches espaces et tab puis ls puis respamer espaces et tab puis -la (affiche le résultat de ls -la)
+k spamer la touche entré (réécris le prompt)
+k spamer les touches espaces et tab puis entré (réécris le prompt)
+k spamer les touches espaces et tab puis ls (affiche le résultat de ls)
+k spamer les touches espaces et tab puis exit (quitte le shell)
+k spamer les touches espaces et tab puis ls puis respamer espaces et tab puis -la (affiche le résultat de ls -la)
 
 Tests setenv simples
 1. Pour setenv name value [overwrite]
-setenv (affiche une erreur, exemple : "too fiew argument")
-setenv 1 2 3 4 (afficher une erreur, exemple : too many arguments)
-setenv truc=machin 2 (affiche une erreur, pas de '=' dans un nom de variable)
-setenv truc "machin bidule" 1 (la variable truc vaut machin bidule sans les guillemets)
+k setenv (affiche une erreur, exemple : "too fiew argument")
+k setenv 1 2 3 4 (afficher une erreur, exemple : too many arguments)
+k setenv truc=machin 2 (affiche une erreur, pas de '=' dans un nom de variable)
+ko setenv truc "machin bidule" 1 (la variable truc vaut machin bidule sans les guillemets)
 2. Pour setenv name=value
-setenv (affiche l'env)
-setenv coucou=test USER=machin truc=bidule (ajoute une variable coucou qui vaut test, modifie la variable USER pour qu'elle vale machin et crée une variable truc qui vaut bidule)
-setenv coucou="test" (ajoute une variable coucou qui vaut test sans les guillemets)
+k setenv (affiche l'env)
+? setenv coucou=test USER=machin truc=bidule (ajoute une variable coucou qui vaut test, modifie la variable USER pour qu'elle vale machin et crée une variable truc qui vaut bidule)
+ko setenv coucou="test" (ajoute une variable coucou qui vaut test sans les guillemets)
 ..
 
 Tests env oklm
-env ls (affiche le resultat de la commande ls)
-env /bin/ls (affiche le resultat de la commande ls)
-env ls -la (affiche le resultat de la commade ls -la)
-env coucou=truc (affiche l'env avec une variable "coucou" de valeur "truc")
-env coucou=truc USER=bidule (affiche l'env qui comprend une variable "coucou" de valeur "truc" et la variable USER avec la valeur "bidule")
-env coucou=truc ls (affiche le résultat de la commande ls)
-env delamerde (affiche une erreur, exemple : "env: delamerde: No such file or directory")
-env coucou=truc delamerde (affiche une erreur, exemple : "env: delamerde: No such file or directory")
-env OLDPWD= /usr/bin/env (affiche l'environnement avec une variable OLDPWD vide)
-env coucou="test" (affiche l'env avec une variable coucou qui vaut test)
+? env ls (affiche le resultat de la commande ls)
+? env /bin/ls (affiche le resultat de la commande ls)
+? env ls -la (affiche le resultat de la commade ls -la)
+? env coucou=truc (affiche l'env avec une variable "coucou" de valeur "truc")
+? env coucou=truc USER=bidule (affiche l'env qui comprend une variable "coucou" de valeur "truc" et la variable USER avec la valeur "bidule")
+? env coucou=truc ls (affiche le résultat de la commande ls)
+? env delamerde (affiche une erreur, exemple : "env: delamerde: No such file or directory")
+? env coucou=truc delamerde (affiche une erreur, exemple : "env: delamerde: No such file or directory")
+? env OLDPWD= /usr/bin/env (affiche l'environnement avec une variable OLDPWD vide)
+? env coucou="test" (affiche l'env avec une variable coucou qui vaut test)
 
 Tests cd sans droits
-chmod 000 dir puis cd dir (affiche une erreur, exemple : cd:cd:13: permission denied: dir, variables d'env non modifiées)
-chmod 000 dir puis cd ../sh1/dir (affiche une erreur, exemple : cd:cd:13: permission denied: dir, variables d'env non modifiées)
+k chmod 000 dir puis cd dir (affiche une erreur, exemple : cd:cd:13: permission denied: dir, variables d'env non modifiées)
+k chmod 000 dir puis cd ../sh1/dir (affiche une erreur, exemple : cd:cd:13: permission denied: dir, variables d'env non modifiées)
 
 Tests cd plus lourd
 cd /~ (afficher une erreur, variables d'env non modifiées)
 cd /- (afficher une erreur, variables d'env non modifiées)
 cd /// (te ramène à la base de ton disque, variables d'env bien modifiées)
-cd ../../../../../../../../../../../../../../../../../../../../ (te ramène à la base de ton disque, variables d'env bien modifiées)
-cd /../../ (te ramène à la base de ton disque, variables d'env bien modifiées)
-cd argument1 argument2 (change la valeur d'argument1 pour celle d'argument2 dans le chemin courant et se déplace via le nouveau chemin, testez sur le vrais au pire !)
+k cd ../../../../../../../../../../../../../../../../../../../../ (te ramène à la base de ton disque, variables d'env bien modifiées)
+k cd /../../ (te ramène à la base de ton disque, variables d'env bien modifiées)
+? cd argument1 argument2 (change la valeur d'argument1 pour celle d'argument2 dans le chemin courant et se déplace via le nouveau chemin, testez sur le vrais au pire !)
 cd -P
 
 Tests signaux
-ctrl + c (réaffiche le prompt)
-ctrl + d (quite le shell) //C'est pas un signal heiinn, je le mets là par commodité
-ctrl + \ (ne fait rien)
-ctrl + z (ne fait rien)
-ctrl + L (clear)
-cat puis ctrl + d (quitte cat (KitKat lol) mais pas le shell)
-cat puis ctrl + c (quitte cat)
-cat puis ctrl + z (suspend cat)
-faire un petit main qui segfault, le lancer (affiche le segfault)
+ko ctrl + c (réaffiche le prompt)
+ko ctrl + d (quite le shell) //C'est pas un signal heiinn, je le mets là par commodité
+ko ctrl + \ (ne fait rien)
+ko ctrl + z (ne fait rien)
+ko ctrl + L (clear)
+ko cat puis ctrl + d (quitte cat (KitKat lol) mais pas le shell)
+ko cat puis ctrl + c (quitte cat)
+ko cat puis ctrl + z (suspend cat)
+ko faire un petit main qui segfault, le lancer (affiche le segfault)
 
 Tests un peu plus complexes de unset/setenv
 1. Pour setenv name value [overwrite]
-setenv HOME delamerde 1 puis cd ~ et/ou cd (va bien au repertoire HOME, variables d'env bien modifiées)
-setenv OLDPWD delamerde 1 puis cd - (va bien au repertoire précédent, variables d'env bien modifiées)
-setenv PATH ~/sh1 1 (donner la valeur du répertoire où se trouve l'exécutable du sh1 à la variable d'env PATH) puis ft_minishell1 (sans le "./" très important, doit lancer le minishell)
+? setenv HOME delamerde 1 puis cd ~ et/ou cd (va bien au repertoire HOME, variables d'env bien modifiées)
+? setenv OLDPWD delamerde 1 puis cd - (va bien au repertoire précédent, variables d'env bien modifiées)
+? setenv PATH ~/sh1 1 (donner la valeur du répertoire où se trouve l'exécutable du sh1 à la variable d'env PATH) puis ft_minishell1 (sans le "./" très important, doit lancer le minishell)
 2. Pour setenv name=value
 ..
 
-unset PATH puis lancer ls (affiche le résultat de la commande ls)
-unset PATH puis lancer un fdf ou wol3d (Fonctionne !)
-unset HOME et cd ~ et/ou cd (se déplace bien dans le repertoire HOME de l'utilisateur, variables d'env bien modifiées)
-unset OLDPWD et cd - (se déplace bien dans le répertoire précédent, variables d'env bien modifiées)
-unset absolument tout puis setenv un truc (ton env a bien ta variable)
+k unset PATH puis lancer ls (affiche le résultat de la commande ls)
+ko unset PATH puis lancer un fdf ou wol3d (Fonctionne !)
+ko unset HOME et cd ~ et/ou cd (se déplace bien dans le repertoire HOME de l'utilisateur, variables d'env bien modifiées)
+ko unset OLDPWD et cd - (se déplace bien dans le répertoire précédent, variables d'env bien modifiées)
+ko unset absolument tout puis setenv un truc (ton env a bien ta variable)
 
 Tests env -i
-env -i ls (affiche le resultat de la commande ls)
-env -i ./ft_minishell1 (tester dans le shell de base, ton shell doit bien se lancer et fonctionner logiquement)
-env -i ./ft_minishell1 (tester dans ton shell, ton shell doit bien se lancer)
-env -i coucou=test (affiche coucou=test)
-env -i coucou=\=test (affiche coucou=\=test)
-env -i coucou=test test=bidule (affiche coucou=test un backslash n et test=bidule)
-env -i delamerde (affiche une erreur, exemple : "env: delamerde: No such file or directory")
-env -i coucou=test env (affiche coucou=test)
-env -i coucou="test" (affiche coucou=test)
+? env -i ls (affiche le resultat de la commande ls)
+? env -i ./ft_minishell1 (tester dans le shell de base, ton shell doit bien se lancer et fonctionner logiquement)
+? env -i ./ft_minishell1 (tester dans ton shell, ton shell doit bien se lancer)
+? env -i coucou=test (affiche coucou=test)
+? env -i coucou=\=test (affiche coucou=\=test)
+? env -i coucou=test test=bidule (affiche coucou=test un backslash n et test=bidule)
+? env -i delamerde (affiche une erreur, exemple : "env: delamerde: No such file or directory")
+? env -i coucou=test env (affiche coucou=test)
+? env -i coucou="test" (affiche coucou=test)
 
 Tests echo
-echo ("affiche" retour à la ligne)
-echo toto tata (affiche "toto tata" avec un retour à la ligne)
-echo -n toto (affiche un toto% avec un retour à la ligne)
-echo $? (affiche la valeur de retour du dernier exécutable, test en exécutant ton shell dans ton shell (inception), si ton exit fonctionne avec une valeur bien-sur !)
+k echo ("affiche" retour à la ligne)
+k echo toto tata (affiche "toto tata" avec un retour à la ligne)
+ko echo -n toto (affiche un toto% avec un retour à la ligne)
+ko echo $? (affiche la valeur de retour du dernier exécutable, test en exécutant ton shell dans ton shell (inception), si ton exit fonctionne avec une valeur bien-sur !)
 echo "$?" (affiche $?)
 echo ~ (affiche la valeur de la variable d'env HOME)
 echo ~/delamerde (affiche une erreur, exemple : "zsh: no such user or named directory: delamerde")
@@ -157,9 +157,9 @@ mkdir "asian porn" (crée un dossier nommé asian porn)
 mkdir "pretty girls nudes" (crée un dossier nommé pretty girls nudes)
 
 Inception test
-./ft_minishell1 (dans ton minishell1) puis exit (quite ton deuxieme shell et pas le premier)
-./ft_minishell1 (dans ton minishell1) puis ctrl + d (quite ton deuxieme shell et pas le premier)
-./ft_minishell1 (dans ton minishell1) puis setenv USER test 1 (modifie bien ton env)puis exit (quite ton deuxieme shell et pas le premier) puis env (la valeur de USER n'est pas test)
+ko ./ft_minishell1 (dans ton minishell1) puis exit (quite ton deuxieme shell et pas le premier)
+ko ./ft_minishell1 (dans ton minishell1) puis ctrl + d (quite ton deuxieme shell et pas le premier)
+ko ./ft_minishell1 (dans ton minishell1) puis setenv USER test 1 (modifie bien ton env)puis exit (quite ton deuxieme shell et pas le premier) puis env (la valeur de USER n'est pas test)
 
 Pour ';'
 ls ; ls (affiche 2 fois le résultat de ls)

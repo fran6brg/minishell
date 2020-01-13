@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 06:18:13 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 16:39:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	builtin_echo(t_env *env, char **cmd_tab);
 **	cd.c
 */
 
-int		change_dir(char **cmd_tab, char *dest);
+int		change_dir(t_env *env, char **cmd_tab, char *dest);
 void	go_home(t_env *env, char *home, char **cmd_tab);
 void	go_path(t_env *env, char **cmd_tab);
 void	print_cd_error(int nb_arg, char **cmd_tab);
