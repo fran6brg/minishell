@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 16:06:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 16:46:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,12 @@ void	root(t_env *env, char *path, char **cmd_tab)
 	else if (ft_strequci(cmd_tab[0], "exit"))
 	{
 		free_env(env);
-		exit(1);
+		if (count_arg(cmd_tab) > 2)
+		{
+			ft_printf("exit: too many arguments\n");
+			exit(0);
+		}
+		exit(cmd_tab[1] ? ft_atoi(cmd_tab[1]) : 1); // exit 10 (la valeur 10 est retourné, 'echo $?' pour verifier dans ton "vrais" shell)
 	}
 	else if (cmd_tab[0]) // pour protéger contre la commade chaine d'espaces + enter
 		execute(cmd_tab, path);
@@ -115,7 +120,7 @@ int		main(int argc, char **argv, char **env_tab)
 			i = -1;
 			while (cmds[++i])
 			{
-				cmd_tab = ft_split_set(cmds[i], " ");
+				cmd_tab = ft_split_set(cmds[i], " \t"); // tab egalement à virer
 				root(env, var_value(env, "PATH"), cmd_tab);
 				free_str_tab(cmd_tab);
 			}

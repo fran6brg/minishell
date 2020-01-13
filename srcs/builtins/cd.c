@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 07:26:28 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 16:38:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,17 @@
 ** http://manpagesfr.free.fr/man/man2/access.2.html
 */
 
-int		change_dir(char **cmd_tab, char *dest)
+int		change_dir(t_env *env, char **cmd_tab, char *dest)
 {
-	int ret = chdir(dest);
+	int ret;
+
+	if (dest[0] == '-')
+	{
+		ret = chdir(var_value(env, "OLDPWD"));
+		ft_printf("%s\n", var_value(env, "OLDPWD"));
+	}
+	else
+		ret = chdir(dest);
 	// printf("1) chdir(%s) = %d\n", dest, ret); // pour debug
 	if (ret == 0)
 		return (1);
@@ -71,7 +79,7 @@ void	go_home(t_env *env, char *home, char **cmd_tab)
 	char	**cmd_tab_tmp;
 
 	tmp_path = getcwd(buf, PATH_MAX - 1);
-	if (!change_dir(cmd_tab, home))
+	if (!change_dir(env, cmd_tab, home))
     	return ;
 	cmd = ft_strjoin("cd OLDPWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
@@ -105,7 +113,7 @@ void	go_path(t_env *env, char **cmd_tab)
 	char	**cmd_tab_tmp;
 
 	tmp_path = getcwd(buf, PATH_MAX - 1);
-	if (!change_dir(cmd_tab, cmd_tab[1]))
+	if (!change_dir(env, cmd_tab, cmd_tab[1]))
 		return ;
 	cmd = ft_strjoin("cd OLDPWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
@@ -157,4 +165,5 @@ void	builtin_cd(t_env *env, char **cmd_tab)
 	else
 		go_path(env, cmd_tab);
 	// a gerer : cd ~/..
+	// a gerer : cd -/..
 }

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 11:15:26 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 16:55:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,17 @@ void    builtin_setenv(char **cmd_tab, t_env *env)
 	t_env   *new;
 
 	if (count_arg(cmd_tab) != 3)
+	{
+		if (!cmd_tab[1])
+			builtin_env(env); // setenv (affiche l'env)
+		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
 		return ;
+	}
+	else if (ft_strchr(cmd_tab[1], '='))
+	{
+		ft_printf("error: variable name can not contain '='\n");
+		return ;
+	}
 	var = env;
 	while (var)
 	{
@@ -98,7 +108,10 @@ void	 builtin_unsetenv(char **cmd_tab, t_env *env)
 	t_env	 *next;
 
 	if (count_arg(cmd_tab) != 2)
+	{
+		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
 		return ;
+	}
 	current = env;
 	previous = env;
 	while (current)
