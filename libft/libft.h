@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 07:15:42 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 12:16:56 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ char				**ft_split_set(char const *s, char *separators);
 int					ft_str_end_with(char *str, char *end);
 int					ft_letterequci(char c1, char c2);
 int					ft_strequci(char *s1, char *s2);
+size_t				ft_next_char_pos(const char *s, char *set);
 
 /*
 ** nbr

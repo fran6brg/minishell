@@ -6,20 +6,20 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 05:48:17 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 13:21:14 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** call_var_pattern()
+** print_env_var()
 **
 ** observations :
 ** echo $PATHfoo renvoie juste un retour à ligne
 */
 
-int call_var_pattern(t_env *env, char *var)
+int print_env_var(t_env *env, char *var)
 {
 	if (var[0] == '$')
 	{
@@ -31,10 +31,62 @@ int call_var_pattern(t_env *env, char *var)
 }
 
 /*
-** echo écrit chaque message sur la sortie standard, avec  un
+** apply_redirect()
+**
+** open || create it with rights as 3rd arg (mode)
+** int open(const char *pathname, int flags, mode_t mode);
+*/
+
+void apply_redirect(char **cmd_tab, int pos)
+{
+	int		i;
+	char	*filename;
+	int		append;
+	int		fd;
+
+	printf("cmd_tab[pos] = %s\n", cmd_tab[pos]);
+	i = 0;
+	i = ft_next_char_pos(cmd_tab[pos] + i, ">");
+	printf("i = %d\n", i);
+	append = cmd_tab[pos][i + 1] == '>' ? 1 : 0;
+	i += append;
+	if (cmd_tab[pos][i + 1])
+		filename = ft_substr(cmd_tab[pos], i + 1, ft_next_char_pos(cmd_tab[pos] + i + 1, " "));
+	else
+	{
+		if (cmd_tab[pos + 1])
+			filename = ft_strdup(cmd_tab[pos + 1]);
+		else // par ex : 'echo abc >'
+		{
+			ft_printf("zsh: parse error near `\\n'\n");
+			return ;
+		}
+	}
+	printf("filename = %s\n", filename);
+	if (access(filename, F_OK) == -1)
+		fd = open(filename, O_CREAT | O_WRONLY, 0777);
+	else
+		fd = open(filename, (append ? O_APPEND : 0) | O_WRONLY, 0777);
+	if (fd == -1)
+		return ; // erreur fd
+	i = 0;
+	while (cmd_tab[++i])
+	{
+		printf("%s %s in %d\n", append ? "append" : "overwrite", cmd_tab[i], fd);
+		write(fd, cmd_tab[i], ft_strlen(cmd_tab[i]));
+	}
+	close(fd);
+	ft_strdel(&filename);
+}
+
+/*
+** echo écrit chaque message sur la sortie standard, avec un
 ** espace  entre  chacun  d'eux, et un saut de ligne après le
 ** dernier.
 ** option ’-n’ = ne pas effectuer le saut de ligne final.
+**
+** premier if gère les cas de double -n cf. observations
+** else print var || print arg as usual
 **
 ** observations :
 ** echo -n -n n'affiche rien
@@ -52,13 +104,17 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 	else
 	{
 		while (cmd_tab[++i])
+			if (ft_strstr(cmd_tab[i], ">") || ft_strstr(cmd_tab[i], ">>"))
+				return (apply_redirect(cmd_tab, i));
+		i = 0;
+		while (cmd_tab[++i])
 		{
 			if ((i == 1 || (i > 1 && !ft_strcmp(cmd_tab[i - 1], "-n")))
 			&& !ft_strcmp(cmd_tab[i], "-n"))
 				n_option = 1;
 			else
 			{
-				if (call_var_pattern(env, cmd_tab[i]))
+				if (print_env_var(env, cmd_tab[i]))
 					;
 				else
 					ft_printf("%s", cmd_tab[i]);

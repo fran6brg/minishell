@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_next_char_pos.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/10 18:39:00 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 11:59:17 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/13 11:59:22 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/13 12:22:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+size_t	ft_next_char_pos(const char *s, char *set)
 {
-	char	*sptr;
-	int		i;
+	size_t	i;
+	int		j;
 
-	sptr = (char *)s;
+	if (!s)
+		return (0);
 	i = -1;
-	while (sptr[++i])
+	while (s[++i])
 	{
-		if (sptr[i] == (char)c)
-			return (sptr + i);
+		j = -1;
+		while (set[++j])
+			if (s[i] == set[j])
+				return (i);
 	}
-	if ((char)c == '\0')
-		return (sptr + i);
-	return ((char *)0);
+	return (i);
 }

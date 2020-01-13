@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 06:16:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/13 11:15:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 /*
 ** is_env_var()
+** ft_strequci str equal case insensitive
 */
 
 int		is_env_var(t_env *env, char *arg)
