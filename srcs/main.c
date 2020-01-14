@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/14 17:07:08 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/14 17:27:17 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,24 @@ int		store_env(char **env_tab, t_env **env)
 ** 3e argument de la fonction main == l’ensemble des variables d’environment
 */
 
+static void			put_prompt(t_env *env)
+{
+	ft_printf("~ %s%s%s > ", COL_GRN, ft_strrchr(var_value(env, "PWD"), '/') + 1, COL_NRM);
+}
+
+// https://stackoverflow.com/questions/7670816/create-extern-char-array-in-c
+
+static void			nl_prompt(int signum)
+{
+	(void)signum;
+	ft_putchar('\n');
+}
+
+static void			sigint_handler(void)
+{
+	signal(SIGINT, nl_prompt);
+}
+
 int		main(int argc, char **argv, char **env_tab)
 {
 	t_env	*env;
@@ -111,7 +129,8 @@ int		main(int argc, char **argv, char **env_tab)
 		return (0);
 	while (42)
 	{
-		ft_printf("~ %s%s%s > ", COL_GRN, ft_strrchr(var_value(env, "PWD"), '/') + 1, COL_NRM);
+		sigint_handler();
+		put_prompt(env);
 		get_next_line(0, &line);
 		if (ft_strstr(line, ";;"))
 			ft_printf("zsh: parse error near `;;'\n");
@@ -121,15 +140,15 @@ int		main(int argc, char **argv, char **env_tab)
 			i = -1;
 			while (cmds[++i])
 			{
-				if (!(cmd_tab = ft_split_set_and_quotes(cmds[i], " \t")))  // tab egalement à virer
-					return (0);
+				if (!(cmd_tab = ft_split_set_and_quotes(cmds[i], " \t"))) // tab egalement à virer
+					continue ;
 				root(env, var_value(env, "PATH"), cmd_tab);
 				free_str_tab(cmd_tab);
 			}
 			free_cmds(line, cmds);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 /*
