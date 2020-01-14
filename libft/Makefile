@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/01/13 15:48:41 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/14 16:17:36 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,6 +67,7 @@ SRCS=ft_putchar.c \
 	ft_strmapi.c \
 	ft_split.c \
 	ft_split_set.c \
+	ft_split_set_and_quotes.c \
 	ft_nbrlen.c \
 	ft_unbrlen.c \
 	ft_intmax_ttoa_base_ws.c \

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 16:46:35 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/14 16:21:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 void	root(t_env *env, char *path, char **cmd_tab)
 {
-	// print_str_split(cmd_tab);
+	print_str_split(cmd_tab);
 	// printf("path = %s\n", path);
 	if (ft_strequci(cmd_tab[0], "echo"))
 		builtin_echo(env, cmd_tab);
@@ -105,7 +105,7 @@ int		main(int argc, char **argv, char **env_tab)
 	char	**cmd_tab;
 	int		i;
 	
-	if (argc > 1 && argv[argc - 1])
+	if (argv[argc])
 		;
 	store_env(env_tab, &env);
 	while (42)
@@ -116,13 +116,17 @@ int		main(int argc, char **argv, char **env_tab)
 			ft_printf("zsh: parse error near `;;'\n");
 		else
 		{
+			ft_printf("split_set ...");
 			cmds = ft_split_set(line, ";");
 			i = -1;
+			ft_printf(" ok\n\n");
 			while (cmds[++i])
 			{
-				cmd_tab = ft_split_set(cmds[i], " \t"); // tab egalement à virer
+				ft_printf("----------------------------------\n");
+				cmd_tab = ft_split_set_and_quotes(cmds[i], " \t"); // tab egalement à virer
 				root(env, var_value(env, "PATH"), cmd_tab);
 				free_str_tab(cmd_tab);
+				ft_printf("----------------------------------\n");
 			}
 			free_cmds(line, cmds);
 		}

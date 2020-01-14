@@ -1,8 +1,0 @@
-
-newline
-newline salut
-newline salut a b c d e f
-newline salut a b c d e f a
-newline salut a b c d e f a b d
-// echo "newline" "salut" a b c d e f >> test.txt a b d loooooooooool
-newline salut a b c d e f a b d loooooooooool

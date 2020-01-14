@@ -6,15 +6,15 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/13 11:59:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 12:22:59 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/14 15:12:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_next_char_pos(const char *s, char *set)
+int		ft_next_char_pos(const char *s, char *set)
 {
-	size_t	i;
+	int		i;
 	int		j;
 
 	if (!s)
