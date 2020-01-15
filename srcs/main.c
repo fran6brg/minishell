@@ -6,7 +6,7 @@
 /*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 03:00:37 by francisberg      ###   ########.fr       */
+/*   Updated: 2020/01/15 03:09:15 by francisberg      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ static void			put_prompt(void)
 	ft_printf("~ %s%s%s > ", COL_GRN, ft_strrchr(var_value(env, "PWD"), '/') + 1, COL_NRM);
 }
 
-// https://stackoverflow.com/questions/7670816/create-extern-char-array-in-c
-
 static void			nl_prompt(int signum)
 {
 	(void)signum;
@@ -119,7 +117,7 @@ static void			nl_prompt(int signum)
 
 static void			sigint_handler(void)
 {
-	signal(SIGINT, nl_prompt);
+	signal(SIGINT, nl_prompt); // ctrl c
 	signal(SIGQUIT, nl_prompt); // ctrl \
 	// signal(?, nl_prompt); // ctrl D
 }
@@ -169,6 +167,6 @@ int		main(int argc, char **argv, char **env_tab)
 ** mettre free str tab dans libft
 ** ls $VAR ; ls ~
 ** check headers
-/*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 02:58:52 by francisberg 
+**   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             
+**   Updated: 2020/01/15 02:58:52 by francisberg 
 */
