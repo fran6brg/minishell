@@ -6,20 +6,20 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 19:26:02 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 19:57:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** print_env_var()
+** is_$env_var()
 **
 ** observations :
 ** echo $PATHfoo renvoie juste un retour à ligne
 */
 
-int print_env_var(t_env *env, char *var)
+int is_$env_var(t_env *env, char *var)
 {
 	if (var[0] == '$')
 	{
@@ -114,7 +114,7 @@ int arg_is_in_quotes(char *arg)
 }
 
 /*
-** check_if_option_n()
+** is_option()
 */
 
 int is_option(int i, char **cmd_tab)
@@ -127,7 +127,6 @@ int is_option(int i, char **cmd_tab)
 	else if (i > 1)
 	{
 		j = 0;
-		// printf("test -%s-\n", cmd_tab[j]);
 		while (++j <= i)
 		{
 			if (!ft_str_start_with(cmd_tab[j], "-n"))
@@ -139,8 +138,9 @@ int is_option(int i, char **cmd_tab)
 					return (0);
 			}
 		}
+		return (1);
 	}
-	return (1);
+	return (0);
 }
 
 /*
@@ -194,11 +194,10 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 		i = 0;
 		while (cmd_tab[++i])
 		{
-			if (is_option(i, cmd_tab))
-				;
-			else
+			// printf("cmd_tab[%d] = -%s-\n", i, cmd_tab[i]);
+			if (!is_option(i, cmd_tab))
 			{
-				if (print_env_var(env, cmd_tab[i]))
+				if (is_$env_var(env, cmd_tab[i]))
 					;
 				else if (arg_is_in_quotes(cmd_tab[i]))
 					write(1, cmd_tab[i] + 1, ft_strlen(cmd_tab[i]) - 1);
@@ -206,7 +205,7 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 					write(1, cmd_tab[i], ft_strlen(cmd_tab[i]));
 				if (cmd_tab[i + 1])
 					write(1, " ", 1);
-			}
+			}			
 		}
 		if (!n_option)
 			write(1, "\n", 1);

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 18:10:58 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 19:59:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int		main(int argc, char **argv, char **env);
 **	echo.c
 */
 
+int		is_$env_var(t_env *env, char *var);
 void	builtin_echo(t_env *env, char **cmd_tab);
 
 /*
