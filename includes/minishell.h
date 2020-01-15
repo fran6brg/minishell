@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
+/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 02:36:24 by francisberg      ###   ########.fr       */
+/*   Updated: 2020/01/15 18:10:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ typedef	struct		s_env
 */
 
 void	root(t_env *env, char *path, char **cmd_tab);
-char	*var_value(t_env *env, char *name);
-int		store_env(char **env_tab, t_env **env);
+void	put_prompt(void);
+void	parse_and_root_cmds(t_env *env, char **cmds);
 int		main(int argc, char **argv, char **env);
 
 /*
@@ -72,6 +72,8 @@ void	builtin_pwd(t_env *env);
 **	env.c
 */
 
+char	*var_value(t_env *env, char *name);
+int		store_env(char **env_tab, t_env **env);
 int		is_env_var(t_env *env, char *arg);
 void	builtin_env(t_env *env);
 void	builtin_unsetenv(char **cmds, t_env *env);
@@ -84,7 +86,7 @@ void	builtin_setenv(char **cmds, t_env *env);
 int		execute(char **cmd_tab, char *path);
 
 /*
-**	free.c
+**	utils.c
 */
 
 void    print_str_split(char **s);
@@ -97,5 +99,12 @@ int		count_arg(char **s);
 void	free_str_tab(char **str_tab);
 void	free_cmds(char *line, char **cmds);
 void	free_env(t_env *env);
+void	free_and_exit(t_env *env, int exit_value, char *msg);
+
+/*
+**	signal.c
+*/
+
+void	sigint_handler(void);
 
 #endif

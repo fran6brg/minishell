@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 15:50:26 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 19:26:02 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,65 @@ void apply_redirect(char **cmd_tab, int pos)
 }
 
 /*
+** arg_is_in_quotes()
+*/
+
+int arg_is_in_quotes(char *arg)
+{
+	int	len;
+
+	len = ft_strlen(arg);
+	return (((arg[0] == '\'' || arg[0] == '"') && (arg[len - 1] == '\'' || arg[len - 1] == '"')));
+}
+
+/*
+** check_if_option_n()
+*/
+
+int is_option(int i, char **cmd_tab)
+{
+	int	j;
+	int	k;
+
+	if (i == 1 && ft_strequ(cmd_tab[i], "-n"))
+		return (1);
+	else if (i > 1)
+	{
+		j = 0;
+		// printf("test -%s-\n", cmd_tab[j]);
+		while (++j <= i)
+		{
+			if (!ft_str_start_with(cmd_tab[j], "-n"))
+				return (0);
+			k = 1;
+			while (cmd_tab[j][++k])
+			{
+				if (cmd_tab[j][k] != 'n')
+					return (0);
+			}
+		}
+	}
+	return (1);
+}
+
+/*
+** check_if_option_n()
+*/
+
+int check_if_option_n(char **cmd_tab)
+{
+	int i;
+
+	i = 0;
+	while (cmd_tab[++i])
+	{
+		if (is_option(i, cmd_tab))
+			return (1);
+	}
+	return (0);
+}
+
+/*
 ** echo écrit chaque message sur la sortie standard, avec un
 ** espace  entre  chacun  d'eux, et un saut de ligne après le
 ** dernier.
@@ -125,21 +184,26 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 		write(1, "\n", 1);
 	else
 	{
-		while (cmd_tab[++i])
-			if (ft_strstr(cmd_tab[i], ">") || ft_strstr(cmd_tab[i], ">>"))
-				return (apply_redirect(cmd_tab, i));
+		n_option = check_if_option_n(cmd_tab);
 		i = 0;
 		while (cmd_tab[++i])
 		{
-			if ((i == 1 || (i > 1 && ft_strequ(cmd_tab[i - 1], "-n")))
-			&& ft_strequ(cmd_tab[i], "-n"))
-				n_option = 1;
+			if (ft_strchr(cmd_tab[i], '>') && !arg_is_in_quotes(cmd_tab[i]))
+				return (apply_redirect(cmd_tab, i));
+		}
+		i = 0;
+		while (cmd_tab[++i])
+		{
+			if (is_option(i, cmd_tab))
+				;
 			else
 			{
 				if (print_env_var(env, cmd_tab[i]))
 					;
+				else if (arg_is_in_quotes(cmd_tab[i]))
+					write(1, cmd_tab[i] + 1, ft_strlen(cmd_tab[i]) - 1);
 				else
-					ft_printf("%s", cmd_tab[i]);
+					write(1, cmd_tab[i], ft_strlen(cmd_tab[i]));
 				if (cmd_tab[i + 1])
 					write(1, " ", 1);
 			}

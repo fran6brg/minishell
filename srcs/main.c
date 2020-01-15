@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
+/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 03:09:15 by francisberg      ###   ########.fr       */
+/*   Updated: 2020/01/15 18:20:20 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,120 +41,59 @@ void	root(t_env *env, char *path, char **cmd_tab)
 		builtin_env(env);
 	else if (ft_strequci(cmd_tab[0], "exit"))
 	{
-		free_env(env);
 		if (count_arg(cmd_tab) > 2)
-		{
-			ft_printf("exit: too many arguments\n");
-			exit(0);
-		}
-		exit(cmd_tab[1] ? ft_atoi(cmd_tab[1]) : 1); // exit 10 (la valeur 10 est retourné, 'echo $?' pour verifier dans ton "vrais" shell)
+			free_and_exit(env, 0, "exit: too many arguments\n");
+		free_and_exit(env, cmd_tab[1] ? ft_atoi(cmd_tab[1]) : 1, NULL); // exit 10 (la valeur 10 est retourné, 'echo $?' pour verifier dans ton "vrais" shell)
 	}
-	else if (cmd_tab[0]) // pour protéger contre la commade chaine d'espaces + enter
+	else if (cmd_tab[0]) // pour protéger contre la commande chaine d'espaces + enter
 		execute(cmd_tab, path);
 }
 
-/*
-** get value from var name
-*/
 
-char	*var_value(t_env *env, char *name)
-{
-	t_env	*var;
-
-	var = env;
-	while (var)
-	{
-		if (!ft_strcmp(var->name, name))
-			return (var->value);
-		var = var->next;
-	}
-	return (NULL);
-}
-
-/*
-** store env inside list
-*/
-
-int		store_env(char **env_tab, t_env **env)
+void	parse_and_root_cmds(t_env *env, char **cmds)
 {
 	int		i;
-	t_env	*var;
-	t_env	*last;
-	
+	char	**cmd_tab;
+
 	i = -1;
-	last = NULL;
-	while (env_tab[++i])
+	while (cmds[++i])
 	{
-		if (!(var = (t_env *)malloc(sizeof(t_env))))
-			return (0);
-		var->name = ft_substr(env_tab[i], 0, (int)(ft_strchr(env_tab[i], '=') - env_tab[i]));
-		var->value = ft_substr(env_tab[i], (int)(ft_strchr(env_tab[i], '=') - env_tab[i]) + 1, ft_strlen(env_tab[i]));
-		var->next = NULL;
-		if (last)
-			last->next = var;
-		else
-			*env = var;
-		last = var;
+		if (!(cmd_tab = ft_split_set_and_quotes(cmds[i], " \t")))
+			continue ;
+		root(env, var_value(env, "PATH"), cmd_tab);
+		free_str_tab(cmd_tab);
 	}
-	return (1);
 }
 
 /*
 ** 3e argument de la fonction main == l’ensemble des variables d’environment
 */
 
-static void			put_prompt(void)
+void			put_prompt(void)
 {
 	ft_printf("~ %s%s%s > ", COL_GRN, ft_strrchr(var_value(env, "PWD"), '/') + 1, COL_NRM);
-}
-
-static void			nl_prompt(int signum)
-{
-	(void)signum;
-	ft_putchar('\n');
-	put_prompt();
-}
-
-static void			sigint_handler(void)
-{
-	signal(SIGINT, nl_prompt); // ctrl c
-	signal(SIGQUIT, nl_prompt); // ctrl \
-	// signal(?, nl_prompt); // ctrl D
 }
 
 int		main(int argc, char **argv, char **env_tab)
 {
 	char	*line;
 	char	**cmds;
-	char	**cmd_tab;
-	int		i;
 	
-	if (argv[argc])
-		;
+	(void)argv[argc];
 	if (!store_env(env_tab, &env))
 		return (0);
 	while (42)
 	{
 		sigint_handler();
 		put_prompt();
-		if (!get_next_line(0, &line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF that quit shell
-		{
-			free_env(env);
-			exit(0);
-		}
+		if (!get_next_line(STDIN_FILENO, &line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF that quit shell
+			free_and_exit(env, 0, NULL);
 		if (ft_strstr(line, ";;"))
 			ft_printf("zsh: parse error near `;;'\n");
 		else
 		{
 			cmds = ft_split_set(line, ";");
-			i = -1;
-			while (cmds[++i])
-			{
-				if (!(cmd_tab = ft_split_set_and_quotes(cmds[i], " \t"))) // tab egalement à virer
-					continue ;
-				root(env, var_value(env, "PATH"), cmd_tab);
-				free_str_tab(cmd_tab);
-			}
+			parse_and_root_cmds(env, cmds);
 			free_cmds(line, cmds);
 		}
 	}
@@ -169,4 +108,5 @@ int		main(int argc, char **argv, char **env_tab)
 ** check headers
 **   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             
 **   Updated: 2020/01/15 02:58:52 by francisberg 
+** valider le comportemenet ctrl bl
 */

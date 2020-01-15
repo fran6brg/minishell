@@ -6,11 +6,59 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 16:55:58 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 18:06:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/*
+** get value from var name
+*/
+
+char	*var_value(t_env *env, char *name)
+{
+	t_env	*var;
+
+	var = env;
+	while (var)
+	{
+		if (!ft_strcmp(var->name, name))
+			return (var->value);
+		var = var->next;
+	}
+	return (NULL);
+}
+
+/*
+** store env inside list
+*/
+
+int		store_env(char **env_tab, t_env **env)
+{
+	int		i;
+	t_env	*var;
+	t_env	*last;
+	
+	i = -1;
+	last = NULL;
+	if (!env_tab || !*env_tab) // env -i
+		return (0);
+	while (env_tab[++i])
+	{
+		if (!(var = (t_env *)malloc(sizeof(t_env))))
+			return (0);
+		var->name = ft_substr(env_tab[i], 0, (int)(ft_strchr(env_tab[i], '=') - env_tab[i]));
+		var->value = ft_substr(env_tab[i], (int)(ft_strchr(env_tab[i], '=') - env_tab[i]) + 1, ft_strlen(env_tab[i]));
+		var->next = NULL;
+		if (last)
+			last->next = var;
+		else
+			*env = var;
+		last = var;
+	}
+	return (1);
+}
 
 /*
 ** is_env_var()

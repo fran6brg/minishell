@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 20:22:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/11 07:01:57 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 18:16:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,16 @@ void   free_env(t_env *elem)
 		ft_strdel(&elem->value);
 		elem = tmp;
 	}
+}
+
+/*
+** free_and_exit
+*/
+
+void	free_and_exit(t_env *env, int exit_value, char *msg)
+{
+	if (msg)
+		ft_printf("%s\n", msg);
+	free_env(env);
+	exit(exit_value);
 }
