@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 16:39:52 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 02:36:24 by francisberg      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef	struct		s_env
 	char			*value;
 	struct	s_env	*next;
 }					t_env;
+
+// extern t_env	*env;
 
 /*
 **	main.c

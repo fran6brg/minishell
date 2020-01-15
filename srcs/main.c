@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/14 17:27:17 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 02:58:52 by francisberg      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+/*
+** global var for put_promt()
+*/
+
+t_env	*env;
 
 /*
 ** root towards the right function
@@ -97,7 +103,7 @@ int		store_env(char **env_tab, t_env **env)
 ** 3e argument de la fonction main == l’ensemble des variables d’environment
 */
 
-static void			put_prompt(t_env *env)
+static void			put_prompt(void)
 {
 	ft_printf("~ %s%s%s > ", COL_GRN, ft_strrchr(var_value(env, "PWD"), '/') + 1, COL_NRM);
 }
@@ -108,16 +114,18 @@ static void			nl_prompt(int signum)
 {
 	(void)signum;
 	ft_putchar('\n');
+	put_prompt();
 }
 
 static void			sigint_handler(void)
 {
 	signal(SIGINT, nl_prompt);
+	signal(SIGQUIT, nl_prompt); // ctrl \
+	// signal(?, nl_prompt); // ctrl D
 }
 
 int		main(int argc, char **argv, char **env_tab)
 {
-	t_env	*env;
 	char	*line;
 	char	**cmds;
 	char	**cmd_tab;
@@ -130,8 +138,12 @@ int		main(int argc, char **argv, char **env_tab)
 	while (42)
 	{
 		sigint_handler();
-		put_prompt(env);
-		get_next_line(0, &line);
+		put_prompt();
+		if (!get_next_line(0, &line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF that quit shell
+		{
+			free_env(env);
+			exit(0);
+		}
 		if (ft_strstr(line, ";;"))
 			ft_printf("zsh: parse error near `;;'\n");
 		else
