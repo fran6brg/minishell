@@ -6,7 +6,7 @@
 /*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 02:58:52 by francisberg      ###   ########.fr       */
+/*   Updated: 2020/01/15 03:00:37 by francisberg      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,4 +168,7 @@ int		main(int argc, char **argv, char **env_tab)
 ** remove # include <stdio.h> in .h
 ** mettre free str tab dans libft
 ** ls $VAR ; ls ~
+** check headers
+/*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/15 02:58:52 by francisberg 
 */
