@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 19:57:57 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 21:55:28 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,93 +31,31 @@ int is_$env_var(t_env *env, char *var)
 }
 
 /*
-** apply_redirect()
-**
-** open || create it with rights as 3rd arg (mode)
-** int open(const char *pathname, int flags, mode_t mode);
+** parse_filename()
 */
 
-void apply_redirect(char **cmd_tab, int pos)
+int	parse_filename(char **filename, char **cmd_tab, int pos, int i)
 {
-	int		i;
-	char	*filename;
-	int		append;
-	int		fd;
-	int		n_option;
-
-	printf("cmd_tab[pos] = %s\n", cmd_tab[pos]);
-	i = 0;
-	i = ft_next_char_pos(cmd_tab[pos] + i, ">");
-	printf("i = %d\n", i);
-	append = cmd_tab[pos][i + 1] == '>' ? 1 : 0;
-	i += append;
 	if (cmd_tab[pos][i + 1])
-		filename = ft_substr(cmd_tab[pos], i + 1, ft_next_char_pos(cmd_tab[pos] + i + 1, " "));
+		*filename = ft_substr(cmd_tab[pos], i + 1, ft_next_char_pos(cmd_tab[pos] + i + 1, " "));
 	else
 	{
 		if (cmd_tab[pos + 1])
-			filename = ft_strdup(cmd_tab[pos + 1]);
+			*filename = ft_strdup(cmd_tab[pos + 1]);
 		else // par ex : 'echo abc >'
 		{
 			ft_printf("zsh: parse error near `\\n'\n");
-			return (ft_strdel(&filename));
+			return (0);
 		}
 	}
-	printf("filename = %s\n", filename);
-	if ((fd = open(filename, O_CREAT | O_WRONLY | (append ? O_APPEND : O_TRUNC), 0777)) == -1)
-		return (ft_strdel(&filename)); // erreur fd
-	i = 0;
-	n_option = 0;
-	while (cmd_tab[++i])
-	{
-		if (i == 1 && ft_str_start_with(cmd_tab[i], "-n"))
-			n_option = 1;
-		else if (i > 1 && ft_str_start_with(cmd_tab[i - 1], "-n") && ft_str_start_with(cmd_tab[i], "-n"))
-			;
-		else
-		{
-			// ne pas afficher d'espace si cmd_tab[1] == -n || cmd_tab[1] == -n && cmd_tab[2] == -n 
-			if (i >= 2 + n_option)
-				;
-			else if (!ft_strequ(cmd_tab[i + 1], filename))
-				;
-			else
-			{
-				printf("%s -%s-   in -%s- before -%s-\n", append ? "append" : "overwrite", " ", filename, cmd_tab[i + 1]);
-				write(fd, " ", 1);
-			}
-			printf("%s -%.*s- in %s\n", append ? "append" : "overwrite", (int)ft_next_char_pos(cmd_tab[i], ">"), cmd_tab[i], filename);
-			write(fd, cmd_tab[i], ft_next_char_pos(cmd_tab[i], ">"));
-			if (ft_strchr(cmd_tab[i], '>') || ft_strequ(cmd_tab[i], filename))
-				i += 1;
-		}
-	}
-	if (!n_option)
-	{
-		printf("newline\n");
-		write(fd, "\n", 1);
-	}
-	close(fd);
-	ft_strdel(&filename);
+	return (1);
 }
 
 /*
-** arg_is_in_quotes()
+** is_n_option()
 */
 
-int arg_is_in_quotes(char *arg)
-{
-	int	len;
-
-	len = ft_strlen(arg);
-	return (((arg[0] == '\'' || arg[0] == '"') && (arg[len - 1] == '\'' || arg[len - 1] == '"')));
-}
-
-/*
-** is_option()
-*/
-
-int is_option(int i, char **cmd_tab)
+int is_n_option(int i, char **cmd_tab)
 {
 	int	j;
 	int	k;
@@ -154,10 +92,53 @@ int check_if_option_n(char **cmd_tab)
 	i = 0;
 	while (cmd_tab[++i])
 	{
-		if (is_option(i, cmd_tab))
+		if (is_n_option(i, cmd_tab))
 			return (1);
 	}
 	return (0);
+}
+
+/*
+** apply_redirect()
+**
+** open || create it with rights as 3rd arg (mode)
+** int open(const char *pathname, int flags, mode_t mode);
+*/
+
+void apply_redirect(char **cmd_tab, int pos)
+{
+	int		i;
+	char	*filename;
+	int		append;
+	int		fd;
+
+	// printf("cmd_tab[pos] = %s\n", cmd_tab[pos]);
+	i = 0;
+	i = ft_next_char_pos(cmd_tab[pos] + i, ">");
+	append = cmd_tab[pos][i + 1] == '>' ? 1 : 0;
+	i += append;
+	filename = NULL;
+	if (!parse_filename(&filename, cmd_tab, pos, i))
+		return (ft_strdel(&filename));
+	printf("filename = %s\n", filename);
+	if ((fd = open(filename, O_CREAT | O_WRONLY | (append ? O_APPEND : O_TRUNC), 0777)) == -1)
+		return (ft_strdel(&filename)); // erreur fd
+	i = 0;
+	while (cmd_tab[++i])
+	{
+		if (is_n_option(i, cmd_tab) || is_n_option(i - 1, cmd_tab) || ft_strequ(cmd_tab[i], filename)) // continuer si cmd_tab[i] == -n (option) || si l'arg est le filename
+			continue ;
+		else
+			write(fd, " ", 1);
+		printf("%s -%.*s- in %s\n", append ? "append" : "overwrite", (int)ft_next_char_pos(cmd_tab[i], ">"), cmd_tab[i], filename);
+		write(fd, cmd_tab[i], ft_next_char_pos(cmd_tab[i], ">"));
+		if (ft_strchr(cmd_tab[i], '>'))
+			i += 1;
+	}
+	if (!check_if_option_n(cmd_tab))
+		write(fd, "\n", 1);
+	close(fd);
+	ft_strdel(&filename);
 }
 
 /*
@@ -176,15 +157,12 @@ int check_if_option_n(char **cmd_tab)
 void	builtin_echo(t_env *env, char **cmd_tab)
 {
 	int i;
-	int	n_option;
 
 	i = 0;
-	n_option = 0;
 	if (cmd_tab[1] == 0)
 		write(1, "\n", 1);
 	else
 	{
-		n_option = check_if_option_n(cmd_tab);
 		i = 0;
 		while (cmd_tab[++i])
 		{
@@ -195,7 +173,7 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 		while (cmd_tab[++i])
 		{
 			// printf("cmd_tab[%d] = -%s-\n", i, cmd_tab[i]);
-			if (!is_option(i, cmd_tab))
+			if (!is_n_option(i, cmd_tab))
 			{
 				if (is_$env_var(env, cmd_tab[i]))
 					;
@@ -207,7 +185,7 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 					write(1, " ", 1);
 			}			
 		}
-		if (!n_option)
+		if (!check_if_option_n(cmd_tab))
 			write(1, "\n", 1);
 	}
 }
