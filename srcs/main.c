@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 03:41:12 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 05:01:23 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ t_env	*env;
 void	root(t_env *env, char *path, char **cmd_tab)
 {
 	print_str_split(cmd_tab);
-	// printf("path = %s\n", path);
 	if (is_$env_var(env, cmd_tab[0])) // $VAR
 		write(1, "\n", 1);
 	else if (ft_strequci(cmd_tab[0], "echo"))
@@ -45,9 +44,9 @@ void	root(t_env *env, char *path, char **cmd_tab)
 	{
 		if (count_arg(cmd_tab) > 2)
 			free_and_exit(env, 0, "exit: too many arguments\n");
-		free_and_exit(env, cmd_tab[1] ? ft_atoi(cmd_tab[1]) : 1, NULL); // exit 10 (la valeur 10 est retourné, 'echo $?' pour verifier dans ton "vrais" shell)
+		free_and_exit(env, cmd_tab[1] ? ft_atoi(cmd_tab[1]) : 1, NULL); // exit 10 (la valeur 10 est retournée, 'echo $?' pour verifier dans le "vrai" shell)
 	}
-	else if (cmd_tab[0]) // pour protéger contre la commande chaine d'espaces + enter
+	else if (cmd_tab[0]) // pour protéger contre la commande constituee d'une chaine d'espaces + enter
 		execute(cmd_tab, path);
 }
 
@@ -60,7 +59,7 @@ void	parse_and_root_cmds(t_env *env, char **cmds)
 	i = -1;
 	while (cmds[++i])
 	{
-		if (!(cmd_tab = ft_split_minishell(cmds[i], " \t")))
+		if (!(cmd_tab = ft_split_set_quotes_chevron(cmds[i], " \t")))
 			continue ;
 		root(env, var_value(env, "PATH"), cmd_tab);
 		free_str_tab(cmd_tab);
@@ -68,7 +67,7 @@ void	parse_and_root_cmds(t_env *env, char **cmds)
 }
 
 /*
-** 3e argument de la fonction main == l’ensemble des variables d’environment
+** put prompt isoler pour pouvoir l'appeler depuis les fonctions de gestion des sig
 */
 
 void			put_prompt(void)
@@ -88,14 +87,10 @@ int		main(int argc, char **argv, char **env_tab)
 	{
 		sigint_handler();
 		put_prompt();
-		if (!get_next_line(STDIN_FILENO, &line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF that quit shell
+		if (!get_next_line(STDIN_FILENO, &line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF, that quits shell
 			free_and_exit(env, 0, NULL);
-		if (ft_strstr(line, ";;"))
-			ft_printf("zsh: parse error near `;;'\n");
-		else if (ft_strstr(line, ">>>"))
-			ft_printf("zsh: parse error near `>'\n");
-		else if (ft_strstr(line, "<<<")) // << = bonus
-			ft_printf("zsh: parse error near `<'\n");
+		if (parse_error(line))
+			free_and_exit(env, 0, NULL);
 		else
 		{
 			if (!(cmds = ft_split_set(line, ";")))

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 23:54:32 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 05:00:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,18 @@ int		execute(char **cmd_tab, char *path);
 void    print_str_split(char **s);
 int		count_arg(char **s);
 int		arg_is_in_quotes(char *arg);
-char	**ft_split_minishell(char const *s, char *set);
+char	**ft_split_set_quotes_chevron(char const *s, char *set);
+
+/*
+**	split_1.c
+*/
+
+static int		nb_new_s(char const *s, char *set)
+
+/*
+**	split_2.c
+*/
+
 
 /*
 **	free.c
