@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 21:55:28 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/15 23:28:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void apply_redirect(char **cmd_tab, int pos)
 	{
 		if (is_n_option(i, cmd_tab) || is_n_option(i - 1, cmd_tab) || ft_strequ(cmd_tab[i], filename)) // continuer si cmd_tab[i] == -n (option) || si l'arg est le filename
 			continue ;
-		else
+		else if (i > 1)
 			write(fd, " ", 1);
 		printf("%s -%.*s- in %s\n", append ? "append" : "overwrite", (int)ft_next_char_pos(cmd_tab[i], ">"), cmd_tab[i], filename);
 		write(fd, cmd_tab[i], ft_next_char_pos(cmd_tab[i], ">"));
@@ -178,7 +178,7 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 				if (is_$env_var(env, cmd_tab[i]))
 					;
 				else if (arg_is_in_quotes(cmd_tab[i]))
-					write(1, cmd_tab[i] + 1, ft_strlen(cmd_tab[i]) - 1);
+					write(1, cmd_tab[i] + 1, ft_strlen(cmd_tab[i]) - 2);
 				else
 					write(1, cmd_tab[i], ft_strlen(cmd_tab[i]));
 				if (cmd_tab[i + 1])

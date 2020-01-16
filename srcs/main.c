@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 20:09:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 01:29:05 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	parse_and_root_cmds(t_env *env, char **cmds)
 	i = -1;
 	while (cmds[++i])
 	{
-		if (!(cmd_tab = ft_split_set_and_quotes(cmds[i], " \t")))
+		if (!(cmd_tab = ft_split_minishell(cmds[i], " \t")))
 			continue ;
 		root(env, var_value(env, "PATH"), cmd_tab);
 		free_str_tab(cmd_tab);
