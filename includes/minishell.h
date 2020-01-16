@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alamorth <alamorth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 05:59:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 13:47:44 by alamorth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ int		arg_is_in_quotes(char *arg);
 
 int		is_separator(char c, char *set);
 char	**ft_split_set_quotes_chevron(char const *s, char *set);
+char	*ft_new_str_with_quotes(const char *s, char *quote);
+char	*ft_new_str_chevron(const char *s, char *quote);
+char	*ft_new_str(const char *s, char *set);
 
 /*
 **	split_2.c
@@ -108,6 +111,14 @@ char	**ft_split_set_quotes_chevron(char const *s, char *set);
 
 int		nb_new_s(char const *s, char *set);
 
+/*
+**	create_strs.c
+*/
+
+int		ft_str_backs_quotes(const char *s, int *i, int *str_i, char **strs);
+int		ft_str_chevron(const char *s, int *i, int *str_i, char **strs, char *set);
+int		ft_is_flag(const char *s, int *i, int *str_i, char **strs, char *set);
+int		ft_create_strs(char **strs, const char *s, char *set);
 /*
 **	errors.c
 */
