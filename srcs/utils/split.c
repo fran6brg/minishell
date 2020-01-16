@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 02:00:22 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 04:12:55 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int		nb_new_s(char const *s, char *set)
 	flag = 1;
 	while (s[++i])
 	{
-        // printf("while | s[%d] = %c | nb = %d\n", i, s[i], nb);
+        printf("while | s[%d] = -%c- | nb = %d\n", i, s[i], nb);
 		if (s[i] == '\'' || s[i] == '"')
 		{
             // printf("first q detected | s[%d] = %c\n", i, s[i]);
@@ -45,8 +45,11 @@ static int		nb_new_s(char const *s, char *set)
 			nb++;
 			i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
             while (s[i - 1] == '\\')
+            {
+                printf("go to next backslash\n");
                 i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
-            // printf("last q detected | s[%d] = %c\n", i, s[i]);
+            }
+            printf("last q detected | s[%d] = %c\n", i, s[i]);
 		}
 		else if (s[i] == '>' || s[i] == '<')
 		{
@@ -65,16 +68,18 @@ static int		nb_new_s(char const *s, char *set)
 			}
 			if (j > 0)
 				nb++; // filename
-			i += j;
 		}
 		else if (is_separator(s[i], set))
-			flag = 1;
+		{
+            printf("SEP | s[%d] = -%c- | flag = %d | nb = %d\n", i, s[i], flag, nb);
+            flag = 1;
+        }
 		else if (flag)
 		{
 			flag = 0;
 			nb++;
 		}
-        // printf("end   | s[%d] = %c | nb = %d\n", i, s[i], nb);
+        printf("end   | s[%d] = -%c- | flag = %d | nb = %d\n", i, s[i], flag, nb);
 	}
     printf("nb_new_s() ret %d\n", nb);
 	return (nb);
@@ -105,17 +110,23 @@ static	char	*ft_new_str_with_quotes(const char *s, char *quote)
 {
 	int		i;
 	char	*new_s;
+    int     j;
 
-	i = ft_next_char_pos(s, quote);
+	i = ft_next_char_pos(s, quote) + 1;
+    while (s[i - 1] == '\\')
+    {
+        printf("go to next backslash\n");
+        i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
+    }
 	// printf("ft_new_str_with_quotes | i = %d\n", i);
 	if (!(new_s = malloc(sizeof(char) * (1 + i + 1))))
 		return (NULL);
-	i = -1;
-	while (s[++i] != quote[0])
-		new_s[1 + i] = s[i];
+	j = -1;
+	while (++j < i)
+		new_s[1 + j] = s[j];
 	new_s[0] = quote[0];
-	new_s[1 + i] = quote[0];
-	new_s[1 + ++i] = '\0';
+	new_s[1 + j] = quote[0];
+	new_s[1 + ++j] = '\0';
 	return (new_s);
 }
 
@@ -139,17 +150,18 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 	int i;
 	int str_i;
 	int flag;
-    int j;
+    // int j;
 
 	i = -1;
 	str_i = 0;
 	flag = 1;
 	while (s[++i])
 	{
+        printf("while create | s[%d] = -%c-\n", i, s[i]);
 		if (s[i] == '\'' || s[i] == '"')
 		{
 			flag = 0;
-            printf("\nft_create_strs | s[%d] = -%c-\n", i, s[i]);
+            printf("\nft_new_str_with_quotes | s[%d] = -%c-\n", i, s[i]);
 			if (!(strs[str_i] = ft_new_str_with_quotes(s + i + 1, s[i] == '\'' ? "'" : "\"")))
 			{
 				while (str_i-- > 0)
@@ -160,12 +172,14 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 			str_i++;
 			// printf("i += %d", ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\""));
 			i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
+            while (s[i - 1] == '\\')
+                i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
 			// printf(" > s[%d] = %c\n", i, s[i]);
 		}
         else if (s[i] == '<' || s[i] == '>')
         {
             flag = 0;
-            printf("\nft_create_strs | s[%d] = -%c-\n", i, s[i]);
+            printf("\nft_new_str_redirect | s[%d] = -%c-\n", i, s[i]);
 			if (!(strs[str_i] = ft_new_str_redirect(s + i + 1, s[i] == '>' ? ">" : "<")))
 			{
 				while (str_i-- > 0)
@@ -177,34 +191,34 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
             i += 1;
             while (s[i] && is_separator(s[i], set))
 			{
-                printf("before filename s[%d] = -%c-\n", j, s[i + j]);
+                printf("before filename s[%d] = -%c-\n", i, s[i]);
                 i++;
             }
-			j = 0;
-			while (s[i + j] && !is_separator(s[i + j], set))
-			{
-				printf("filename[%d] = -%c-\n", j, s[i + j]);
-				j++;
-			}
-			if (j > 0)
-			{
-                printf("\nft_create_strs | s[%d] = -%c-\n", i, s[i]);
+			// j = 0;
+			// while (s[i + j] && !is_separator(s[i + j], set))
+			// {
+			// 	printf("filename[%d] = -%c-\n", j, s[i + j]);
+			// 	j++;
+			// }
+			// if (j > 0)
+			// {
+                printf("\nft_new_str filename | s[%d] = -%c-\n", i, s[i]);
                 if (!(strs[str_i] = ft_new_str(s + i, set)))
 			    {
                     while (str_i-- > 0)
                         free(strs[str_i]);
                     return (0);
 			    }
+			    i += ft_strlen(strs[str_i]) - 1;
                 str_i++;
-			    i += j;
-            }
+            // }
         }
 		else if (is_separator(s[i], set))
 			flag = 1;
 		else if (flag)
 		{
 			flag = 0;
-            printf("\nft_create_strs | s[%d] = -%c-\n", i, s[i]);
+            printf("\nft_new_str | s[%d] = -%c-\n", i, s[i]);
 			if (!(strs[str_i] = ft_new_str(s + i, set)))
 			{
 				while (str_i-- > 0)
@@ -267,8 +281,6 @@ char			**ft_split_minishell(char const *s, char *set)
 	// printf("nb_new_s() = %d\n", nb_new_s(trim_s, set));
 	strs[nb_new_s(trim_s, set)] = 0;
 	ft_strdel(&trim_s);
-    print_str_split(strs);
-    exit(0);
 	return (strs);
 }
 

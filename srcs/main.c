@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 01:29:05 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 03:41:12 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,14 @@ int		main(int argc, char **argv, char **env_tab)
 			free_and_exit(env, 0, NULL);
 		if (ft_strstr(line, ";;"))
 			ft_printf("zsh: parse error near `;;'\n");
+		else if (ft_strstr(line, ">>>"))
+			ft_printf("zsh: parse error near `>'\n");
+		else if (ft_strstr(line, "<<<")) // << = bonus
+			ft_printf("zsh: parse error near `<'\n");
 		else
 		{
-			cmds = ft_split_set(line, ";");
+			if (!(cmds = ft_split_set(line, ";")))
+				continue ;
 			parse_and_root_cmds(env, cmds);
 			free_cmds(line, cmds);
 		}
