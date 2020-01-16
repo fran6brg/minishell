@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 05:00:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 05:59:39 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int		main(int argc, char **argv, char **env);
 */
 
 int		is_$env_var(t_env *env, char *var);
+void	apply_redirect(t_env *env, char **cmd_tab, int pos);
 void	builtin_echo(t_env *env, char **cmd_tab);
 
 /*
@@ -93,18 +94,26 @@ int		execute(char **cmd_tab, char *path);
 void    print_str_split(char **s);
 int		count_arg(char **s);
 int		arg_is_in_quotes(char *arg);
-char	**ft_split_set_quotes_chevron(char const *s, char *set);
 
 /*
 **	split_1.c
 */
 
-static int		nb_new_s(char const *s, char *set)
+int		is_separator(char c, char *set);
+char	**ft_split_set_quotes_chevron(char const *s, char *set);
 
 /*
 **	split_2.c
 */
 
+int		nb_new_s(char const *s, char *set);
+
+/*
+**	errors.c
+*/
+
+int		parse_error(char *line);
+int		multiline(const char *s);
 
 /*
 **	free.c

@@ -6,13 +6,13 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:41:10 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 04:48:07 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 05:23:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int		nb_new_s(char const *s, char *set)
+int		nb_new_s(char const *s, char *set)
 {
 	int i;
 	int nb;

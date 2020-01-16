@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 18:42:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 00:28:52 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 06:08:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static int		nb_new_s(char const *s, char *set)
 	int i;
 	int nb;
 	int flag;
-	int	j;
 
 	i = -1;
 	nb = 0;
@@ -62,7 +61,7 @@ static char		*ft_new_str(const char *s, char *set)
 	i = 0;
 	while (s[i] && !(is_separator(s[i], set)))
 		i++;
-	// printf("ft_new_str | i = %d\n", i);
+	// // printf("ft_new_str | i = %d\n", i);
 	if (!(new_s = malloc(sizeof(char) * (i + 1))))
 		return ((char *)NULL);
 	i = -1;
@@ -78,7 +77,7 @@ static	char	*ft_new_str_with_quotes(const char *s, char *quote)
 	char	*new_s;
 
 	i = ft_next_char_pos(s, quote);
-	// printf("ft_new_str_with_quotes | i = %d\n", i);
+	// // printf("ft_new_str_with_quotes | i = %d\n", i);
 	if (!(new_s = malloc(sizeof(char) * (1 + i + 1))))
 		return (NULL);
 	i = -1;
@@ -101,7 +100,7 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 	flag = 1;
 	while (s[++i])
 	{
-		// printf("\nft_create_strs | s[%d] = %c\n", i, s[i]);
+		// // printf("\nft_create_strs | s[%d] = %c\n", i, s[i]);
 		if (s[i] == '\'' || s[i] == '"')
 		{
 			flag = 0;
@@ -111,11 +110,11 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 					free(strs[str_i]);
 				return (0);
 			}
-			// printf(">>>>>> strs[%d] = -%s-\n\n", str_i, strs[str_i]);
+			// // printf(">>>>>> strs[%d] = -%s-\n\n", str_i, strs[str_i]);
 			str_i++;
-			// printf("i += %d", ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\""));
+			// // printf("i += %d", ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\""));
 			i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
-			// printf(" > s[%d] = %c\n", i, s[i]);
+			// // printf(" > s[%d] = %c\n", i, s[i]);
 		}
 		else if (is_separator(s[i], set))
 			flag = 1;
@@ -128,7 +127,7 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 					free(strs[str_i]);
 				return (0);
 			}
-			// printf("||||||| strs[%d] = -%s-\n\n", str_i, strs[str_i]);
+			// // printf("||||||| strs[%d] = -%s-\n\n", str_i, strs[str_i]);
 			str_i++;
 		}
 	}
@@ -142,20 +141,20 @@ static	int	multiline(const char *s)
 	i = -1;
 	while (s[++i])
 	{
-		// printf("multiline | s[%d] = %c\n", i, s[i]);
+		// // printf("multiline | s[%d] = %c\n", i, s[i]);
 		if (s[i] == '\'' || s[i] == '"')
 		{
 			if (!ft_strchr(s + i + 1, s[i] == '\'' ? '\'' : '"'))
 			{
-				printf("error multiline\n");
+				// printf("error multiline\n");
 				return (1);
 			}
-			// printf("i += %d", ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\""));
+			// // printf("i += %d", ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\""));
 			i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
-			// printf(" > s[%d] = %c\n", i, s[i]);
+			// // printf(" > s[%d] = %c\n", i, s[i]);
 		}
 	}
-	// printf("ok pas de multi\n");
+	// // printf("ok pas de multi\n");
 	return (0);
 }
 
@@ -166,7 +165,7 @@ char			**ft_split_set_and_quotes(char const *s, char *set)
 
 	if (!s || multiline(s))
 		return (NULL);
-	// printf("line = %s\n", s);
+	// // printf("line = %s\n", s);
 	trim_s = ft_strtrim(s, ";");
 	if (!(strs = malloc(sizeof(char *) * (nb_new_s(trim_s, set) + 1))))
 	{
@@ -179,7 +178,7 @@ char			**ft_split_set_and_quotes(char const *s, char *set)
 		free(strs);
 		return (NULL);
 	}
-	// printf("nb_new_s() = %d\n", nb_new_s(trim_s, set));
+	// // printf("nb_new_s() = %d\n", nb_new_s(trim_s, set));
 	strs[nb_new_s(trim_s, set)] = 0;
 	ft_strdel(&trim_s);
 	return (strs);

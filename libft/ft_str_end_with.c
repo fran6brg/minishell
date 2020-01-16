@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/20 07:29:32 by fberger           #+#    #+#             */
-/*   Updated: 2019/12/20 07:37:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 06:07:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		ft_str_end_with(char *str, char *end)
 		return (0);
 	i = ft_strlen(str);
 	j = ft_strlen(end);
-	while (--j > 0 && --i > 0)
+	while (--j >= 0 && --i >= 0)
 	{
 		if (str[i] != end[j])
 			return (0);

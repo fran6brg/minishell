@@ -6,13 +6,13 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 05:02:57 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/16 06:36:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int		is_separator(char c, char *set)
+int		is_separator(char c, char *set)
 {
 	int i;
 
@@ -115,7 +115,7 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
         {
             flag = 0;
             printf("\nft_new_str_chevron | s[%d] = -%c-\n", i, s[i]);
-			if (!(strs[str_i] = ft_new_str_chevron(s + i + 1, s[i] == '>' ? ">" : "<")))
+			if (!(strs[str_i] = ft_new_str_chevron(s + i, s[i] == '>' ? ">" : "<")))
 			{
 				while (str_i-- > 0)
 					free(strs[str_i]);
@@ -155,28 +155,6 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 	return (1);
 }
 
-static	int	multiline(const char *s)
-{
-	int i;
-
-	i = -1;
-	while (s[++i])
-	{
-		if (s[i] == '\'' || s[i] == '"')
-		{
-			if (!ft_strchr(s + i + 1, s[i] == '\'' ? '\'' : '"'))
-			{
-				printf("multiline bonus not handled\n");
-				return (1);
-			}
-			i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
-            while (s[i - 1] == '\\')
-                i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
-		}
-	}
-	return (0);
-}
-
 char			**ft_split_set_quotes_chevron(char const *s, char *set)
 {
 	char	**strs;
@@ -200,20 +178,3 @@ char			**ft_split_set_quotes_chevron(char const *s, char *set)
 	ft_strdel(&trim_s);
 	return (strs);
 }
-
-// echo abc "; ">filename;echo $HOME      '' 
-
-// split ';'
-
-// **1
-//  echo abc "; ">filename
-//  echo $HOME      ''
-
-// split ' ' with quotes
-
-// 1[0]
-//  echo|abc|"; ">filename
-// 1[1]
-//  echo|$HOME|'' 
-
-// split
