@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alamorth <alamorth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 16:04:04 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/17 17:13:09 by alamorth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ char	*check(char **cmd_tab, struct stat *s, char *path, char *exec_path)
 				return (exec_path);
 		ft_strdel(&exec_path);
 		exec_path = NULL;
+	}
+	if (cmd_tab[0][0] == '.' && cmd_tab[0][1] == '/')
+	{
+		if (!access(cmd_tab[0], X_OK))
+			return (cmd_tab[0]);
 	}
 	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 	return (0);
