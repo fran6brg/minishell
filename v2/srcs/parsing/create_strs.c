@@ -6,7 +6,7 @@
 /*   By: alamorth <alamorth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:34:47 by alamorth          #+#    #+#             */
-/*   Updated: 2020/01/16 13:48:05 by alamorth         ###   ########.fr       */
+/*   Updated: 2020/01/17 12:42:26 by alamorth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ int			ft_str_backs_quotes(const char *s, int *i, int *str_i, char **strs)
 	*str_i += 1;
 			// printf("i += %d", ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\""));
 	*i += ft_next_char_pos(s + *i + 1, s[*i] == '\'' ? "'" : "\"") + 1;
-    while (s[*i - 1] == '\\')
+    while (s[*i - 1] == '\\'){
         *i += ft_next_char_pos(s + *i + 1, s[*i] == '\'' ? "'" : "\"") + 1;
+	}
 			// printf(" > s[%d] = %c\n", i, s[i]);
 	return (1);
 }

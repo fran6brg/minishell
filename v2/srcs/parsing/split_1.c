@@ -6,7 +6,7 @@
 /*   By: alamorth <alamorth@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 13:48:33 by alamorth         ###   ########.fr       */
+/*   Updated: 2020/01/17 14:14:17 by alamorth         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,49 @@ char		*ft_new_str(const char *s, char *set)
 	return (new_s);
 }
 
+int		ft_next_char_posS(const char *s, char *set)
+{
+	int		i;
+	int		j;
+
+	if (!s)
+		return (0);
+	i = -1;
+	while (s[++i])
+	{
+		j = -1;
+		while (set[++j])
+			if (s[i] == set[j] && s[i - 1] != '\\')
+				return (i);
+	}
+	return (i);
+}
+
 char	*ft_new_str_with_quotes(const char *s, char *quote)
 {
 	int		i;
 	char	*new_s;
     int     j;
+	int		k;
 
-	i = ft_next_char_pos(s, quote) + 1;
-    while (s[i - 1] == '\\')
-        i += ft_next_char_pos(s + i + 1, quote) + 1;
+	i = ft_next_char_posS(s, quote) + 1;
 	if (!(new_s = malloc(sizeof(char) * (1 + i + 1))))
 		return (NULL);
 	j = -1;
+	k = 0;
 	while (++j < i)
-		new_s[1 + j] = s[j];
+	{
+		if (s[j] == '\\' && s[j + 1] == '"')
+		{
+			new_s[1 + k] = s[j + 1];
+			j++;
+		}
+		else
+			new_s[1 + k] = s[j];
+		k++;
+	}
 	new_s[0] = quote[0];
-	//new_s[1 + j] = quote[0];
-	new_s[1 + j] = '\0';
+	new_s[j + 1] = '\0';
 	return (new_s);
 }
 
