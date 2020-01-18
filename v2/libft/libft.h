@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 03:49:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 21:31:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ int					ft_strequci(char *s1, char *s2);
 int					ft_next_char_pos(const char *s, char *set);
 void				ft_free_str_tab(char **strs, int str_i);
 int					ft_free_str_tab_ret(char **strs, int str_i, int ret);
+void				ft_print_str_tab(char **s);
 
 /*
 ** nbr

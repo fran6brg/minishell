@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_str_tab.c                                  :+:      :+:    :+:   */
+/*   ft_print_str_tab.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/17 23:56:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 21:28:42 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/18 21:28:47 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/18 21:31:27 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free_str_tab(char **strs, int str_i)
+void	ft_print_str_tab(char **s)
 {
-	if (strs)
-	{
-		while (str_i-- > 0)
-			ft_strdel(&strs[str_i]);
-		free(strs);
-	}
+	int i;
+
+	i = -1;
+	while (s[++i])
+		ft_printf("str_tab[%d] = -%s-\n", i, s[i]);
 }

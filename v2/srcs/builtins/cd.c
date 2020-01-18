@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/13 16:38:26 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 22:37:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@
 ** http://manpagesfr.free.fr/man/man2/access.2.html
 */
 
-int		change_dir(t_env *env, char **cmd_tab, char *dest)
+int		change_dir(char **cmd_tab, char *dest)
 {
 	int ret;
 
 	if (dest[0] == '-')
 	{
-		ret = chdir(var_value(env, "OLDPWD"));
-		ft_printf("%s\n", var_value(env, "OLDPWD"));
+		ret = chdir(var_value("OLDPWD"));
+		ft_printf("%s\n", var_value("OLDPWD"));
 	}
 	else
 		ret = chdir(dest);
@@ -71,7 +71,7 @@ int		change_dir(t_env *env, char **cmd_tab, char *dest)
 ** http://manpagesfr.free.fr/man/man3/getcwd.3.html
 */
 
-void	go_home(t_env *env, char *home, char **cmd_tab)
+void	go_home(char *home, char **cmd_tab)
 {
 	char	*tmp_path;
   	char	buf[PATH_MAX - 1];
@@ -79,11 +79,11 @@ void	go_home(t_env *env, char *home, char **cmd_tab)
 	char	**cmd_tab_tmp;
 
 	tmp_path = getcwd(buf, PATH_MAX - 1);
-	if (!change_dir(env, cmd_tab, home))
+	if (!change_dir(cmd_tab, home))
     	return ;
 	cmd = ft_strjoin("cd OLDPWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
-  	builtin_setenv(cmd_tab_tmp, env);
+  	builtin_setenv(cmd_tab_tmp);
 
 	ft_strdel(&cmd);
 	free_str_tab(cmd_tab_tmp);
@@ -92,7 +92,7 @@ void	go_home(t_env *env, char *home, char **cmd_tab)
   	tmp_path = getcwd(buf, PATH_MAX - 1);
 	cmd = ft_strjoin("setenv PWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
-  	builtin_setenv(cmd_tab_tmp, env);
+  	builtin_setenv(cmd_tab_tmp);
 	
 	ft_strdel(&cmd);
 	free_str_tab(cmd_tab_tmp);
@@ -105,7 +105,7 @@ void	go_home(t_env *env, char *home, char **cmd_tab)
 ** http://manpagesfr.free.fr/man/man2/chdir.2.html
 */
 
-void	go_path(t_env *env, char **cmd_tab)
+void	go_path(char **cmd_tab)
 {
 	char	*tmp_path;
 	char	buf[PATH_MAX - 1];
@@ -113,11 +113,11 @@ void	go_path(t_env *env, char **cmd_tab)
 	char	**cmd_tab_tmp;
 
 	tmp_path = getcwd(buf, PATH_MAX - 1);
-	if (!change_dir(env, cmd_tab, cmd_tab[1]))
+	if (!change_dir(cmd_tab, cmd_tab[1]))
 		return ;
 	cmd = ft_strjoin("cd OLDPWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
-	builtin_setenv(cmd_tab_tmp, env);
+	builtin_setenv(cmd_tab_tmp);
 
 	ft_strdel(&cmd);
 	free_str_tab(cmd_tab_tmp);
@@ -126,7 +126,7 @@ void	go_path(t_env *env, char **cmd_tab)
 	tmp_path = getcwd(buf, PATH_MAX - 1);
 	cmd = ft_strjoin("setenv PWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
-	builtin_setenv(cmd_tab_tmp, env);
+	builtin_setenv(cmd_tab_tmp);
 
 	ft_strdel(&cmd);
 	free_str_tab(cmd_tab_tmp);
@@ -147,11 +147,11 @@ void	print_cd_error(int nb_arg, char **cmd_tab)
 ** http://manpagesfr.free.fr/man/man2/chdir.2.html
 */
 
-void	builtin_cd(t_env *env, char **cmd_tab)
+void	builtin_cd(char **cmd_tab)
 {
 	int nb_arg;
 
-	// print_str_split(cmd_tab); // pour debug
+	// ft_print_str_tab(cmd_tab); // pour debug
 	nb_arg = count_arg(cmd_tab);
 	// printf("nb_arg = %d\n", nb_arg); // pour debug
 	if (nb_arg >= 3)
@@ -160,10 +160,10 @@ void	builtin_cd(t_env *env, char **cmd_tab)
 	else if (!cmd_tab[1]
 	|| (cmd_tab[1][0] == '~' && !ft_isalpha(cmd_tab[1][1]))
 	|| ft_strequci(cmd_tab[1], "$HOME"))
-		go_home(env, var_value(env, "HOME"), cmd_tab);
+		go_home(var_value("HOME"), cmd_tab);
 	// cd ~/ || cd ~/[...]
 	else
-		go_path(env, cmd_tab);
+		go_path(cmd_tab);
 	// a gerer : cd ~/..
 	// a gerer : cd -/..
 }

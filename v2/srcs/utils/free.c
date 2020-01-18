@@ -6,11 +6,17 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 20:22:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 18:16:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 22:54:16 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/*
+** global var for put_promt()
+*/
+
+t_env	*g_env;
 
 /*
 ** free 2D str array
@@ -44,16 +50,16 @@ void	free_cmds(char *line, char **cmds)
 ** free env list
 */
 
-void   free_env(t_env *elem)
+void   free_env()
 {
     t_env *tmp;
 
-	while (elem)
+	while (g_env)
 	{
-		tmp = elem->next;
-		ft_strdel(&elem->name);
-		ft_strdel(&elem->value);
-		elem = tmp;
+		tmp = g_env->next;
+		ft_strdel(&g_env->name);
+		ft_strdel(&g_env->value);
+		g_env = tmp;
 	}
 }
 
@@ -61,10 +67,10 @@ void   free_env(t_env *elem)
 ** free_and_exit
 */
 
-void	free_and_exit(t_env *env, int exit_value, char *msg)
+void	free_and_exit(int exit_value, char *msg)
 {
 	if (msg)
 		ft_printf("%s\n", msg);
-	free_env(env);
+	free_env();
 	exit(exit_value);
 }

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/17 22:44:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 21:21:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,7 @@ int		execute(char **cmd_tab, char *path)
 	}
 	if (!(exec_path = check_paths(cmd_tab, &s, path, exec_path)))
 		return (-1);
-	pid = 0;
-	pid = fork();
-	if (pid == 0)
+	if ((pid = fork()) == 0)
 		execv(exec_path, cmd_tab);
 	else if (pid < 0)
 	{
@@ -111,5 +109,6 @@ int		execute(char **cmd_tab, char *path)
 	status = 0;
 	waitpid(pid, &status, 0);
 	kill(pid, SIGTERM);
+	write(1, "\n", ft_strequci(cmd_tab[0], "cat"));
 	return (0);
 }

@@ -6,21 +6,27 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/15 18:06:35 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 22:57:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
+** global var for put_promt()
+*/
+
+t_env	*g_env;
+
+/*
 ** get value from var name
 */
 
-char	*var_value(t_env *env, char *name)
+char	*var_value(char *name)
 {
 	t_env	*var;
 
-	var = env;
+	var = g_env;
 	while (var)
 	{
 		if (!ft_strcmp(var->name, name))
@@ -34,7 +40,7 @@ char	*var_value(t_env *env, char *name)
 ** store env inside list
 */
 
-int		store_env(char **env_tab, t_env **env)
+int		store_env(char **env_tab)
 {
 	int		i;
 	t_env	*var;
@@ -54,7 +60,7 @@ int		store_env(char **env_tab, t_env **env)
 		if (last)
 			last->next = var;
 		else
-			*env = var;
+			g_env = var;
 		last = var;
 	}
 	return (1);
@@ -65,11 +71,11 @@ int		store_env(char **env_tab, t_env **env)
 ** ft_strequci str equal case insensitive
 */
 
-int		is_env_var(t_env *env, char *arg)
+int		is_env_var(char *arg)
 {
 	t_env   *var;
 	
-	var = env;
+	var = g_env;
 	while (var)
 	{
 		if (ft_strequci(var->name, arg))
@@ -84,11 +90,11 @@ int		is_env_var(t_env *env, char *arg)
 ** print toutes les var d'env
 */
 
-void	builtin_env(t_env *env)
+void	builtin_env()
 {
 	t_env   *var;
 	
-	var = env;
+	var = g_env;
 	while (var)
 	{
 		ft_printf("%s=%s\n", var->name, var->value);
@@ -105,7 +111,7 @@ void	builtin_env(t_env *env)
 ** setenv n'existe pas sur ZSH, à la place il y a export Name=Value
 */
 
-void    builtin_setenv(char **cmd_tab, t_env *env)
+void    builtin_setenv(char **cmd_tab)
 {
 	t_env   *var;
 	t_env   *new;
@@ -113,7 +119,7 @@ void    builtin_setenv(char **cmd_tab, t_env *env)
 	if (count_arg(cmd_tab) != 3)
 	{
 		if (!cmd_tab[1])
-			builtin_env(env); // setenv (affiche l'env)
+			builtin_env();
 		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
 		return ;
 	}
@@ -122,7 +128,7 @@ void    builtin_setenv(char **cmd_tab, t_env *env)
 		ft_printf("error: variable name can not contain '='\n");
 		return ;
 	}
-	var = env;
+	var = g_env;
 	while (var)
 	{
 		if (ft_strequ(var->name, cmd_tab[1]))
@@ -137,7 +143,7 @@ void    builtin_setenv(char **cmd_tab, t_env *env)
 	new->name = ft_strdup(cmd_tab[1]);
 	new->value = ft_strdup(cmd_tab[2]);
 	new->next = NULL;
-	var = env;
+	var = g_env;
 	while (var->next)
 		var = var->next;
 	var->next = new;
@@ -149,7 +155,7 @@ void    builtin_setenv(char **cmd_tab, t_env *env)
 */
 
 
-void	 builtin_unsetenv(char **cmd_tab, t_env *env)
+void	 builtin_unsetenv(char **cmd_tab)
 {
 	t_env	 *previous;
 	t_env	 *current;
@@ -160,15 +166,15 @@ void	 builtin_unsetenv(char **cmd_tab, t_env *env)
 		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
 		return ;
 	}
-	current = env;
-	previous = env;
+	current = g_env;
+	previous = g_env;
 	while (current)
 	{
 		next = current->next;
 		if (ft_strequ(current->name, cmd_tab[1]))
 		{
-			if (current == env)
-				env = next;
+			if (current == g_env)
+				g_env = next;
 			previous->next = next;
 			ft_strdel(&current->name);
 			ft_strdel(&current->value);
