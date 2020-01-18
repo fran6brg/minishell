@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/01/14 16:17:36 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/18 03:49:48 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,6 @@ SRCS=ft_putchar.c \
 	ft_strmapi.c \
 	ft_split.c \
 	ft_split_set.c \
-	ft_split_set_and_quotes.c \
 	ft_nbrlen.c \
 	ft_unbrlen.c \
 	ft_intmax_ttoa_base_ws.c \
@@ -108,7 +107,8 @@ SRCS=ft_putchar.c \
 	ft_set_option.c \
 	ft_letterequci.c \
 	ft_strequci.c \
-	ft_next_char_pos.c
+	ft_next_char_pos.c \
+	ft_free_str_tab.c
 
 
 OBJS=${SRCS:.c=.o}

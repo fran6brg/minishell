@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   split_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alamorth <alamorth@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:41:10 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 13:31:26 by alamorth         ###   ########.fr       */
+/*   Updated: 2020/01/17 23:40:40 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+**
+*/
 
 void	ft_back_or_quote(int *flag, int *nb, int *i, char const *s)
 {
@@ -21,6 +24,10 @@ void	ft_back_or_quote(int *flag, int *nb, int *i, char const *s)
     while (s[*i - 1] == '\\')
         *i += ft_next_char_pos(s + *i + 1, s[*i] == '\'' ? "'" : "\"") + 1;
 }
+
+/*
+**
+*/
 
 void	ft_is_chevron(int *flag, int *nb, int *i, char const *s, char *set, int *j)
 {
@@ -37,6 +44,10 @@ void	ft_is_chevron(int *flag, int *nb, int *i, char const *s, char *set, int *j)
 		*nb += 1; // filename
 }
 
+/*
+**
+*/
+
 int		nb_new_s(char const *s, char *set)
 {
 	int i;
@@ -49,23 +60,20 @@ int		nb_new_s(char const *s, char *set)
 	flag = 1;
 	while (s[++i])
 	{
-        printf("while | s[%d] = -%c- | nb = %d\n", i, s[i], nb);
+        // printf("while | s[%d] = -%c- | nb = %d\n", i, s[i], nb);
 		if (s[i] == '\'' || s[i] == '"')
 			ft_back_or_quote(&flag, &nb, &i, s);
 		else if (s[i] == '>' || s[i] == '<')
 			ft_is_chevron(&flag, &nb, &i, s, set, &j);
 		else if (is_separator(s[i], set))
-		{
-            // printf("SEP | s[%d] = -%c- | flag = %d | nb = %d\n", i, s[i], flag, nb);
             flag = 1;
-        }
 		else if (flag)
 		{
 			flag = 0;
 			nb++;
 		}
-        printf("end   | s[%d] = -%c- | flag = %d | nb = %d\n", i, s[i], flag, nb);
+        // printf("end   | s[%d] = -%c- | flag = %d | nb = %d\n", i, s[i], flag, nb);
 	}
-    printf("nb_new_s() ret %d\n", nb);
+    // printf("nb_new_s() ret %d\n", nb);
 	return (nb);
 }

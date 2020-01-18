@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alamorth <alamorth@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/17 17:13:09 by alamorth         ###   ########.fr       */
+/*   Updated: 2020/01/17 22:44:23 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 ** access : cf. cd.c
 */
 
-char	*check(char **cmd_tab, struct stat *s, char *path, char *exec_path)
+char	*check_paths(char **cmd_tab, struct stat *s, char *path, char *exec_path)
 {
 	int i;
 	char **tab;
@@ -61,11 +61,8 @@ char	*check(char **cmd_tab, struct stat *s, char *path, char *exec_path)
 		ft_strdel(&exec_path);
 		exec_path = NULL;
 	}
-	if (cmd_tab[0][0] == '.' && cmd_tab[0][1] == '/')
-	{
-		if (!access(cmd_tab[0], X_OK))
-			return (cmd_tab[0]);
-	}
+	if (ft_str_start_with(cmd_tab[0], "./") && !access(cmd_tab[0], X_OK))
+		return (cmd_tab[0]);
 	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 	return (0);
 }
@@ -100,7 +97,7 @@ int		execute(char **cmd_tab, char *path)
 		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 		return (-1);		
 	}
-	if (!(exec_path = check(cmd_tab, &s, path, exec_path)))
+	if (!(exec_path = check_paths(cmd_tab, &s, path, exec_path)))
 		return (-1);
 	pid = 0;
 	pid = fork();

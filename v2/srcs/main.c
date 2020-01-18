@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 06:00:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/17 23:40:01 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	parse_and_root_cmds(t_env *env, char **cmds)
 	i = -1;
 	while (cmds[++i])
 	{
-		if (!(cmd_tab = ft_split_set_quotes_chevron(cmds[i], " \t")))
+		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i], " \t")))
 			continue ;
 		root(env, var_value(env, "PATH"), cmd_tab);
 		free_str_tab(cmd_tab);
@@ -67,7 +67,7 @@ void	parse_and_root_cmds(t_env *env, char **cmds)
 }
 
 /*
-** put prompt isoler pour pouvoir l'appeler depuis les fonctions de gestion des sig
+** put prompt isolé pour pouvoir l'appeler depuis les fonctions de gestion des sig
 */
 
 void			put_prompt(void)

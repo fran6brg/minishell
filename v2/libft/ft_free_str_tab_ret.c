@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdel.c                                        :+:      :+:    :+:   */
+/*   ft_free_str_tab_ret.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/11 04:04:16 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 03:48:15 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/18 03:41:29 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/18 03:42:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_strdel(char **s)
+int	ft_free_str_tab_ret(char **strs, int str_i, int ret)
 {
-	if (s)
-	{
-		free(*s);
-		*s = NULL;
-	}
+	ft_free_str_tab(strs, str_i);
+	return (ret);
 }

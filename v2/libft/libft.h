@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/14 16:11:28 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 03:49:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ char				*ft_strjoin_free(char *s1, char *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				*ft_strfulltrim(char const *s1, char const *set);
 char				*ft_strtrim_ws(char const *s1);
-void				ft_strdel(char **as);
+void				ft_strdel(char **s);
+int					ft_strdel_ret(char **s, int ret);
 void				ft_strclr(char *s);
 void				ft_striter(char *s, void (*f)(char *));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
@@ -118,12 +119,13 @@ char				*ft_strmap(char const *s, char (*f)(char));
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				**ft_split(char const *s, char c);
 char				**ft_split_set(char const *s, char *separators);
-char				**ft_split_set_and_quotes(char const *s, char *separators);
 int					ft_str_start_with(char *str, char *end);
 int					ft_str_end_with(char *str, char *end);
 int					ft_letterequci(char c1, char c2);
 int					ft_strequci(char *s1, char *s2);
 int					ft_next_char_pos(const char *s, char *set);
+void				ft_free_str_tab(char **strs, int str_i);
+int					ft_free_str_tab_ret(char **strs, int str_i, int ret);
 
 /*
 ** nbr
