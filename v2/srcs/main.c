@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 23:10:54 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 23:45:06 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 
 /*
 ** root towards the right function
+**
+** nb :
+** else if (cmd_tab[0]) sert à protéger la fonction execute 
+** contre la commande constituee d'une chaine d'espaces + enter
 */
 
-void	root(char *path, char **cmd_tab)
+void	root(char **cmd_tab)
 {
 	// ft_print_str_tab(cmd_tab);
-	if (is_dollar_env_var(cmd_tab[0])) // $VAR
+	if (is_dollar_env_var(cmd_tab[0]))
 		ft_printf("%s\n", var_value(cmd_tab[0] + 1));
 	else if (ft_strequci(cmd_tab[0], "echo"))
 		builtin_echo(cmd_tab);
@@ -27,21 +31,15 @@ void	root(char *path, char **cmd_tab)
 		builtin_cd(cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "pwd"))
 		builtin_pwd();
-	else if (ft_strequci(cmd_tab[0], "setenv")
-	|| ft_strequci(cmd_tab[0], "export"))
-		builtin_setenv(cmd_tab);
-	else if (ft_strequci(cmd_tab[0], "unset"))
-		builtin_unsetenv(cmd_tab);
-	else if (ft_strequci(cmd_tab[0], "env"))
-		builtin_env();
+	else if (ft_strequci(cmd_tab[0], "env")
+	|| ft_strequci(cmd_tab[0], "setenv")
+	|| ft_strequci(cmd_tab[0], "export")
+	|| ft_strequci(cmd_tab[0], "unset"))
+		builtins_env(cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "exit"))
-	{
-		if (count_arg(cmd_tab) > 2)
-			free_and_exit(0, "exit: too many arguments\n");
-		free_and_exit(cmd_tab[1] ? ft_atoi(cmd_tab[1]) : 1, NULL); // exit 10 (la valeur 10 est retournée, 'echo $?' pour verifier dans le "vrai" shell)
-	}
-	else if (cmd_tab[0]) // pour protéger contre la commande constituee d'une chaine d'espaces + enter
-		execute(cmd_tab, path);
+		exit_minishell(cmd_tab);
+	else if (cmd_tab[0])
+		execute(cmd_tab);
 }
 
 
@@ -55,7 +53,7 @@ void	parse_and_root_cmds(char **cmds)
 	{
 		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i], " \t")))
 			continue ;
-		root(var_value("PATH"), cmd_tab);
+		root(cmd_tab);
 		free_str_tab(cmd_tab);
 	}
 }

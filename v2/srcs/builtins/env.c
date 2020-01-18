@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 22:57:03 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 23:37:49 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	builtin_env()
 ** setenv n'existe pas sur ZSH, à la place il y a export Name=Value
 */
 
-void    builtin_setenv(char **cmd_tab)
+int	builtin_setenv(char **cmd_tab)
 {
 	t_env   *var;
 	t_env   *new;
@@ -120,13 +120,14 @@ void    builtin_setenv(char **cmd_tab)
 	{
 		if (!cmd_tab[1])
 			builtin_env();
-		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
-		return ;
+		else
+			ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
+		return (1);
 	}
 	else if (ft_strchr(cmd_tab[1], '='))
 	{
 		ft_printf("error: variable name can not contain '='\n");
-		return ;
+		return (1);
 	}
 	var = g_env;
 	while (var)
@@ -134,12 +135,12 @@ void    builtin_setenv(char **cmd_tab)
 		if (ft_strequ(var->name, cmd_tab[1]))
 	 	{
 			var->value = ft_strdup(cmd_tab[2]);
-			return ;
+			return (1);
 		}
 		var = var->next;
 	}
 	if (!(new = (t_env *)malloc(sizeof(t_env))))
-		return ;
+		return (0);
 	new->name = ft_strdup(cmd_tab[1]);
 	new->value = ft_strdup(cmd_tab[2]);
 	new->next = NULL;
@@ -147,6 +148,7 @@ void    builtin_setenv(char **cmd_tab)
 	while (var->next)
 		var = var->next;
 	var->next = new;
+	return (1);
 }
 
 /*
@@ -183,4 +185,22 @@ void	 builtin_unsetenv(char **cmd_tab)
 		previous = current;
 		current = current->next;
 	}
+}
+
+/*
+** builtins_env()
+*/
+
+void	builtins_env(char **cmd_tab)
+{
+	if (ft_strequci(cmd_tab[0], "env"))
+		builtin_env();
+	else if (ft_strequci(cmd_tab[0], "setenv")
+	|| ft_strequci(cmd_tab[0], "export"))
+	{
+		if (!builtin_setenv(cmd_tab))
+			free_and_exit(0, "exit: malloc failed\n");
+	}
+	else if (ft_strequci(cmd_tab[0], "unset"))
+		builtin_unsetenv(cmd_tab);
 }

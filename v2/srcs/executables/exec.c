@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 21:21:00 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 23:29:40 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*check_paths(char **cmd_tab, struct stat *s, char *path, char *exec_path)
 ** http://manpagesfr.free.fr/man/man2/kill.2.html
 */
 
-int		execute(char **cmd_tab, char *path)
+int		execute(char **cmd_tab)
 {
 	pid_t pid;
 	char *exec_path;
@@ -92,12 +92,12 @@ int		execute(char **cmd_tab, char *path)
 	int	status;
 
 	exec_path = 0;
-	if (!path) // si 'unset PATH' a été lancé
+	if (!var_value("PATH")) // si 'unset PATH' a été lancé
 	{
 		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 		return (-1);		
 	}
-	if (!(exec_path = check_paths(cmd_tab, &s, path, exec_path)))
+	if (!(exec_path = check_paths(cmd_tab, &s, var_value("PATH"), exec_path)))
 		return (-1);
 	if ((pid = fork()) == 0)
 		execv(exec_path, cmd_tab);

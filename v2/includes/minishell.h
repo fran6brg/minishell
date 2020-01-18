@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 22:39:50 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 23:45:11 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ typedef	struct		s_env
 **	main.c
 */
 
-void	root(char *path, char **cmd_tab);
-void	put_prompt(void);
+void	root(char **cmd_tab);
 void	parse_and_root_cmds(char **cmds);
+void	put_prompt(void);
 int		main(int argc, char **argv, char **env);
 
 /*
@@ -77,13 +77,20 @@ int		store_env(char **env_tab);
 int		is_env_var(char *arg);
 void	builtin_env();
 void	builtin_unsetenv(char **cmds);
-void	builtin_setenv(char **cmds);
+int		builtin_setenv(char **cmds);
+void	builtins_env(char **cmds);
 
 /*
 **	exec.c
 */
 
-int		execute(char **cmd_tab, char *path);
+int		execute(char **cmd_tab);
+
+/*
+**	exit.c
+*/
+
+void	exit_minishell(char **cmd_tab);
 
 /*
 **	utils.c
