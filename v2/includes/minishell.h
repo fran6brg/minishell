@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 04:11:35 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 05:59:16 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,24 +100,25 @@ int		arg_is_in_quotes(char *arg);
 */
 
 int		is_separator(char c, char *set);
-char	**ft_split_set_quotes_chevrons(char const *s, char *set);
-int		ft_new_str_with_quotes(const char *s, char *quote, char **strs, int *str_i);
-int		ft_new_str_chevron(const char *s, char *quote, char **strs, int *str_i);
-int		ft_new_str(const char *s, char *set, char **strs, int *str_i);
+char	**ft_split_set_quotes_chevrons(char *s, char *set);
+int		ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i);
+int		ft_new_str_chevron(char *s, char *quote, char **strs, int *str_i);
+int		ft_new_str(char *s, char *set, char **strs, int *str_i);
 
 /*
 **	split_2.c
 */
 
-int		nb_new_s(char const *s, char *set);
+void	ft_inc_to_closing_quote(int *i, char *s);
+int		nb_new_s(char *s, char *set);
 
 /*
 **	split_3.c
 */
 
-int		ft_str_with_quotes(const char *s, int *i, char **strs, int *str_i);
-int		ft_str_with_chevron(const char *s, int *i, char **strs, int *str_i, char *set);
-int		ft_create_strs(char **strs, const char *s, int *str_i, char *set);
+int		ft_str_with_quotes(char *s, int *i, char **strs, int *str_i);
+int		ft_str_with_chevron(char *s, int *i, char **strs, int *str_i, char *set);
+int		ft_create_strs(char *s, char **strs, int *str_i, char *set);
 
 /*
 **	errors.c

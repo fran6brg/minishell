@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 04:18:09 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 06:45:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,7 @@ int		is_separator(char c, char *set)
 **
 */
 
-int		ft_next_char_posS(const char *s, char *set)
-{
-	int		i;
-	int		j;
-
-	if (!s)
-		return (0);
-	i = -1;
-	while (s[++i])
-	{
-		j = -1;
-		while (set[++j])
-			if (s[i] == set[j] && s[i - 1] != '\\')
-				return (i);
-	}
-	return (i);
-}
-
-
-/*
-**
-*/
-
-int		ft_create_strs(char **strs, const char *s, int *str_i, char *set)
+int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
 {
 	int i;
 	int flag;
@@ -87,28 +64,27 @@ int		ft_create_strs(char **strs, const char *s, int *str_i, char *set)
 ** malloc and returns strs array
 */
 
-char			**ft_split_set_quotes_chevrons(char const *s, char *set)
+char			**ft_split_set_quotes_chevrons(char *s, char *set)
 {
 	char	**strs;
 	char	*trim_s;
 	int		str_i;
 
-	if (!s || multilines(s))
+	if (!s || multilines(s) || !(trim_s = ft_strtrim(s, ";")))
 		return (NULL);
-	trim_s = ft_strtrim(s, ";");
 	if (!(strs = malloc(sizeof(char *) * (nb_new_s(trim_s, set) + 1))))
 	{
 		ft_strdel(&trim_s);
 		return (NULL);
 	}
 	str_i = 0;
-	if (!ft_create_strs(strs, trim_s, &str_i, set))
+	if (!ft_create_strs(trim_s, strs, &str_i, set))
 	{
 		ft_strdel(&trim_s);
 		ft_free_str_tab(strs, str_i);
 		return (NULL);
 	}
-	strs[str_i] = 0;
+	strs[str_i] = NULL;
 	ft_strdel(&trim_s);
 	return (strs);
 }

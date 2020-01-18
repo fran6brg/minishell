@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:34:47 by alamorth          #+#    #+#             */
-/*   Updated: 2020/01/18 04:18:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 05:44:25 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 **
 */
 
-int	ft_new_str(const char *s, char *set, char **strs, int *str_i)
+int	ft_new_str(char *s, char *set, char **strs, int *str_i)
 {
 	int		i;
 
@@ -40,13 +40,14 @@ int	ft_new_str(const char *s, char *set, char **strs, int *str_i)
 **
 */
 
-int	ft_new_str_with_quotes(const char *s, char *quote, char **strs, int *str_i)
+int	ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i)
 {
 	int		i;
     int     j;
 	int		k;
 
-	i = ft_next_char_posS(s, quote) + 1;
+	i = 1;
+	ft_inc_to_closing_quote(&i, s);
 	if (!(strs[*str_i] = malloc(sizeof(char) * (1 + i + 1))))
 		return (0);
 	j = -1;
@@ -69,13 +70,11 @@ int	ft_new_str_with_quotes(const char *s, char *quote, char **strs, int *str_i)
 **
 */
 
-int			ft_str_with_quotes(const char *s, int *i, char **strs, int *str_i)
+int	ft_str_with_quotes(char *s, int *i, char **strs, int *str_i)
 {
 	if (!ft_new_str_with_quotes(s + *i + 1, s[*i] == '\'' ? "'" : "\"", strs, str_i))
 		return (0);
-	*i += ft_next_char_pos(s + *i + 1, s[*i] == '\'' ? "'" : "\"") + 1;
-    while (s[*i - 1] == '\\')
-        *i += ft_next_char_pos(s + *i + 1, s[*i] == '\'' ? "'" : "\"") + 1;
+	ft_inc_to_closing_quote(i, s);
 	return (1);
 }
 
@@ -83,7 +82,7 @@ int			ft_str_with_quotes(const char *s, int *i, char **strs, int *str_i)
 **
 */
 
-int	ft_new_str_chevron(const char *s, char *quote, char **strs, int *str_i)
+int	ft_new_str_chevron(char *s, char *quote, char **strs, int *str_i)
 {
 	if (!(strs[*str_i] = malloc(sizeof(char) * (1 + ((s[0] == '>' && s[1] == '>') ? 1 : 0) + 1))))
 		return (0);
@@ -100,7 +99,7 @@ int	ft_new_str_chevron(const char *s, char *quote, char **strs, int *str_i)
 **
 */
 
-int			ft_str_with_chevron(const char *s, int *i, char **strs, int *str_i, char *set)
+int	ft_str_with_chevron(char *s, int *i, char **strs, int *str_i, char *set)
 {
 	if (!ft_new_str_chevron(s + *i, s[*i] == '>' ? ">" : "<", strs, str_i))
 		return (0);
