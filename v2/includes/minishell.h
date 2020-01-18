@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 05:59:16 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 07:24:10 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		main(int argc, char **argv, char **env);
 */
 
 int		is_$env_var(t_env *env, char *var);
-void	apply_redirect(t_env *env, char **cmd_tab, int pos);
+void	apply_redirect_right(t_env *env, char **cmd_tab, int pos);
 void	builtin_echo(t_env *env, char **cmd_tab);
 
 /*

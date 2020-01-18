@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 06:37:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 07:29:10 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,27 +119,21 @@ int parse_filename(char **cmd_tab, int pos, char **filename, int *fd)
 	i += append;
 	*filename = NULL;
 	if (!store_filename(filename, cmd_tab, pos, i))
-	{
-		ft_strdel(filename);
-		return (0);
-	}
+		return (ft_strdel_ret(filename, 0)); // erreur fd
 	// printf("filename = %s\n", *filename);
 	if ((*fd = open(*filename, O_CREAT | O_WRONLY | (append ? O_APPEND : O_TRUNC), 0777)) == -1)
-	{
-		ft_strdel(filename);
-		return (0); // erreur fd
-	}
+		return (ft_strdel_ret(filename, 0)); // erreur fd
 	return (1);
 }
 
 /*
-** apply_redirect()
+** apply_redirect_right()
 **
 ** open || create it with rights as 3rd arg (mode)
 ** int open(const char *pathname, int flags, mode_t mode);
 */
 
-void apply_redirect(t_env *env, char **cmd_tab, int pos)
+void apply_redirect_right(t_env *env, char **cmd_tab, int pos)
 {
 	int		i;
 	char	*filename;
@@ -150,9 +144,9 @@ void apply_redirect(t_env *env, char **cmd_tab, int pos)
 		return ;
 	while (cmd_tab[++i])
 	{
-		if (is_n_option(i, cmd_tab) || is_n_option(i - 1, cmd_tab) || ft_strequ(cmd_tab[i], filename)) // continuer si cmd_tab[i] == -n (option) || si l'arg est le filename
+		if (is_n_option(i, cmd_tab) || *cmd_tab[i] == '<' || *cmd_tab[i] == '>' || ft_strequ(cmd_tab[i], filename)) // continuer si cmd_tab[i] == -n (option) || si l'arg est le filename
 			continue ;
-		else if (i > 1)
+		else if (i > 1 && !is_n_option(i - 1, cmd_tab))
 			write(fd, " ", 1);
 		printf("%s -%.*s- in %s\n", "append || overwrite", (int)ft_next_char_pos(cmd_tab[i], ">"), cmd_tab[i], filename);
 		if (is_$env_var(env, cmd_tab[i]))
@@ -161,12 +155,20 @@ void apply_redirect(t_env *env, char **cmd_tab, int pos)
 			write(fd, cmd_tab[i] + 1, ft_next_char_pos(cmd_tab[i], ">") - 2);
 		else
 			write(fd, cmd_tab[i], ft_next_char_pos(cmd_tab[i], ">"));
-		if (ft_strchr(cmd_tab[i], '>'))
-			i += 1;
 	}
 	write(1, "\n", no_option_n(cmd_tab));
 	ft_strdel(&filename);
 	close(fd);
+}
+
+/*
+** apply_redirect_left()
+**
+*/
+
+void apply_redirect_left(t_env *env, char **cmd_tab, int pos)
+{
+	;
 }
 
 /*
@@ -195,7 +197,9 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 		while (cmd_tab[++i])
 		{
 			if (ft_strchr(cmd_tab[i], '>') && !arg_is_in_quotes(cmd_tab[i]))
-				return (apply_redirect(env, cmd_tab, i));
+				return (apply_redirect_right(env, cmd_tab, i));
+			if (ft_strchr(cmd_tab[i], '>') && !arg_is_in_quotes(cmd_tab[i]))
+				return (apply_redirect_left(env, cmd_tab, i));
 		}
 		i = 0;
 		while (cmd_tab[++i])
