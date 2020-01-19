@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 23:45:11 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 02:17:39 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,30 +35,46 @@ typedef	struct		s_env
 	struct	s_env	*next;
 }					t_env;
 
+extern t_env *g_env;
+
+/*
+** ----------------------------------------------------------------------------
+*/
+
 /*
 **	main.c
 */
 
+int		store_env(char **env_tab);
 void	root(char **cmd_tab);
 void	parse_and_root_cmds(char **cmds);
 void	put_prompt(void);
 int		main(int argc, char **argv, char **env);
 
 /*
+** ----------------------------------------------------------------------------
+*/
+
+/*
 **	echo.c
 */
 
-int		is_dollar_env_var(char *var);
 void	apply_redirect_right(char **cmd_tab, int pos);
 void	builtin_echo(char **cmd_tab);
+
+/*
+**	echo_utils.c
+*/
+
+int		is_n_option(int i, char **cmd_tab);
+int		no_option_n(char **cmd_tab);
 
 /*
 **	cd.c
 */
 
 int		change_dir(char **cmd_tab, char *dest);
-void	go_home(char *home, char **cmd_tab);
-void	go_path(char **cmd_tab);
+void	go_path(char **cmd_tab, char *dest);
 void	print_cd_error(int nb_arg, char **cmd_tab);
 void	builtin_cd(char **cmd_tab);
 
@@ -73,18 +89,17 @@ void	builtin_pwd();
 */
 
 char	*var_value(char *name);
-int		store_env(char **env_tab);
-int		is_env_var(char *arg);
 void	builtin_env();
 void	builtin_unsetenv(char **cmds);
 int		builtin_setenv(char **cmds);
 void	builtins_env(char **cmds);
 
 /*
-**	exec.c
+**	env_utils.c
 */
 
-int		execute(char **cmd_tab);
+int		is_env_var(char *arg);
+int		is_dollar_env_var(char *var);
 
 /*
 **	exit.c
@@ -93,11 +108,18 @@ int		execute(char **cmd_tab);
 void	exit_minishell(char **cmd_tab);
 
 /*
-**	utils.c
+** ----------------------------------------------------------------------------
 */
 
-int		count_arg(char **s);
-int		arg_is_in_quotes(char *arg);
+/*
+**	exec.c
+*/
+
+int		execute(char **cmd_tab);
+
+/*
+** ----------------------------------------------------------------------------
+*/
 
 /*
 **	split_1.c
@@ -132,18 +154,24 @@ int		parse_error(char *line);
 int		multilines(const char *s);
 
 /*
-**	free.c
-*/
-
-void	free_str_tab(char **str_tab);
-void	free_cmds(char *line, char **cmds);
-void	free_env();
-void	free_and_exit(int exit_value, char *msg);
-
-/*
 **	signal.c
 */
 
-void	sigint_handler(void);
+void	sig_handler(void);
+
+/*
+**	helpers.c
+*/
+
+int		count_arg(char **s);
+int		arg_is_in_quotes(char *arg);
+
+/*
+**	free.c
+*/
+
+void	free_cmds(char *line, char **cmds);
+void	free_env();
+void	free_and_exit(int exit_value, char *msg);
 
 #endif

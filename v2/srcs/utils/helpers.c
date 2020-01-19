@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/15 17:34:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 01:16:05 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/08 02:42:37 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/19 02:09:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-static void			put_nl_and_prompt(int signum)
+/*
+** count_arg
+*/
+
+int    count_arg(char **s)
 {
-	(void)signum;
-	ft_putchar('\n');
-	put_prompt();
+    int i;
+
+    i = 0;
+    while (s[++i])
+		;
+	return (i);
 }
 
 /*
-** SIGINT ctrl c
-** SIGQUIT ctrl backslash
-** SIGTSTP ctrl z
+** arg_is_in_quotes()
 */
 
-void			sig_handler(void)
+int arg_is_in_quotes(char *arg)
 {
-	signal(SIGINT, put_nl_and_prompt);
-	signal(SIGQUIT, put_nl_and_prompt);
-	signal(SIGTSTP, put_nl_and_prompt);
+	int	len;
+
+	len = ft_strlen(arg);
+	return (((arg[0] == '\'' || arg[0] == '"') && (arg[len - 1] == '\'' || arg[len - 1] == '"')));
 }

@@ -1,39 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_free_str_tab_index.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 02:42:37 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 21:31:00 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/19 02:43:24 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/19 02:43:44 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-/*
-** count_arg
-*/
-
-int    count_arg(char **s)
+void	ft_free_str_tab_index(char **strs, int str_i)
 {
-    int i;
-
-    i = 0;
-    while (s[++i])
-		;
-	return (i);
-}
-
-/*
-** arg_is_in_quotes()
-*/
-
-int arg_is_in_quotes(char *arg)
-{
-	int	len;
-
-	len = ft_strlen(arg);
-	return (((arg[0] == '\'' || arg[0] == '"') && (arg[len - 1] == '\'' || arg[len - 1] == '"')));
+	if (strs)
+	{
+		while (str_i-- > 0)
+			ft_strdel(&strs[str_i]);
+		free(strs);
+	}
 }

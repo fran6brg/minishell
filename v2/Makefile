@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/18 23:45:49 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/19 02:33:23 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,18 @@ NAME 	= minishell
 
 CC		= gcc
 
-FLAGS 	= -Wall -Wextra -Werror
+FLAGS 	= -Wall -Wextra -Werror -g -g3
 
 SRCS 	= srcs/main.c \
-		srcs/builtins/echo.c srcs/builtins/cd.c srcs/builtins/env.c \
+		srcs/builtins/echo.c srcs/builtins/echo_utils.c \
+		srcs/builtins/cd.c \
+		srcs/builtins/env.c srcs/builtins/env_utils.c \
 		srcs/builtins/pwd.c \
+		srcs/builtins/exit.c \
 		srcs/executables/exec.c \
-		srcs/utils/free.c srcs/utils/utils.c srcs/utils/signal.c \
-		srcs/utils/exit.c \
+		srcs/utils/free.c \
+		srcs/utils/helpers.c \
+		srcs/utils/signal.c \
 		srcs/parsing/errors.c \
 		srcs/parsing/split_1.c srcs/parsing/split_2.c srcs/parsing/split_3.c \
 

@@ -1,52 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/10 20:22:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 02:47:38 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/19 01:54:29 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** free cmds
+** is_env_var()
+** ft_strequci str equal case insensitive
 */
 
-void	free_cmds(char *line, char **cmds)
+int		is_env_var(char *arg)
 {
-	ft_free_str_tab(cmds);
-    ft_strdel(&line);
-}
-
-/*
-** free env list
-*/
-
-void   free_env()
-{
-    t_env *tmp;
-
-	while (g_env)
+	t_env   *var;
+	
+	var = g_env;
+	while (var)
 	{
-		tmp = g_env->next;
-		ft_strdel(&g_env->name);
-		ft_strdel(&g_env->value);
-		g_env = tmp;
+		if (ft_strequci(var->name, arg))
+			return (1);
+		var = var->next;
 	}
+	return (0);
 }
 
 /*
-** free_and_exit
+** is_dollar_env_var()
+**
+** observations :
+** echo $PATHfoo renvoie juste un retour à ligne
 */
 
-void	free_and_exit(int exit_value, char *msg)
+int is_dollar_env_var(char *var)
 {
-	if (msg)
-		ft_printf("%s\n", msg);
-	free_env();
-	exit(exit_value);
+	if (var[0] == '$')
+	{
+		if (is_env_var(var + 1))
+			return (1);
+	}
+	return (0);
 }

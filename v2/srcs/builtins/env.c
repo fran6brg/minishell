@@ -6,15 +6,11 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 23:37:49 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 01:41:21 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-** global var for put_promt()
-*/
 
 t_env	*g_env;
 
@@ -24,7 +20,7 @@ t_env	*g_env;
 
 char	*var_value(char *name)
 {
-	t_env	*var;
+	t_env			*var;
 
 	var = g_env;
 	while (var)
@@ -34,55 +30,6 @@ char	*var_value(char *name)
 		var = var->next;
 	}
 	return (NULL);
-}
-
-/*
-** store env inside list
-*/
-
-int		store_env(char **env_tab)
-{
-	int		i;
-	t_env	*var;
-	t_env	*last;
-	
-	i = -1;
-	last = NULL;
-	if (!env_tab || !*env_tab) // env -i
-		return (0);
-	while (env_tab[++i])
-	{
-		if (!(var = (t_env *)malloc(sizeof(t_env))))
-			return (0);
-		var->name = ft_substr(env_tab[i], 0, (int)(ft_strchr(env_tab[i], '=') - env_tab[i]));
-		var->value = ft_substr(env_tab[i], (int)(ft_strchr(env_tab[i], '=') - env_tab[i]) + 1, ft_strlen(env_tab[i]));
-		var->next = NULL;
-		if (last)
-			last->next = var;
-		else
-			g_env = var;
-		last = var;
-	}
-	return (1);
-}
-
-/*
-** is_env_var()
-** ft_strequci str equal case insensitive
-*/
-
-int		is_env_var(char *arg)
-{
-	t_env   *var;
-	
-	var = g_env;
-	while (var)
-	{
-		if (ft_strequci(var->name, arg))
-			return (1);
-		var = var->next;
-	}
-	return (0);
 }
 
 /*
@@ -159,9 +106,9 @@ int	builtin_setenv(char **cmd_tab)
 
 void	 builtin_unsetenv(char **cmd_tab)
 {
-	t_env	 *previous;
-	t_env	 *current;
-	t_env	 *next;
+	t_env	*previous;
+	t_env	*current;
+	t_env	*next;
 
 	if (count_arg(cmd_tab) != 2)
 	{

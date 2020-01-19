@@ -6,75 +6,11 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 23:00:21 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 01:53:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-** is_dollar_env_var()
-**
-** observations :
-** echo $PATHfoo renvoie juste un retour à ligne
-*/
-
-int is_dollar_env_var(char *var)
-{
-	if (var[0] == '$')
-	{
-		if (is_env_var(var + 1))
-			return (1);
-	}
-	return (0);
-}
-
-/*
-** is_n_option()
-*/
-
-int is_n_option(int i, char **cmd_tab)
-{
-	int	j;
-	int	k;
-
-	if (i == 1 && ft_strequ(cmd_tab[i], "-n"))
-		return (1);
-	else if (i > 1)
-	{
-		j = 0;
-		while (++j <= i)
-		{
-			if (!ft_str_start_with(cmd_tab[j], "-n"))
-				return (0);
-			k = 1;
-			while (cmd_tab[j][++k])
-			{
-				if (cmd_tab[j][k] != 'n')
-					return (0);
-			}
-		}
-		return (1);
-	}
-	return (0);
-}
-
-/*
-** no_option_n()
-*/
-
-int no_option_n(char **cmd_tab)
-{
-	int i;
-
-	i = 0;
-	while (cmd_tab[++i])
-	{
-		if (is_n_option(i, cmd_tab))
-			return (0);
-	}
-	return (1);
-}
 
 /*
 ** store_filename()
@@ -162,17 +98,6 @@ void apply_redirect_right(char **cmd_tab, int pos)
 }
 
 /*
-** apply_redirect_left()
-**
-** doesn't apply to echo
-*/
-
-// void apply_redirect_left(char **cmd_tab, int pos)
-// {
-// 	;
-// }
-
-/*
 ** echo écrit chaque message sur la sortie standard, avec un
 ** espace  entre  chacun  d'eux, et un saut de ligne après le
 ** dernier.
@@ -199,13 +124,10 @@ void	builtin_echo(char **cmd_tab)
 		{
 			if (ft_strchr(cmd_tab[i], '>') && !arg_is_in_quotes(cmd_tab[i]))
 				return (apply_redirect_right(cmd_tab, i));
-			// else if (ft_strchr(cmd_tab[i], '<') && !arg_is_in_quotes(cmd_tab[i]))
-			// 	return (apply_redirect_left(cmd_tab, i));
 		}
 		i = 0;
 		while (cmd_tab[++i])
 		{
-			// printf("cmd_tab[%d] = -%s-\n", i, cmd_tab[i]);
 			if (is_n_option(i, cmd_tab))
 				continue ;
 			else if (is_dollar_env_var(cmd_tab[i]))
@@ -214,8 +136,7 @@ void	builtin_echo(char **cmd_tab)
 				write(1, cmd_tab[i] + 1, ft_strlen(cmd_tab[i]) - 2);
 			else
 				write(1, cmd_tab[i], ft_strlen(cmd_tab[i]));
-			if (cmd_tab[i + 1])
-				write(1, " ", 1);
+			write(1, " ", cmd_tab[i + 1] != 0);
 		}
 		write(1, "\n", no_option_n(cmd_tab));
 	}
