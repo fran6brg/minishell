@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 07:53:51 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 23:12:04 by francisberg      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,16 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
 	ret = 1;
 	while (s[++i])
 	{
+		printf("ft_create_strs | s[%d] = -%c- | flag = %d\n", i, s[i], flag);
 		if ((s[i] == '\'' || s[i] == '"') && !(flag = 0))
 			ret = ft_str_with_quotes(s, &i, strs, str_i);
         else if ((s[i] == '<' || s[i] == '>') && !(flag = 0))
 			ret = ft_str_with_chevron(s, &i, strs, str_i, set);
-		else if (s[i] == '|' && !(flag = 0))
+		else if (s[i] == '|')
+		{
+			flag = !is_separator(s[i + 1], set);
 			ret = ft_str_pipe(strs, str_i);
+		}
 		else if (is_separator(s[i], set))
 			flag = 1;
 		else if ((flag) && !(flag = 0))
@@ -86,6 +90,8 @@ char			**ft_split_set_quotes_chevrons(char *s, char *set)
 		ft_free_str_tab_index(strs, str_i);
 		return (NULL);
 	}
+	printf("nb_new_s(trim_s, set) = %d\n", nb_new_s(trim_s, set));
+	printf("str_i = %d\n", str_i);
 	strs[str_i] = NULL;
 	ft_strdel(&trim_s);
 	return (strs);

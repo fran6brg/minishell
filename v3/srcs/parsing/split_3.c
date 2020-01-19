@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:34:47 by alamorth          #+#    #+#             */
-/*   Updated: 2020/01/19 08:42:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 22:33:09 by francisberg      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ int	ft_new_str(char *s, char *set, char **strs, int *str_i)
 	int		i;
 
 	i = 0;
-	while (s[i] && !is_separator(s[i], set) && s[i] != '>' && s[i] != '<')
+	while (s[i] && !is_separator(s[i], set) && s[i] != '>' && s[i] != '<' && s[i] != '|')
 		i++;
 	if (!(strs[*str_i] = malloc(sizeof(char) * (i + 1))))
 		return (0);
 	i = 0;
-	while (s[i] && !is_separator(s[i], set) && s[i] != '>' && s[i] != '<')
+	while (s[i] && !is_separator(s[i], set) && s[i] != '>' && s[i] != '<' && s[i] != '|')
 	{
         strs[*str_i][i] = s[i];
         i++;
