@@ -1,0 +1,10 @@
+total 21
+drwxr-xr-x  6 fberger  2018_paris     9 Jan 19 02:30 .
+drwxr-xr-x  5 fberger  2018_paris     8 Jan 19 02:30 ..
+-rw-r--r--  1 fberger  2018_paris     0 Jan 19 02:30 abc
+drwxr-xr-x  2 fberger  2018_paris    16 Jan 19 02:22 builtins
+drwxr-xr-x  2 fberger  2018_paris     4 Jan 19 02:22 executables
+-rw-r--r--  1 fberger  2018_paris  3449 Jan 19 02:07 main.c
+-rw-r--r--  1 fberger  2018_paris  3620 Jan 19 02:22 main.o
+drwxr-xr-x  2 fberger  2018_paris    11 Jan 19 02:22 parsing
+drwxr-xr-x  2 fberger  2018_paris     8 Jan 19 02:22 utils
