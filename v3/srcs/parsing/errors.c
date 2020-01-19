@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:48:45 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/17 23:53:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:48:39 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int parse_error(char *line)
 ** return 0 otherwise
 */
 
-int multilines(const char *s)
+int multilines(char *s, char *set)
 {
 	int i;
 
@@ -53,6 +53,17 @@ int multilines(const char *s)
 			i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
             while (s[i - 1] == '\\')
                 i += ft_next_char_pos(s + i + 1, s[i] == '\'' ? "'" : "\"") + 1;
+		}
+		else if (s[i] == '|')
+		{
+			i++;
+			while (s[i] && is_separator(s[i], set))
+				i++;
+			if (!s[i])
+			{
+				printf("multilines bonus not handled\n");
+				return (1);
+			}
 		}
 	}
 	return (0);

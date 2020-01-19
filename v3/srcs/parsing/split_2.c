@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:41:10 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 06:44:40 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:45:42 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int		nb_new_s(char *s, char *set)
 			nb++;
 			ft_count_chevron_and_filename(&nb, &i, s, set);
 		}
+		else if (s[i] == '|' && !(flag = 0))
+			nb++;
 		else if (is_separator(s[i], set))
             flag = 1;
 		else if (flag && !(flag = 0))

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 02:47:05 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:53:51 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
 			ret = ft_str_with_quotes(s, &i, strs, str_i);
         else if ((s[i] == '<' || s[i] == '>') && !(flag = 0))
 			ret = ft_str_with_chevron(s, &i, strs, str_i, set);
+		else if (s[i] == '|' && !(flag = 0))
+			ret = ft_str_pipe(strs, str_i);
 		else if (is_separator(s[i], set))
 			flag = 1;
 		else if ((flag) && !(flag = 0))
@@ -70,7 +72,7 @@ char			**ft_split_set_quotes_chevrons(char *s, char *set)
 	char	*trim_s;
 	int		str_i;
 
-	if (!s || multilines(s) || !(trim_s = ft_strtrim(s, ";")))
+	if (!s || multilines(s, set) || !(trim_s = ft_strtrim(s, ";")))
 		return (NULL);
 	if (!(strs = malloc(sizeof(char *) * (nb_new_s(trim_s, set) + 1))))
 	{

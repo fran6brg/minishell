@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 06:42:22 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:54:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ char	**ft_split_set_quotes_chevrons(char *s, char *set);
 int		ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i);
 int		ft_new_str_chevron(char *s, char *quote, char **strs, int *str_i);
 int		ft_new_str(char *s, char *set, char **strs, int *str_i);
+int		ft_str_pipe(char **strs, int *str_i);
 
 /*
 **	split_2.c
@@ -154,7 +155,7 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set);
 */
 
 int		parse_error(char *line);
-int		multilines(const char *s);
+int		multilines(char *s, char *set);
 
 /*
 **	signal.c

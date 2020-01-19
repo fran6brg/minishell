@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:34:47 by alamorth          #+#    #+#             */
-/*   Updated: 2020/01/18 23:06:19 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:53:44 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,19 @@ int	ft_str_with_chevron(char *s, int *i, char **strs, int *str_i, char *set)
     if (!ft_new_str(s + *i, set, strs, str_i))
     	return (0);
     *i += ft_strlen(strs[*str_i - 1]) - 1;
+	return (1);
+}
+
+/*
+**
+*/
+
+int	ft_str_pipe(char **strs, int *str_i)
+{
+	if (!(strs[*str_i] = malloc(sizeof(char) * (1 + 1))))
+		return (0);
+	strs[*str_i][0] = '|';
+    strs[*str_i][1] = '\0';
+	*str_i += 1;
 	return (1);
 }

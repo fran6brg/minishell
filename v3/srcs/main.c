@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 07:10:11 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:24:19 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,6 @@ int		main(int argc, char **argv, char **env_tab)
 ** ls $VAR ; ls ~
 ** valider le comportemenet ctrl bl
 ** echo "lol\'"> a 123 456
+** echo "\"abc|" => str_tab[0] = -echo- str_tab[1] = -""abc|- => ""abc|
 ** cat -e abc
 */
