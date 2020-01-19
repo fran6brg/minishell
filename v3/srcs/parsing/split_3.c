@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:34:47 by alamorth          #+#    #+#             */
-/*   Updated: 2020/01/19 07:53:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 08:42:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,21 @@ int	ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i)
 	ft_inc_to_closing_quote(&i, s);
 	if (!(strs[*str_i] = malloc(sizeof(char) * (1 + i + 1))))
 		return (0);
-	j = -1;
-	k = 0;
-	while (++j < i)
+	// printf("s[0] = -%c-\n", s[0]); // s[0] = 1ere lettre apres premier "
+	strs[*str_i][0] = quote[0]; // premier "
+	j = 0; // place 0 reservee au premier "
+	k = 0; // nombre d'escape rencontres
+	while (j < i + 1)
 	{
 		if (s[j] == '\\' && s[j + 1] == quote[0])
-			strs[*str_i][1 + k] = s[j++ + 1];
+			k++;
 		else
-			strs[*str_i][1 + k] = s[j];
-		k++;
+			strs[*str_i][j - k + 1] = s[j];
+		j++;
 	}
-	strs[*str_i][0] = quote[0];
-	strs[*str_i][j + 1] = '\0';
+	printf("k = %d\n", k);
+	strs[*str_i][j - k] = quote[0]; // dernier "
+	strs[*str_i][j - k + 1] = '\0';
 	*str_i += 1;
 	return (1);
 }
