@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 05:42:18 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 05:45:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,11 @@ int		fork_and_exec(char **cmd_tab, char *exec_path)
 	return (1);
 }
 
+/*
+** int execve(const char *fichier, char *const argv[], char *const envp[]); 
+** http://manpagesfr.free.fr/man/man2/execve.2.html
+*/
+
 int		handle_pipe(char **cmd_tab, char *exec_path)
 {
 	int    		pdes[2];
@@ -129,14 +134,14 @@ int		handle_pipe(char **cmd_tab, char *exec_path)
         close(pdes[READ]);
         dup2(pdes[WRITE], STDOUT_FILENO);
         /* Execute command to the left of the pipe */
-        execve("/bin/ls", args1, NULL);
+        execv("/bin/ls", args1);
     }
     if (!(child_right = fork()))
     {
         close(pdes[WRITE]);
         dup2(pdes[READ], STDIN_FILENO);
         /* Recursive call or execution of last command */
-        execve("/bin/cat", args2, NULL);
+        execv("/bin/cat", args2);
 		// to do : recursive handle_pipe
     }
     /* Should not forget to close both ends of the pipe */
