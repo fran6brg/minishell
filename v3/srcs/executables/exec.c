@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 05:45:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 07:14:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int		check_paths(char **cmd_tab, char **exec_path)
 	char	**tab;
 	struct	stat s;
 
+	printf("exec_path =%s\n", *exec_path);
 	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
 		*exec_path = cmd_tab[0];
@@ -75,7 +76,9 @@ int		check_paths(char **cmd_tab, char **exec_path)
 	tab = ft_split(var_value("PATH"), ':');
 	while (tab[++i])
 	{
-		*exec_path = ft_strjoin(tab[i], ft_strjoin("/", cmd_tab[0]));
+		if (!(*exec_path = ft_strjoin(tab[i], ft_strjoin("/", cmd_tab[0]))))
+			return (0);
+		printf("exec_path =%s\n", *exec_path);
 		if (check_direct_path_to_exec(*exec_path, &s))
 			return (1);			
 		ft_strdel(exec_path);
@@ -86,6 +89,9 @@ int		check_paths(char **cmd_tab, char **exec_path)
 
 /*
 ** fork_and_exec
+**
+** int kill(pid_t pid, int sig);
+** http://manpagesfr.free.fr/man/man2/kill.2.html
 */
 
 int		fork_and_exec(char **cmd_tab, char *exec_path)
@@ -104,8 +110,27 @@ int		fork_and_exec(char **cmd_tab, char *exec_path)
 }
 
 /*
-** int execve(const char *fichier, char *const argv[], char *const envp[]); 
-** http://manpagesfr.free.fr/man/man2/execve.2.html
+** int pipe(int pipefd[2]); 
+** Cet appel renvoie 0 s'il réussit, ou -1 s'il échoue, auquel cas errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man2/pipe.2.html
+**
+** pid_t fork(void);
+** En cas de succès, le PID du fils est renvoyé au processus parent, et 0 est
+** renvoyé au processus fils. En cas d'échec -1 est renvoyé dans le contexte du
+** parent, aucun processus fils n'est créé, et errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man2/fork.2.html
+**
+** int dup2(int oldfd, int newfd);
+** dup() et dup2() renvoient le nouveau descripteur, ou -1 s'ils échouent, auquel cas errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man2/dup.2.html
+**
+** int execv(const char *path, char *const argv[]);
+** argv est un tableau de chaînes d'arguments passées au nouveau programme
+** http://manpagesfr.free.fr/man/man3/exec.3.html
+**
+** pid_t wait(int *status);
+** pid_t waitpid(pid_t pid, int *status, int options);
+** http://manpages.ubuntu.com/manpages/xenial/fr/man2/wait.2.html
 */
 
 int		handle_pipe(char **cmd_tab, char *exec_path)
@@ -118,7 +143,13 @@ int		handle_pipe(char **cmd_tab, char *exec_path)
     pid_t   	child_left;
 	char		*args1[3];
 	char		*args2[3];
+	char		**left_args;
+	char		**right_args;
 
+	if (!get_exec_args(cmd_tab, &left_args, &right_args))
+		return (0);
+	ft_print_str_tab(left_args); // pour debug
+	ft_print_str_tab(right_args); // pour debug
 	if (cmd_tab || exec_path || status)
 		;
 	printf("**********PIPE*********\n");
@@ -134,42 +165,27 @@ int		handle_pipe(char **cmd_tab, char *exec_path)
         close(pdes[READ]);
         dup2(pdes[WRITE], STDOUT_FILENO);
         /* Execute command to the left of the pipe */
-        execv("/bin/ls", args1);
+        execv(args1[0], args1);
+		// exit(0); // pq ca ne change rien ?
     }
     if (!(child_right = fork()))
     {
         close(pdes[WRITE]);
         dup2(pdes[READ], STDIN_FILENO);
         /* Recursive call or execution of last command */
-        execv("/bin/cat", args2);
+        execv(args2[0], args2);
+		// exit(0);
 		// to do : recursive handle_pipe
     }
     /* Should not forget to close both ends of the pipe */
     close(pdes[WRITE]);
     close(pdes[READ]);
-    wait(NULL);
+    wait(NULL); // ?
     waitpid(child_right, &status, 0);
-    // exit(0);
+    // exit(0); // seulement si recursif ?
 	printf("**********FINAL*********\n");
     return (1);
 }
-
-/*
-** int execv(const char *path, char *const argv[]);
-** http://manpagesfr.free.fr/man/man3/exec.3.html
-**
-** pid_t fork(void);
-** En cas de succès, le PID du fils est renvoyé au processus parent, et 0 est
-** renvoyé au processus fils. En cas d'échec -1 est renvoyé dans le contexte du
-** parent, aucun processus fils n'est créé, et errno contient le code d'erreur.  
-** http://manpagesfr.free.fr/man/man2/fork.2.html
-**
-** pid_t waitpid(pid_t pid, int *status, int options);
-** http://manpages.ubuntu.com/manpages/xenial/fr/man2/wait.2.html
-**
-** int kill(pid_t pid, int sig);
-** http://manpagesfr.free.fr/man/man2/kill.2.html
-*/
 
 int		execute(char **cmd_tab)
 {
@@ -183,10 +199,12 @@ int		execute(char **cmd_tab)
 		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 		return (0);
 	}
-	if (cmd_contains_pipe(cmd_tab) && !handle_pipe(cmd_tab, exec_path))
-		ft_putstr("Fork Failed\n");
+	if (cmd_contains_pipe(cmd_tab))
+	{
+		if (!handle_pipe(cmd_tab, exec_path))
+			ft_putstr("Fork Failed\n");
+	}
 	else if (!fork_and_exec(cmd_tab, exec_path))
 		ft_putstr("Fork Failed\n");
-	wait(NULL);
 	return (0);
 }

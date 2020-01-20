@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 04:11:10 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 06:59:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,17 @@ void	exit_minishell(char **cmd_tab);
 **	exec.c
 */
 
+int		check_direct_path_to_exec(char *tested_path, struct stat *s);
+int		check_paths(char **cmd_tab, char **exec_path);
+int		fork_and_exec(char **cmd_tab, char *exec_path);
+int		handle_pipe(char **cmd_tab, char *exec_path);
 int		execute(char **cmd_tab);
 
 /*
-**	exec.c
+**	exec_utils.c
 */
 
-int		execute(char **cmd_tab);
+int get_exec_args(char **cmd_tab, char ***left_args, char ***right_args);
 
 /*
 ** ----------------------------------------------------------------------------
