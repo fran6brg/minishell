@@ -1,33 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/15 17:34:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 02:00:32 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/20 02:04:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-static void			put_nl_and_prompt(int signum)
-{
-	(void)signum;
-	ft_putchar('\n');
-	put_prompt();
-}
+#include "../../includes/minishell.h"
 
 /*
-** SIGINT ctrl c
-** SIGQUIT ctrl backslash
-** SIGTSTP ctrl z
+** replace_dollar_vars();
 */
-
-void			handle_sig(void)
-{
-	signal(SIGINT, put_nl_and_prompt);
-	signal(SIGQUIT, put_nl_and_prompt);
-	signal(SIGTSTP, put_nl_and_prompt);
-}

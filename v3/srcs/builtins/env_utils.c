@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 01:54:29 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 02:05:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,25 @@ int is_dollar_env_var(char *var)
 			return (1);
 	}
 	return (0);
+}
+
+/*
+** replace_dollar_vars();
+*/
+
+void	replace_dollar_vars(char **cmd_tab)
+{
+	int		i;
+	char	*tmp;
+
+    i = 0;
+    while (cmd_tab[++i])
+	{
+		if (is_dollar_env_var(cmd_tab[i]))
+		{
+			tmp = var_value(cmd_tab[i]);
+			ft_strdel(&cmd_tab[i]);
+			cmd_tab[i] = tmp;
+		}
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 06:51:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 01:25:45 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int parse_filename(char **cmd_tab, char **filename, int *fd)
 	pos = 1;
 	while (!ft_strchr(cmd_tab[pos], '>') && !arg_is_in_quotes(cmd_tab[pos]))
 		pos++;
+	pos++; // pour decaler apres le >
 	*filename = NULL;
 	if (!store_filename(filename, cmd_tab, pos))
 		return (0);

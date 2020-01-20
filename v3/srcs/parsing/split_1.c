@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
+/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 23:12:04 by francisberg      ###   ########.fr       */
+/*   Updated: 2020/01/20 02:10:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
 	ret = 1;
 	while (s[++i])
 	{
-		printf("ft_create_strs | s[%d] = -%c- | flag = %d\n", i, s[i], flag);
+		// printf("ft_create_strs | s[%d] = -%c- | flag = %d\n", i, s[i], flag);
 		if ((s[i] == '\'' || s[i] == '"') && !(flag = 0))
 			ret = ft_str_with_quotes(s, &i, strs, str_i);
         else if ((s[i] == '<' || s[i] == '>') && !(flag = 0))
@@ -90,8 +90,8 @@ char			**ft_split_set_quotes_chevrons(char *s, char *set)
 		ft_free_str_tab_index(strs, str_i);
 		return (NULL);
 	}
-	printf("nb_new_s(trim_s, set) = %d\n", nb_new_s(trim_s, set));
-	printf("str_i = %d\n", str_i);
+	// printf("nb_new_s(trim_s, set) = %d\n", nb_new_s(trim_s, set));
+	// printf("str_i = %d\n", str_i);
 	strs[str_i] = NULL;
 	ft_strdel(&trim_s);
 	return (strs);

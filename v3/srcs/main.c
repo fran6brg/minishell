@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 07:24:19 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 02:00:33 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int		main(int argc, char **argv, char **env_tab)
 		return (0);
 	while (42)
 	{
-		sig_handler();
+		handle_sig();
 		put_prompt();
 		if (!get_next_line(STDIN_FILENO, &line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF, that quits shell
 			free_and_exit(0, NULL);
@@ -133,7 +133,6 @@ int		main(int argc, char **argv, char **env_tab)
 ** remove # include <stdio.h> in .h
 ** ls $VAR ; ls ~
 ** valider le comportemenet ctrl bl
-** echo "lol\'"> a 123 456
-** echo "\"abc|" => str_tab[0] = -echo- str_tab[1] = -""abc|- => ""abc|
+** echo "lol\'"> abc 123 456
 ** cat -e abc
 */

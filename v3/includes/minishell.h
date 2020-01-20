@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 07:54:09 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 04:11:10 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	builtins_env(char **cmds);
 
 int		is_env_var(char *arg);
 int		is_dollar_env_var(char *var);
+void	replace_dollar_vars(char **cmd_tab);
 
 /*
 **	exit.c
@@ -113,6 +114,12 @@ void	exit_minishell(char **cmd_tab);
 /*
 ** ----------------------------------------------------------------------------
 */
+
+/*
+**	exec.c
+*/
+
+int		execute(char **cmd_tab);
 
 /*
 **	exec.c
@@ -161,7 +168,7 @@ int		multilines(char *s, char *set);
 **	signal.c
 */
 
-void	sig_handler(void);
+void	handle_sig(void);
 
 /*
 **	helpers.c
@@ -170,6 +177,7 @@ void	sig_handler(void);
 int		count_arg(char **s);
 int		arg_is_in_quotes(char *arg);
 int		check_if_redirect(char **cmd_tab);
+int		cmd_contains_pipe(char **cmd_tab);
 
 /*
 **	free.c

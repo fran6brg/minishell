@@ -6,32 +6,11 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 07:01:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/20 05:42:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-** replace_dollar_vars();
-*/
-
-void	replace_dollar_vars(char **cmd_tab)
-{
-	int		i;
-	char	*tmp;
-
-    i = 0;
-    while (cmd_tab[++i])
-	{
-		if (is_dollar_env_var(cmd_tab[i]))
-		{
-			tmp = var_value(cmd_tab[i]);
-			ft_strdel(&cmd_tab[i]);
-			cmd_tab[i] = tmp;
-		}
-	}
-}
 
 /*
 ** int stat(const char *path, struct stat *buf);
@@ -81,27 +60,93 @@ int		check_direct_path_to_exec(char *tested_path, struct stat *s)
 ** if not then operate normal case
 */
 
-int		check_paths(char **cmd_tab, struct stat *s, char *path, char **exec_path)
+int		check_paths(char **cmd_tab, char **exec_path)
 {
 	int 	i;
 	char	**tab;
+	struct	stat s;
 
 	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
 		*exec_path = cmd_tab[0];
-		return (check_direct_path_to_exec(*exec_path, s));
+		return (check_direct_path_to_exec(*exec_path, &s));
 	}
 	i = -1;
-	tab = ft_split(path, ':');
+	tab = ft_split(var_value("PATH"), ':');
 	while (tab[++i])
 	{
 		*exec_path = ft_strjoin(tab[i], ft_strjoin("/", cmd_tab[0]));
-		if (check_direct_path_to_exec(*exec_path, s))
+		if (check_direct_path_to_exec(*exec_path, &s))
 			return (1);			
 		ft_strdel(exec_path);
 		*exec_path = NULL;
 	}
 	return (0);
+}
+
+/*
+** fork_and_exec
+*/
+
+int		fork_and_exec(char **cmd_tab, char *exec_path)
+{
+	pid_t	child;
+	int		status;
+
+	if ((child = fork()) == 0)
+		execv(exec_path, cmd_tab);
+	else if (child == -1)
+		return (0);
+	status = 0;
+	waitpid(child, &status, 0);
+	kill(child, SIGTERM);
+	return (1);
+}
+
+int		handle_pipe(char **cmd_tab, char *exec_path)
+{
+	int    		pdes[2];
+    int			status = 0;
+	int	const	READ = 0;
+	int	const	WRITE = 1;
+    pid_t   	child_right;
+    pid_t   	child_left;
+	char		*args1[3];
+	char		*args2[3];
+
+	if (cmd_tab || exec_path || status)
+		;
+	printf("**********PIPE*********\n");
+	args1[0] = "/bin/ls";
+	args1[1] = "-lF";
+	args1[2] = 0;
+	args2[0] = "/bin/cat";
+	args2[1] = "-e";
+	args2[2] = 0;
+    pipe(pdes);
+    if (!(child_left = fork()))
+    {
+        close(pdes[READ]);
+        dup2(pdes[WRITE], STDOUT_FILENO);
+        /* Execute command to the left of the pipe */
+        execve("/bin/ls", args1, NULL);
+    }
+    if (!(child_right = fork()))
+    {
+        close(pdes[WRITE]);
+        dup2(pdes[READ], STDIN_FILENO);
+        /* Recursive call or execution of last command */
+        execve("/bin/cat", args2, NULL);
+		// to do : recursive handle_pipe
+    }
+    /* Should not forget to close both ends of the pipe */
+    close(pdes[WRITE]);
+    close(pdes[READ]);
+    wait(NULL);
+    waitpid(child_right, &status, 0);
+    // exit(0);
+	printf("**********FINAL*********\n");
+    return (1);
 }
 
 /*
@@ -123,29 +168,20 @@ int		check_paths(char **cmd_tab, struct stat *s, char *path, char **exec_path)
 
 int		execute(char **cmd_tab)
 {
-	pid_t child;
 	char *exec_path;
-	struct stat s;
-	int	status;
 
 	replace_dollar_vars(cmd_tab);
 	if (ft_str_start_with(cmd_tab[0], "./") && !access(cmd_tab[0], X_OK))
 		exec_path = cmd_tab[0];
-	else if (!check_paths(cmd_tab, &s, var_value("PATH"), &exec_path))
+	else if (!check_paths(cmd_tab, &exec_path))
 	{
 		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
-		return (-1);
+		return (0);
 	}
-	if ((child = fork()) == 0)
-		execv(exec_path, cmd_tab);
-	else if (child == -1)
-	{
+	if (cmd_contains_pipe(cmd_tab) && !handle_pipe(cmd_tab, exec_path))
 		ft_putstr("Fork Failed\n");
-		return (-1);
-	}
-	status = 0;
-	waitpid(child, &status, 0);
-	kill(child, SIGTERM);
-	write(1, "\n", ft_strequci(cmd_tab[0], "cat"));
+	else if (!fork_and_exec(cmd_tab, exec_path))
+		ft_putstr("Fork Failed\n");
+	wait(NULL);
 	return (0);
 }
