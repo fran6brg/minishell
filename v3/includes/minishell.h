@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/21 02:52:02 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/21 06:09:56 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,17 @@ int		execute(char **cmd_tab);
 
 char	**get_left_exec_args(char **cmd_tab);
 char	**get_right_exec_args(char **cmd_tab);
+
+/*
+** ----------------------------------------------------------------------------
+*/
+
+/*
+**	root.c
+*/
+
+void	root(char **cmd_tab);
+void	connect_cmds(char **cmd_tab);
 
 /*
 ** ----------------------------------------------------------------------------

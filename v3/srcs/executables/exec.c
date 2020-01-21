@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/21 02:51:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/21 06:58:45 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,11 +120,14 @@ int		fork_and_exec(char **cmd_tab, char *exec_path)
 ** http://manpagesfr.free.fr/man/man2/fork.2.html
 **
 ** int dup2(int oldfd, int newfd);
-** dup() et dup2() renvoient le nouveau descripteur, ou -1 s'ils échouent, auquel cas errno contient le code d'erreur.  
+** dup() et dup2() créent une copie du descripteur de fichier oldfd.
+** dup() et dup2() renvoient le nouveau descripteur, ou -1 s'ils échouent,
+** auquel cas errno contient le code d'erreur.  
 ** http://manpagesfr.free.fr/man/man2/dup.2.html
 **
 ** int execv(const char *path, char *const argv[]);
 ** argv est un tableau de chaînes d'arguments passées au nouveau programme
+** Si l'une des fonctions exec() revient, c'est qu'une erreur a eu lieu. La valeur de retour est -1, et errno contient le code d'erreur.  
 ** http://manpagesfr.free.fr/man/man3/exec.3.html
 **
 ** pid_t wait(int *status);
@@ -184,7 +187,8 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
         close(pdes[READ]);
         dup2(pdes[WRITE], STDOUT_FILENO);
         /* Execute command to the left of the pipe */
-        execv(left_args[0], left_args);
+        if (execv(left_args[0], left_args) == -1)
+			printf("ERROR EXECV\n");
 		// exit(0); // pq ca ne change rien ?
     }
 	child_right = fork();
@@ -204,7 +208,10 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
         /* Recursive call or execution of last command */
 		printf("nb_pipe = %d\n", nb_pipe);
         if (nb_pipe <= 1)
-			execv(right_args[0], right_args);
+		{
+			if (execv(right_args[0], right_args) == -1)
+				printf("ERROR EXECV\n");
+		}
 		else // to do : recursive handle_pipe
 		{
 			j = 0;
