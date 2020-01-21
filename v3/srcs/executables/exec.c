@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 07:14:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/21 02:51:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int		check_paths(char **cmd_tab, char **exec_path)
 	char	**tab;
 	struct	stat s;
 
-	printf("exec_path =%s\n", *exec_path);
 	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
 		*exec_path = cmd_tab[0];
@@ -78,7 +77,7 @@ int		check_paths(char **cmd_tab, char **exec_path)
 	{
 		if (!(*exec_path = ft_strjoin(tab[i], ft_strjoin("/", cmd_tab[0]))))
 			return (0);
-		printf("exec_path =%s\n", *exec_path);
+		// printf("exec_path =%s\n", *exec_path);
 		if (check_direct_path_to_exec(*exec_path, &s))
 			return (1);			
 		ft_strdel(exec_path);
@@ -133,56 +132,100 @@ int		fork_and_exec(char **cmd_tab, char *exec_path)
 ** http://manpages.ubuntu.com/manpages/xenial/fr/man2/wait.2.html
 */
 
-int		handle_pipe(char **cmd_tab, char *exec_path)
+int		handle_pipe(char **cmd_tab, int recursive_call)
 {
 	int    		pdes[2];
     int			status = 0;
 	int	const	READ = 0;
 	int	const	WRITE = 1;
-    pid_t   	child_right;
     pid_t   	child_left;
-	char		*args1[3];
-	char		*args2[3];
-	char		**left_args;
-	char		**right_args;
+    pid_t   	child_right;
+	char 		**left_args = get_left_exec_args(cmd_tab);
+	char 		**right_args = get_right_exec_args(cmd_tab);
+	int			j;
+	int 		nb_pipe = 0;
 
-	if (!get_exec_args(cmd_tab, &left_args, &right_args))
+	j = 0;
+	while (cmd_tab[j])
+	{
+		if (cmd_tab[j][0] == '|')
+			nb_pipe++;
+		j++;
+	}
+	printf("nb_pipe = %d\n", nb_pipe);
+	
+	if (!left_args || !right_args)
+	{
+		printf("cmd error\n");
 		return (0);
+	}
 	ft_print_str_tab(left_args); // pour debug
 	ft_print_str_tab(right_args); // pour debug
-	if (cmd_tab || exec_path || status)
-		;
+    
+	if (pipe(pdes) == -1)
+	{
+		printf("pipe error\n");
+		return (0);
+	}
 	printf("**********PIPE*********\n");
-	args1[0] = "/bin/ls";
-	args1[1] = "-lF";
-	args1[2] = 0;
-	args2[0] = "/bin/cat";
-	args2[1] = "-e";
-	args2[2] = 0;
-    pipe(pdes);
-    if (!(child_left = fork()))
+
+    child_left = fork();
+	printf("left = %d\n", child_left);
+	if (child_left == -1)
+	{
+		// close(pdes[READ]);
+		// close(pdes[WRITE]);
+		printf("Failed | left = %d\n", child_left);
+		return (0);
+	}
+	else if (child_left == 0)
     {
+		printf("Sucess | left = %d\n", child_left);
         close(pdes[READ]);
         dup2(pdes[WRITE], STDOUT_FILENO);
         /* Execute command to the left of the pipe */
-        execv(args1[0], args1);
+        execv(left_args[0], left_args);
 		// exit(0); // pq ca ne change rien ?
     }
-    if (!(child_right = fork()))
+	child_right = fork();
+    printf("right = %d\n", child_left);
+	if (child_right == -1)
+	{
+		// close(pdes[READ]);
+		// close(pdes[WRITE]);
+		printf("Failed | right = %d\n", child_left);
+		return (0);
+	}
+	else if (child_right == 0)
     {
+		printf("Sucess | right = %d\n", child_right);
         close(pdes[WRITE]);
         dup2(pdes[READ], STDIN_FILENO);
         /* Recursive call or execution of last command */
-        execv(args2[0], args2);
+		printf("nb_pipe = %d\n", nb_pipe);
+        if (nb_pipe <= 1)
+			execv(right_args[0], right_args);
+		else // to do : recursive handle_pipe
+		{
+			j = 0;
+			while (cmd_tab[j] && cmd_tab[j][0] != '|')
+				j++;
+			j++;
+			ft_print_str_tab(cmd_tab + j);
+			if (!handle_pipe(cmd_tab + j, 1))
+				return (0);
+		}
 		// exit(0);
-		// to do : recursive handle_pipe
     }
     /* Should not forget to close both ends of the pipe */
     close(pdes[WRITE]);
     close(pdes[READ]);
     wait(NULL); // ?
     waitpid(child_right, &status, 0);
-    // exit(0); // seulement si recursif ?
+    if (recursive_call)
+		exit(0); // seulement si recursif ?
+	ft_free_str_tab(left_args);
+	ft_free_str_tab(right_args);
 	printf("**********FINAL*********\n");
     return (1);
 }
@@ -201,8 +244,7 @@ int		execute(char **cmd_tab)
 	}
 	if (cmd_contains_pipe(cmd_tab))
 	{
-		if (!handle_pipe(cmd_tab, exec_path))
-			ft_putstr("Fork Failed\n");
+		handle_pipe(cmd_tab, 0);
 	}
 	else if (!fork_and_exec(cmd_tab, exec_path))
 		ft_putstr("Fork Failed\n");

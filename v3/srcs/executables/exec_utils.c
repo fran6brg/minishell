@@ -6,59 +6,69 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 07:28:17 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/21 00:04:39 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** get_exec_args();
+** get_left_exec_args();
 */
 
-int get_exec_args(char **cmd_tab, char ***left_args, char ***right_args)
+char **get_left_exec_args(char **cmd_tab)
+{
+    int     i;
+    char    **left_args;
+
+    i = 0;
+    while (cmd_tab[i][0] != '|')
+        i++;
+    if (!(left_args = (char **)malloc(sizeof(char *) * (i + 1))))
+        return (NULL);
+    left_args[0] = NULL;
+    left_args[i] = NULL;
+    i = 0;
+    while (cmd_tab[i][0] != '|')
+    {
+        if (i == 0)
+            check_paths(cmd_tab, left_args);
+        else
+            left_args[i] = ft_strdup(cmd_tab[i]);
+        i++;
+    }
+    return (left_args);
+}
+
+
+/*
+** get_right_exec_args();
+*/
+
+char **get_right_exec_args(char **cmd_tab)
 {
     int i;
     int j;
+    char    **right_args;
 
     i = 0;
     while (cmd_tab[i][0] != '|')
         i++;
-    *left_args = (char **)malloc(sizeof(char *) * i);
-    printf("ok malloc\n");
-    i = 0;
-    while (cmd_tab[i][0] != '|')
-    {
-        printf("cmd_tab[i] = %s\n", cmd_tab[i]);
-        if (i == 0)
-        {
-            // *left_args = NULL;
-            check_paths(cmd_tab, *left_args);
-            printf("cmd_tab[i] = %s\n", cmd_tab[i]);
-        }
-        else
-            *left_args[i] = ft_strdup(cmd_tab[i]);
-        printf("*left_args[i] = %s\n", *left_args[i]);
-        i++;
-    }
-    i++;
-    j = i;
+    j = ++i;
     while (cmd_tab[j] && cmd_tab[j][0] != '|')
         j++;
-    *right_args = malloc(sizeof(char *) * (j - i));
+    if (!(right_args = malloc(sizeof(char *) * (j - i + 1))))
+        return (NULL);
+    right_args[0] = NULL;
+    right_args[j - i] = NULL;
     j = i;
     while (cmd_tab[j] && cmd_tab[j][0] != '|')
     {
-        printf("cmd_tab[j] = %s\n", cmd_tab[i]);
         if (j == i)
-        {
-            *right_args = NULL;
-            check_paths(cmd_tab + j, *right_args);
-        }
+            check_paths(&cmd_tab[j], right_args);
         else
-            *right_args[j] = ft_strdup(cmd_tab[j]);
-        printf("*right_args[j] = %s\n", *right_args[j]);
+            right_args[j - i] = ft_strdup(cmd_tab[j]);
         j++;
     }
-    return (1);
+    return (right_args);
 }
