@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/21 07:22:52 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/24 16:04:19 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,18 @@ void	root(char **cmd_tab)
 //     int         pdes[2];
 //     int	const   READ = 0;
 // 	int	const	WRITE = 1;
+// 	int 		i;
 
 //     replace_dollar_vars(cmd_tab);
-//     if ()
-//         ;
+// 	i = 0;
+//     while (cmd_tab[i])
+// 	{
+// 		if (count_pipe(cmd_tab) > 0)
+// 		{
+// 			execute_pipe(cmd_tab);
+// 			// position_i_after_pipe(cmd_tab, &i);
+// 		}
+// 		else
+// 			execute_cmd(cmd_tab, &i);
+// 	}
 // }

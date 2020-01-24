@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/21 05:43:22 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/22 01:13:41 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int		main(int argc, char **argv, char **env_tab)
 	char	*line;
 	char	**cmds;
 
+	if (argc != 1)
+		return (0);
 	(void)argv[argc];
 	if (!store_env(env_tab))
 		return (0);
@@ -103,6 +105,6 @@ int		main(int argc, char **argv, char **env_tab)
 ** remove # include <stdio.h> in .h
 ** ls $VAR ; ls ~
 ** valider le comportemenet ctrl bl
-** echo "lol\'"> abc 123 456
 ** cat -e abc
+** cd ~Desktop
 */

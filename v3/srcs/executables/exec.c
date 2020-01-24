@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/21 06:58:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/24 16:07:28 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,13 +148,7 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
 	int			j;
 	int 		nb_pipe = 0;
 
-	j = 0;
-	while (cmd_tab[j])
-	{
-		if (cmd_tab[j][0] == '|')
-			nb_pipe++;
-		j++;
-	}
+	nb_pipe = count_pipe(cmd_tab);
 	printf("nb_pipe = %d\n", nb_pipe);
 	
 	if (!left_args || !right_args)
@@ -187,8 +181,13 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
         close(pdes[READ]);
         dup2(pdes[WRITE], STDOUT_FILENO);
         /* Execute command to the left of the pipe */
-        if (execv(left_args[0], left_args) == -1)
-			printf("ERROR EXECV\n");
+        if (0)
+			;
+		else
+		{
+			if (execv(left_args[0], left_args) == -1)
+				printf("ERROR EXECV\n");
+		}	
 		// exit(0); // pq ca ne change rien ?
     }
 	child_right = fork();
@@ -254,6 +253,7 @@ int		execute(char **cmd_tab)
 		handle_pipe(cmd_tab, 0);
 	}
 	else if (!fork_and_exec(cmd_tab, exec_path))
-		ft_putstr("Fork Failed\n");
+		perror("fork failed");
+	// ft_putstr("Fork Failed\n");
 	return (0);
 }

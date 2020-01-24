@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/21 00:04:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/24 16:06:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,36 @@ char **get_right_exec_args(char **cmd_tab)
         j++;
     }
     return (right_args);
+}
+
+/*
+** position_i_after_pipe();
+*/
+
+// void	position_i_after_pipe(char **cmd_tab, int *i)
+// {
+//     while (cmd_tab[*i] && cmd_tab[*i] != '|')
+// 		*i++;
+//     if (cmd_tab[*i])
+//         *i++;
+// }
+
+/*
+** count_pipes();
+*/
+
+int		count_pipe(char **cmd_tab)
+{
+    int			i;
+	int 		nb_pipe;
+
+	i = 0;
+    nb_pipe = 0;
+    while (cmd_tab[i])
+	{
+		if (cmd_tab[i][0] == '|')
+			nb_pipe++;
+		i++;
+	}
+    return (nb_pipe);
 }
