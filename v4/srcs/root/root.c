@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/25 21:45:21 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 00:11:43 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 ** contre la commande constituee d'une chaine d'espaces + enter
 */
 
-void	root(char **cmd_tab, int pdesread, int pdeswrite)
+int	root_builtins(char **cmd_tab)
 {
-	ft_print_str_tab(cmd_tab, "root"); // pour debug
+	// ft_print_str_tab(cmd_tab, "inside root_builtins"); // pour debug
 	if (is_dollar_env_var(cmd_tab[0]))
 		ft_printf("%s\n", var_value(cmd_tab[0] + 1));
 	else if (ft_strequci(cmd_tab[0], "echo"))
@@ -35,34 +35,135 @@ void	root(char **cmd_tab, int pdesread, int pdeswrite)
 	|| ft_strequci(cmd_tab[0], "setenv")
 	|| ft_strequci(cmd_tab[0], "export")
 	|| ft_strequci(cmd_tab[0], "unset"))
-		builtins_env(cmd_tab, pdesread, pdeswrite);
+		builtins_env(cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "exit"))
 		exit_minishell(cmd_tab);
-	// else if (cmd_tab[0])
-	// 	execute(cmd_tab);
+	return (1);
 }
 
 /*
-** real stuff happens here
+** root_args
 */
 
-// void	connect_cmds(char **cmd_tab)
-// {
-//     int         pdes[2];
-//     int	const   READ = 0;
-// 	int	const	WRITE = 1;
-// 	int 		i;
+void	root_args(char **cmd_tab)
+{
+	// ft_print_str_tab(cmd_tab, "inside root args"); // pour debug
+	replace_dollar_vars(cmd_tab);
+	if (is_builtin(cmd_tab))
+	{
+		if (!root_builtins(cmd_tab))
+			exit(EXIT_FAILURE);
+	}
+	else
+	{
+		if (execv(cmd_tab[0], cmd_tab) == -1)
+			exit(EXIT_FAILURE);
+	}
+	exit(EXIT_SUCCESS);
+}
 
-//     replace_dollar_vars(cmd_tab);
-// 	i = 0;
-//     while (cmd_tab[i])
-// 	{
-// 		if (count_pipe(cmd_tab) > 0)
-// 		{
-// 			execute_pipe(cmd_tab);
-// 			// position_i_after_pipe(cmd_tab, &i);
-// 		}
-// 		else
-// 			execute_cmd(cmd_tab, &i);
-// 	}
-// }
+/*
+** int pipe(int pipefd[2]); 
+** Cet appel renvoie 0 s'il réussit, ou -1 s'il échoue, auquel cas errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man2/pipe.2.html
+**
+** pid_t fork(void);
+** En cas de succès, le PID du fils est renvoyé au processus parent, et 0 est
+** renvoyé au processus fils. En cas d'échec -1 est renvoyé dans le contexte du
+** parent, aucun processus fils n'est créé, et errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man2/fork.2.html
+**
+** int dup2(int oldfd, int newfd);
+** dup() et dup2() créent une copie du descripteur de fichier oldfd.
+** dup() et dup2() renvoient le nouveau descripteur, ou -1 s'ils échouent,
+** auquel cas errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man2/dup.2.html
+**
+** int execv(const char *path, char *const argv[]);
+** argv est un tableau de chaînes d'arguments passées au nouveau programme
+** Si l'une des fonctions exec() revient, c'est qu'une erreur a eu lieu. La valeur de retour est -1, et errno contient le code d'erreur.  
+** http://manpagesfr.free.fr/man/man3/exec.3.html
+**
+** pid_t wait(int *status);
+** pid_t waitpid(pid_t pid, int *status, int options);
+** http://manpages.ubuntu.com/manpages/xenial/fr/man2/wait.2.html
+*/
+
+int		process_pipeline(char **cmd_tab, int recursive_call)
+{
+	int    		pdes[2];
+    int			status = 0;
+	int	const	READ = 0;
+	int	const	WRITE = 1;
+    pid_t   	child_left;
+    pid_t   	child_right;
+	char 		**left_args = get_first_args(cmd_tab);
+	char 		**right_args = get_second_args(cmd_tab);
+	int			j;
+
+	printf("**********PIPE*********\n");
+	ft_print_str_tab(cmd_tab, "process_pipeline");
+		
+	if (pipe(pdes) == -1)
+		return (0);
+	
+    child_left = fork();
+	if (child_left == -1) // 1.err
+	{
+		close(pdes[READ]);
+		close(pdes[WRITE]);
+		printf("left son pid = %d | FORK FAIL\n", child_left);
+		exit(EXIT_FAILURE);
+	}
+	else if (child_left == 0) // 2.fils
+    {
+		printf("inside left process pid = %d\n", child_left);
+        close(pdes[READ]);
+        dup2(pdes[WRITE], STDOUT_FILENO);
+		root_args(left_args);
+		ft_free_str_tab(left_args);
+    }
+	else // 3.parent
+		waitpid(child_left, &status, 0);	
+
+	status = 0;
+	child_right = fork();
+	if (child_right == -1) // 1.err
+	{
+		close(pdes[READ]);
+		close(pdes[WRITE]);
+		printf("right process pid = %d | FORK FAIL\n", child_right);
+		exit(EXIT_FAILURE);
+	}
+	else if (child_right == 0) // 2.fils
+    {
+		printf("inside right son pid = %d\n", child_right);
+        close(pdes[WRITE]);
+        dup2(pdes[READ], STDIN_FILENO);
+        /* execution of last command */
+        if (count_pipe(cmd_tab) >= 1)
+			root_args(right_args);
+		/* or recursive call */
+		else
+		{
+			j = 0;
+			while (cmd_tab[j] && cmd_tab[j][0] != '|')
+				j++;
+			j++;
+			ft_print_str_tab(cmd_tab + j, "inside child right > exec");
+			if (!process_pipeline(cmd_tab + j, 1))
+				return (0);
+		}
+		ft_free_str_tab(right_args);
+    }
+	else // 3. parent
+	{
+		close(pdes[WRITE]);
+		close(pdes[READ]);    
+		waitpid(child_right, &status, 0);
+	}
+    if (recursive_call)
+		exit(EXIT_SUCCESS); // seulement si recursif
+	printf("**********END PIPE*********\n");
+    return (1);
+}

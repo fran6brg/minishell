@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/25 22:23:19 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/25 22:28:25 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,16 @@ char	*var_value(char *name)
 ** print toutes les var d'env
 */
 
-void	builtin_env(int pdesread, int pdeswrite)
+void	builtin_env()
 {
 	t_env   *var;
 	
-	if (pdesread || pdeswrite)
-		;
 	var = g_env;
 	while (var)
 	{
 		write(1, var->name, ft_strlen(var->name));
-		write(1, var->value, ft_strlen(var->name));
+		write(1, "=", 1);
+		write(1, var->value, ft_strlen(var->value));
 		write(1, "\n", 1);
 		var = var->next;
 	}
@@ -142,10 +141,10 @@ void	 builtin_unsetenv(char **cmd_tab)
 ** builtins_env()
 */
 
-void	builtins_env(char **cmd_tab, int pdesread, int pdeswrite)
+void	builtins_env(char **cmd_tab)
 {
 	if (ft_strequci(cmd_tab[0], "env"))
-		builtin_env(pdesread, pdeswrite);
+		builtin_env();
 	else if (ft_strequci(cmd_tab[0], "setenv")
 	|| ft_strequci(cmd_tab[0], "export"))
 	{

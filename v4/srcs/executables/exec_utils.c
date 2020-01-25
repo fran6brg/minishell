@@ -6,30 +6,30 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/25 22:11:48 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 00:23:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** get_left_exec_args();
+** get_first_args();
 */
 
-char **get_left_exec_args(char **cmd_tab)
+char **get_first_args(char **cmd_tab)
 {
     int     i;
     char    **left_args;
 
     i = 0;
-    while (cmd_tab[i][0] != '|')
+    while (cmd_tab[i] && cmd_tab[i][0] != '|')
         i++;
     if (!(left_args = (char **)malloc(sizeof(char *) * (i + 1))))
         return (NULL);
     left_args[0] = NULL;
     left_args[i] = NULL;
     i = 0;
-    while (cmd_tab[i][0] != '|')
+    while (cmd_tab[i] && cmd_tab[i][0] != '|')
     {
         if (i == 0)
         {
@@ -47,10 +47,10 @@ char **get_left_exec_args(char **cmd_tab)
 
 
 /*
-** get_right_exec_args();
+** get_second_args();
 */
 
-char **get_right_exec_args(char **cmd_tab)
+char **get_second_args(char **cmd_tab)
 {
     int i;
     int j;
