@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/24 16:45:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/25 22:12:14 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,5 @@ int		main(int argc, char **argv, char **env_tab)
 ** valider le comportemenet ctrl bl
 ** cat -e abc
 ** cd ~Desktop
+** cat-e a gerer dans le spit pour couper les options
 */

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/24 17:56:37 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/25 22:22:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int		check_paths(char **cmd_tab, char **exec_path)
 	char	**tab;
 	struct	stat s;
 
+	// ft_print_str_tab(cmd_tab, "INSIDE CHECK PATH\n");
 	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
 		*exec_path = cmd_tab[0];
@@ -150,14 +151,14 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
 	int 		nb_remainings_cmd = 0;
 
 	printf("**********PIPE*********\n");
-	ft_print_str_tab(cmd_tab);
+	ft_print_str_tab(cmd_tab, "handle_pipe");
 	nb_pipe = count_pipe(cmd_tab);
 	printf("nb_pipe = %d\n", nb_pipe);
 	nb_remainings_cmd = nb_pipe + 1;
 	printf("nb_remainings_cmd = %d\n", nb_remainings_cmd);
 		
-	ft_print_str_tab(left_args); // pour debug
-	ft_print_str_tab(right_args); // pour debug
+	ft_print_str_tab(left_args, "left args"); // pour debug
+	ft_print_str_tab(right_args, "right args"); // pour debug
     
 
 	if (pipe(pdes) == -1)
@@ -181,10 +182,10 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
         close(pdes[READ]);
         dup2(pdes[WRITE], STDOUT_FILENO);
         /* Execute command to the left of the pipe */
-        if (is_builtin(cmd_tab))
+        if (is_builtin(left_args))
 		{
-			root(cmd_tab, 0, 1);
-			// exit(0);
+			root(left_args, 0, 1);
+			exit(0);
 		}
 		else
 		{
@@ -193,14 +194,16 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
 		}	
 		// exit(0); // pq ca ne change rien ?
     }
-	
+	else
+		waitpid(child_left, &status, 0);	
+
 	child_right = fork();
-    printf("right = %d\n", child_left);
+    printf("right = %d\n", child_right);
 	if (child_right == -1)
 	{
 		// close(pdes[READ]);
 		// close(pdes[WRITE]);
-		printf("Failed | right = %d\n", child_left);
+		printf("Failed | right = %d\n", child_right);
 		return (0);
 	}
 	else if (child_right == 0)
@@ -212,13 +215,13 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
 		printf("nb_pipe = %d\n", nb_pipe);
         if (nb_pipe == 1)
 		{
-			if (is_builtin(cmd_tab))
+			if (is_builtin(right_args))
 			{
 				j = 0;
 				while (cmd_tab[j] && cmd_tab[j][0] != '|')
 					j++;
 				j++;
-				ft_print_str_tab(cmd_tab + j);
+				ft_print_str_tab(cmd_tab + j, "inside child right > builtin");
 				root(cmd_tab + j, pdes[READ], pdes[WRITE]);
 				// exit(0);
 			}
@@ -231,7 +234,7 @@ int		handle_pipe(char **cmd_tab, int recursive_call)
 			while (cmd_tab[j] && cmd_tab[j][0] != '|')
 				j++;
 			j++;
-			ft_print_str_tab(cmd_tab + j);
+			ft_print_str_tab(cmd_tab + j, "inside child right > exec");
 			if (!handle_pipe(cmd_tab + j, 1))
 				return (0);
 		}

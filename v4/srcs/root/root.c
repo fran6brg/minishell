@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/24 17:13:51 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/25 21:45:21 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 void	root(char **cmd_tab, int pdesread, int pdeswrite)
 {
-	ft_print_str_tab(cmd_tab); // pour debug
+	ft_print_str_tab(cmd_tab, "root"); // pour debug
 	if (is_dollar_env_var(cmd_tab[0]))
 		ft_printf("%s\n", var_value(cmd_tab[0] + 1));
 	else if (ft_strequci(cmd_tab[0], "echo"))

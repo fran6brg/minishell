@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/24 17:46:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/25 22:11:48 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ char **get_right_exec_args(char **cmd_tab)
     i = 0;
     while (cmd_tab[i][0] != '|')
         i++;
-    j = ++i;
+    i++;
+    j = i;
     while (cmd_tab[j] && cmd_tab[j][0] != '|')
         j++;
+    // ft_print_str_tab(cmd_tab + i, "INSIDE GREA\n");
     if (!(right_args = malloc(sizeof(char *) * (j - i + 1))))
         return (NULL);
     right_args[0] = NULL;
@@ -74,7 +76,7 @@ char **get_right_exec_args(char **cmd_tab)
             if (is_builtin(cmd_tab + j))
                 right_args[j - i] = ft_strdup(cmd_tab[j]);
             else
-                check_paths(&cmd_tab[j], right_args);
+                check_paths(cmd_tab + j, right_args);
         }
         else
             right_args[j - i] = ft_strdup(cmd_tab[j]);

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/24 17:57:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/25 22:23:19 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,14 @@ void	builtin_env(int pdesread, int pdeswrite)
 {
 	t_env   *var;
 	
-	if (pdesread)
+	if (pdesread || pdeswrite)
 		;
-	printf("HELLO FROM ENV <<<<<<<<<<<<<<<< \n");
 	var = g_env;
 	while (var)
 	{
-		write(pdeswrite, var->name, ft_strlen(var->name));
-		write(pdeswrite, var->value, ft_strlen(var->name));
-		write(pdeswrite, "\n", 1);
+		write(1, var->name, ft_strlen(var->name));
+		write(1, var->value, ft_strlen(var->name));
+		write(1, "\n", 1);
 		var = var->next;
 	}
 }

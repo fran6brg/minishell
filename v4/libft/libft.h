@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 02:46:26 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/25 21:44:50 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int					ft_next_char_pos(const char *s, char *set);
 void				ft_free_str_tab(char **strs);
 void				ft_free_str_tab_index(char **strs, int str_i);
 int					ft_free_str_tab_ret(char **strs, int str_i, int ret);
-void				ft_print_str_tab(char **s);
+void				ft_print_str_tab(char **s, char *indication);
 
 /*
 ** nbr
