@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 04:56:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 05:05:13 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,8 +211,8 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 		}
 		else if (cmd_is_left_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
 		{
-			; // fd = get_fd(cmd_tab);
-			// dup2(fd, STDOUT_FILENO); // ?
+			fd = get_fd(cmd_tab);
+			dup2(fd, STDIN_FILENO);
 		}
 		else
        		dup2(pdes[WRITE], STDOUT_FILENO);
@@ -237,8 +237,8 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 		}
 		else if (cmd_is_left_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
 		{
-			; // fd = get_fd(cmd_tab);
-			// dup2(fd, STDOUT_FILENO); // ?
+			fd = get_fd(cmd_tab);
+			dup2(fd, STDIN_FILENO);
 		}
 		else
 	   		dup2(pdes[READ], STDIN_FILENO);

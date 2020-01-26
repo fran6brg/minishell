@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 02:42:37 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 04:56:07 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 05:10:08 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,11 @@ int		get_fd(char **args)
 		if (args[i][0] == '>')
 		{
 			fd = open(args[i + 1], O_CREAT | O_WRONLY | (args[i][1] == '>' ? O_APPEND : O_TRUNC), 0777);
+			return (fd);
+        }
+		else if (args[i][0] == '<')
+		{
+			fd = open(args[i + 1], O_CREAT | O_WRONLY, 0777);
 			return (fd);
         }
 		i++;

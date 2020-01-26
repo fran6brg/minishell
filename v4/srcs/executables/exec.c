@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 04:46:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 05:20:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ char **get_first_args(char **cmd_tab)
             else
                 check_paths(cmd_tab, left_args);
         }
-		else if (cmd_tab[i][0] == '>' || cmd_tab[i - 1][0] == '>')
+		else if (ft_strchr("<>", cmd_tab[i][0]) || ft_strchr(">", cmd_tab[i - 1][0]))
 			offset++;
         else
             left_args[i - offset] = ft_strdup(cmd_tab[i]);
@@ -157,7 +157,7 @@ char **get_second_args(char **cmd_tab)
             else
                 check_paths(cmd_tab + j, right_args);
         }
-		else if (cmd_tab[j][0] == '>' || cmd_tab[j - 1][0] == '>')
+		else if (ft_strchr("<>", cmd_tab[j][0]) || ft_strchr(">", cmd_tab[j - 1][0]))
 			offset++;
         else
             right_args[j - i - offset] = ft_strdup(cmd_tab[j]);
@@ -194,6 +194,11 @@ void	single_execv(char **cmd_tab)
 				fd = get_fd(cmd_tab);
 				dup2(fd, STDOUT_FILENO);
 				// dup2(fd, STDERR_FILENO); // to debug
+			}
+			else if (cmd_is_left_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
+			{
+				fd = get_fd(cmd_tab);
+				dup2(fd, STDIN_FILENO);
 			}
 			exit((execv(formated_args[0], formated_args) == -1) ? EXIT_FAILURE : EXIT_SUCCESS);
 			close((cmd_is_right_redirected(cmd_tab) && fd) ? fd : -1);
