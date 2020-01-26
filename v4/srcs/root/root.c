@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 00:11:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 00:50:40 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
         close(pdes[WRITE]);
         dup2(pdes[READ], STDIN_FILENO);
         /* execution of last command */
-        if (count_pipe(cmd_tab) >= 1)
+        if (count_pipe(cmd_tab) == 1)
 			root_args(right_args);
 		/* or recursive call */
 		else

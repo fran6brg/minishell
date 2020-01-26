@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 00:24:36 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 00:46:46 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,48 +42,30 @@ int		store_env(char **env_tab)
 	return (1);
 }
 
+/*
+** parse_and_root_cmds()
+** 3 possibilités : pipeline || single builtin || single execv
+*/
 
 void	parse_and_root_cmds(char **cmds)
 {
 	int		i;
 	char	**cmd_tab;
-	char	**formated_args;
-	pid_t   child;
-	int		status;
 
 	i = -1;
 	while (cmds[++i])
 	{
 		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i], " \t")))
 			continue ;
-		if (cmd_contains_pipe(cmd_tab))
+		if (count_pipe(cmd_tab) > 0)
 		{
 			if (!process_pipeline(cmd_tab, 0))
-				ft_putstr("PIPELINE ERROR\n");
+				ft_putstr("minishell: broken pipe error\n");
 		}
 		else if (is_builtin(cmd_tab))
 			root_builtins(cmd_tab);
-		else if (cmd_tab[0])
-		{
-			status = 0;
-			if ((formated_args = get_first_args(cmd_tab)))
-			{
-
-				ft_print_str_tab(formated_args, "one shot execv"); // pour debug
-				child = fork();
-				if (child == -1) // 1.err
-					exit(EXIT_FAILURE);
-				else if (child == 0) // 2.fils
-				{
-					if (execv(formated_args[0], formated_args) == -1)
-						exit(EXIT_FAILURE);
-					exit(EXIT_SUCCESS);
-					ft_free_str_tab(formated_args);
-				}
-				else // 3. parent
-					waitpid(child, &status, 0);
-			}
-		}
+		else if (cmd_tab[0]) // meaning if at leat 1 arg
+			single_execv(cmd_tab);
 		ft_free_str_tab(cmd_tab);
 	}
 }
@@ -139,4 +121,5 @@ int		main(int argc, char **argv, char **env_tab)
 ** cd ~Desktop
 ** pwd with args
 ** cat-e a gerer dans le spit pour couper les options
+** ls -la | cat -e | env
 */
