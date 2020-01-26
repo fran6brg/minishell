@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 02:07:54 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 04:57:56 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,8 @@ int		exit_process(int pdes[2], pid_t child);
 
 int		root_builtins(char **cmd_tab);
 void	root_args(char **cmd_tab);
-void	process_left_child(char **cmd_tab, int pdes[2]);
-int		process_right_child(char **cmd_tab, int pdes[2]);
+// void	process_left_child(char **cmd_tab, int pdes[2]);
+// int		process_right_child(char **cmd_tab, int pdes[2]);
 int		process_pipeline(char **cmd_tab, int recursive_call);
 
 /*
@@ -202,7 +202,9 @@ void	listen_sig(void);
 
 int		count_arg(char **s);
 int		arg_is_in_quotes(char *arg);
-int		check_if_redirect(char **cmd_tab);
+int		cmd_is_right_redirected(char **cmd_tab);
+int		cmd_is_left_redirected(char **cmd_tab);
+int		get_fd(char **args);
 int		is_builtin(char **cmd_tab);
 /*
 **	free.c

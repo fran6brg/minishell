@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 01:52:50 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 04:58:41 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	parse_and_root_cmds(char **cmds)
 
 void	put_prompt(void)
 {
-	ft_printf("~%s%s%s$ ", COL_GRN, ft_strrchr(var_value("PWD"), '/') + 1, COL_NRM);
+	ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDCYAN, ft_strrchr(var_value("PWD"), '/') + 1, BOLDGREEN, RESET);
 }
 
 /*

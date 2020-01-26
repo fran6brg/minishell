@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 02:13:52 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 04:56:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,7 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
     pid_t   	child_right;
 	char 		**left_args = get_first_args(cmd_tab);
 	char 		**right_args = get_second_args(cmd_tab);
+	int			fd;
 
 	printf("**********PIPE*********\n");
 	ft_print_str_tab(cmd_tab, "process_pipeline");
@@ -203,7 +204,18 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
     {
 		printf("inside left process pid = %d\n", child_left);
         close(pdes[READ]);
-        dup2(pdes[WRITE], STDOUT_FILENO);
+		if (cmd_is_right_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
+		{
+			fd = get_fd(cmd_tab);
+			dup2(fd, STDOUT_FILENO);
+		}
+		else if (cmd_is_left_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
+		{
+			; // fd = get_fd(cmd_tab);
+			// dup2(fd, STDOUT_FILENO); // ?
+		}
+		else
+       		dup2(pdes[WRITE], STDOUT_FILENO);
 		root_args(left_args);
 		ft_free_str_tab(left_args);
     }
@@ -218,7 +230,18 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
     {
 		printf("inside right son pid = %d\n", child_right);
         close(pdes[WRITE]);
-        dup2(pdes[READ], STDIN_FILENO);
+		if (cmd_is_right_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
+		{
+			fd = get_fd(cmd_tab);
+			dup2(fd, STDOUT_FILENO);
+		}
+		else if (cmd_is_left_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
+		{
+			; // fd = get_fd(cmd_tab);
+			// dup2(fd, STDOUT_FILENO); // ?
+		}
+		else
+	   		dup2(pdes[READ], STDIN_FILENO);
         /* execution of last command */
         if (count_pipe(cmd_tab) == 1)
 			root_args(right_args);
@@ -229,6 +252,7 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 			if (!process_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
 				return (0);
 		}
+		close((cmd_is_right_redirected(cmd_tab) && fd) ? fd : -1);
 		ft_free_str_tab(right_args);
     }
 	else // 3. parent
@@ -237,6 +261,7 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 		close(pdes[READ]);    
 		waitpid(child_right, &status, 0);
 	}
+
     if (recursive_call)
 		exit(EXIT_SUCCESS); // seulement si recursif
 	printf("**********END PIPE*********\n");

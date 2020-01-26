@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 01:25:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 04:46:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,10 @@ void	builtin_echo(char **cmd_tab)
 	int i;
 
 	i = 0;
-	// printf("check_if_redirect(cmd_tab) = %d\n", check_if_redirect(cmd_tab));
+	// printf("cmd_is_right_redirected(cmd_tab) = %d\n", cmd_is_right_redirected(cmd_tab));
 	if (cmd_tab[1] == 0)
 		write(1, "\n", 1);
-	else if (check_if_redirect(cmd_tab) >= 2)
+	else if (cmd_is_right_redirected(cmd_tab) >= 2)
 		apply_redirect_right(cmd_tab);
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 02:08:20 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 03:28:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		next_pipe_pos_or_len(char **cmd_tab)
 }
 
 /*
-** count_pipes();
+** count_pipe();
 */
 
 int		count_pipe(char **cmd_tab)

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 01:06:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 04:46:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,18 +90,21 @@ int		check_paths(char **cmd_tab, char **exec_path)
 /*
 ** get_first_args();
 ** meaning before pipe if pipe
+** here j is used to skip '>' || '>>' || <filename> args
 */
 
 char **get_first_args(char **cmd_tab)
 {
     int     i;
     char    **left_args;
+	int		offset;
 
 	i = next_pipe_pos_or_len(cmd_tab);
     if (!(left_args = malloc(sizeof(char *) * (i + 1))))
         return (NULL);
     left_args[i] = NULL;
     i = 0;
+	offset = 0;
     while (cmd_tab[i] && cmd_tab[i][0] != '|')
     {
         if (i == 0)
@@ -112,17 +115,22 @@ char **get_first_args(char **cmd_tab)
             else
                 check_paths(cmd_tab, left_args);
         }
+		else if (cmd_tab[i][0] == '>' || cmd_tab[i - 1][0] == '>')
+			offset++;
         else
-            left_args[i] = ft_strdup(cmd_tab[i]);
+            left_args[i - offset] = ft_strdup(cmd_tab[i]);
         i++;
     }
-	// ft_print_str_tab(left_args, "inside first_args");
+	while (offset)
+		left_args[i - offset--] = NULL;
+	ft_print_str_tab(left_args, "inside first_args");
     return (left_args);
 }
 
 /*
 ** get_second_args();
 ** meaning after pipe
+** here k is used to skip '>' || '>>' || <filename> args
 */
 
 char **get_second_args(char **cmd_tab)
@@ -130,6 +138,7 @@ char **get_second_args(char **cmd_tab)
     int 	i;
     int 	j;
     char    **right_args;
+	int		offset;
 
     i = next_pipe_pos_or_len(cmd_tab) + 1;
     j = i + next_pipe_pos_or_len(cmd_tab + i);
@@ -137,6 +146,7 @@ char **get_second_args(char **cmd_tab)
         return (NULL);
     right_args[j - i] = NULL;
     j = i;
+	offset = 0;
     while (cmd_tab[j] && cmd_tab[j][0] != '|')
     {
         if (j == i)
@@ -147,11 +157,15 @@ char **get_second_args(char **cmd_tab)
             else
                 check_paths(cmd_tab + j, right_args);
         }
+		else if (cmd_tab[j][0] == '>' || cmd_tab[j - 1][0] == '>')
+			offset++;
         else
-            right_args[j - i] = ft_strdup(cmd_tab[j]);
+            right_args[j - i - offset] = ft_strdup(cmd_tab[j]);
         j++;
     }
-	// ft_print_str_tab(right_args, "inside second_args");
+	while (offset)
+		right_args[j - i - offset--] = NULL;
+	ft_print_str_tab(right_args, "inside second_args");
     return (right_args);
 }
 
@@ -164,19 +178,25 @@ void	single_execv(char **cmd_tab)
 	char	**formated_args;
 	pid_t   child;
 	int		status;
+	int		fd;
 
 	status = 0;
 	if ((formated_args = get_first_args(cmd_tab)))
 	{
-		// ft_print_str_tab(formated_args, "one shot execv"); // pour debug
+		ft_print_str_tab(formated_args, "one shot execv"); // pour debug
 		child = fork();
 		if (child == -1) // 1.err
 			exit(EXIT_FAILURE);
 		else if (child == 0) // 2.fils
 		{
-			if (execv(formated_args[0], formated_args) == -1)
-				exit(EXIT_FAILURE);
-			exit(EXIT_SUCCESS);
+			if (cmd_is_right_redirected(cmd_tab))
+			{
+				fd = get_fd(cmd_tab);
+				dup2(fd, STDOUT_FILENO);
+				// dup2(fd, STDERR_FILENO); // to debug
+			}
+			exit((execv(formated_args[0], formated_args) == -1) ? EXIT_FAILURE : EXIT_SUCCESS);
+			close((cmd_is_right_redirected(cmd_tab) && fd) ? fd : -1);
 		}
 		else // 3. parent
 			waitpid(child, &status, 0);
