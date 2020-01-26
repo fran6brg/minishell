@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 00:47:08 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 02:07:54 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # include <sys/stat.h>
 # include <stdio.h>
 # include <signal.h>
+
+/*
+**	CONSTANTES
+*/
+
+# define READ 0
+# define WRITE 1
 
 /*
 **	structs
@@ -130,6 +137,7 @@ void	single_execv(char **cmd_tab);
 
 int		next_pipe_pos_or_len(char **cmd_tab);
 int		count_pipe(char **cmd_tab);
+int		exit_process(int pdes[2], pid_t child);
 
 /*
 ** ----------------------------------------------------------------------------
@@ -141,6 +149,8 @@ int		count_pipe(char **cmd_tab);
 
 int		root_builtins(char **cmd_tab);
 void	root_args(char **cmd_tab);
+void	process_left_child(char **cmd_tab, int pdes[2]);
+int		process_right_child(char **cmd_tab, int pdes[2]);
 int		process_pipeline(char **cmd_tab, int recursive_call);
 
 /*
@@ -184,7 +194,7 @@ int		multilines(char *s, char *set);
 **	signal.c
 */
 
-void	handle_sig(void);
+void	listen_sig(void);
 
 /*
 **	helpers.c

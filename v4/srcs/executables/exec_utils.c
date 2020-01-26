@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 00:47:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 02:08:20 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,16 @@ int		count_pipe(char **cmd_tab)
 		i++;
 	}
     return (nb_pipe);
+}
+
+/*
+** exit_process(int pdes[2], pid_t child);
+*/
+
+int exit_process(int pdes[2], pid_t child)
+{
+    close(pdes[READ]);
+	close(pdes[WRITE]);
+	printf("process pid = %d | FORK FAIL\n", child);
+	exit(EXIT_FAILURE);
 }

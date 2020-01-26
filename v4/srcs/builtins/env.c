@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/25 22:28:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 01:07:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	builtin_setenv(char **cmd_tab)
 	if (count_arg(cmd_tab) != 3)
 	{
 		if (!cmd_tab[1])
-			;// builtin_env(1);
+			builtin_env();
 		else
 			ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
 		return (1);

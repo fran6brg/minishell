@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 00:46:46 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 01:52:50 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	parse_and_root_cmds(char **cmds)
 
 void	put_prompt(void)
 {
-	ft_printf("~ %s%s%s > ", COL_GRN, ft_strrchr(var_value("PWD"), '/') + 1, COL_NRM);
+	ft_printf("~%s%s%s$ ", COL_GRN, ft_strrchr(var_value("PWD"), '/') + 1, COL_NRM);
 }
 
 /*
@@ -93,14 +93,12 @@ int		main(int argc, char **argv, char **env_tab)
 	(void)argv[argc];
 	if (!store_env(env_tab))
 		return (0);
+	listen_sig();
 	while (42)
 	{
-		handle_sig();
 		put_prompt();
-		if (!get_next_line(STDIN_FILENO, &line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF, that quits shell
-			free_and_exit(0, NULL);
-		if (parse_error(line))
-			free_and_exit(0, NULL);
+		if (!get_next_line(STDIN_FILENO, &line) || parse_error(line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF, that quits shell
+			free_and_exit(EXIT_FAILURE, NULL);
 		else
 		{
 			if (!(cmds = ft_split_set(line, ";")))
@@ -109,7 +107,7 @@ int		main(int argc, char **argv, char **env_tab)
 			free_cmds(line, cmds);
 		}
 	}
-	return (1);
+	return (0);
 }
 
 /*

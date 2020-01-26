@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 01:01:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 01:06:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,6 @@ void	single_execv(char **cmd_tab)
 	status = 0;
 	if ((formated_args = get_first_args(cmd_tab)))
 	{
-
 		// ft_print_str_tab(formated_args, "one shot execv"); // pour debug
 		child = fork();
 		if (child == -1) // 1.err
