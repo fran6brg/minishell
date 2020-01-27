@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 05:31:29 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:14:21 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	replace_dollar_vars(char **cmd_tab)
 	{
 		if (is_env_var(cmd_tab[i]))
 		{
-			tmp = var_value(cmd_tab[i]);
+			if (!(tmp = ft_strdup(var_value(cmd_tab[i]))))
+				return ;
 			ft_strdel(&cmd_tab[i]);
 			cmd_tab[i] = tmp;
 		}

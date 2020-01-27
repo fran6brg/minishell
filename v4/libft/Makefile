@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/01/27 03:41:33 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/27 07:07:16 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,7 +111,9 @@ SRCS=ft_putchar.c \
 	ft_strequci.c \
 	ft_next_char_pos.c \
 	ft_free_str_tab.c \
-	ft_free_str_tab_index.c \
+	ft_free_str_tab_ret.c \
+	ft_free_n_str_tab.c \
+	ft_free_n_str_tab_ret.c \
 	ft_print_str_tab.c
 
 OBJS=${SRCS:.c=.o}

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 06:17:27 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 06:43:12 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 **	DEBUG
 */
 
-# define DEBUG 0
+# define DEBUG 1
 
 /*
 **	CONSTANTES
@@ -155,6 +155,7 @@ int		exit_process(int pdes[2], pid_t child);
 
 int		single_builtin(char **cmd_tab);
 void	single_execv(char **cmd_tab);
+int		is_builtin(char **cmd_tab);
 void	root_args(char **cmd_tab);
 // void	process_left_child(char **cmd_tab, int pdes[2]);
 // int		process_right_child(char **cmd_tab, int pdes[2]);
@@ -212,7 +213,6 @@ int		arg_is_in_quotes(char *arg);
 int		right_redirected_cmd(char **cmd_tab);
 int		left_redirected_cmd(char **cmd_tab);
 int		get_fd(char **args);
-int		is_builtin(char **cmd_tab);
 /*
 **	free.c
 */

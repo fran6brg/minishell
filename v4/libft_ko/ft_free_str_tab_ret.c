@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_str_tab_ret.c                              :+:      :+:    :+:   */
+/*   ft_free_n_str_tab_ret.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int	ft_free_str_tab_ret(char **strs, int str_i, int ret)
+int	ft_free_n_str_tab_ret(char **strs, int str_i, int ret)
 {
 	ft_free_str_tab(strs, str_i);
 	return (ret);

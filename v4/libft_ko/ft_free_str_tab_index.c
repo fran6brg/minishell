@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_str_tab_index.c                            :+:      :+:    :+:   */
+/*   ft_free_n_str_tab.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-void	ft_free_str_tab_index(char **strs, int str_i)
+void	ft_free_n_str_tab(char **strs, int str_i)
 {
 	if (strs)
 	{

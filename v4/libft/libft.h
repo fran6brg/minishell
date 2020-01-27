@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 03:40:56 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:07:45 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,9 @@ int					ft_letterequci(char c1, char c2);
 int					ft_strequci(char *s1, char *s2);
 int					ft_next_char_pos(const char *s, char *set);
 void				ft_free_str_tab(char **strs);
-void				ft_free_str_tab_index(char **strs, int str_i);
-int					ft_free_str_tab_ret(char **strs, int str_i, int ret);
+int					ft_free_str_tab_ret(char **strs, int ret);
+void				ft_free_n_str_tab(char **strs, int str_i);
+int					ft_free_n_str_tab_ret(char **strs, int str_i, int ret);
 void				ft_print_str_tab(char **s, char *indication);
 
 /*

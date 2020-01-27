@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 06:16:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:11:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,9 @@ int		find_path(char **cmd_tab, char **exec_path)
 	while (tab[++i])
 	{
 		if (!(*exec_path = ft_strjoin_ter(tab[i], "/", cmd_tab[0])))
-		{
-            ft_free_str_tab(tab);
-            return (0);
-        }
+			return (ft_free_str_tab_ret(tab, 0));
 		if (path_to_exec_is_valid(*exec_path, &s))
-		{
-			ft_free_str_tab(tab);
-        	return (1);
-        }
+			return (ft_free_str_tab_ret(tab, 1));
 		ft_strdel(exec_path);
 	}
 	ft_free_str_tab(tab);
@@ -106,7 +100,7 @@ int		nb_args_wo_offset(char **cmd_tab)
 	offset = 0;
 	while (cmd_tab[i] && cmd_tab[i][0] != '|')
     {
-		if (ft_strchr("<>", cmd_tab[i][0]) || (i > 0 && ft_strchr(">", cmd_tab[i - 1][0])))
+		if (ft_strchr("<>", cmd_tab[i][0]) || (i > 0 && ft_strchr("<>", cmd_tab[i - 1][0])))
 			offset++;
         i++;
     }
@@ -135,6 +129,8 @@ char **get_first_args(char **cmd_tab)
 	offset = 0;
     while (cmd_tab[i] && cmd_tab[i][0] != '|')
     {
+		if (DEBUG)
+			printf("inside first_args cmd_tab[%d] = %s\n", i, cmd_tab[i]);
         if (i == 0)
         {
             left_args[0] = NULL;
@@ -143,7 +139,7 @@ char **get_first_args(char **cmd_tab)
             else
                 find_path(cmd_tab, left_args);
         }
-		else if (ft_strchr("<>", cmd_tab[i][0]) || ft_strchr(">", cmd_tab[i - 1][0]))
+		else if (ft_strchr("<>", cmd_tab[i][0]) || ft_strchr("<>", cmd_tab[i - 1][0]))
 			offset++;
         else
             left_args[i - offset] = ft_strdup(cmd_tab[i]);
@@ -185,7 +181,7 @@ char **get_second_args(char **cmd_tab)
             else
                 find_path(cmd_tab + j, right_args);
         }
-		else if (ft_strchr("<>", cmd_tab[j][0]) || ft_strchr(">", cmd_tab[j - 1][0]))
+		else if (ft_strchr("<>", cmd_tab[j][0]) || ft_strchr("<>", cmd_tab[j - 1][0]))
 			offset++;
         else
             right_args[j - i - offset] = ft_strdup(cmd_tab[j]);

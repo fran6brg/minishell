@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/20 02:10:59 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:03:10 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char			**ft_split_set_quotes_chevrons(char *s, char *set)
 	if (!ft_create_strs(trim_s, strs, &str_i, set))
 	{
 		ft_strdel(&trim_s);
-		ft_free_str_tab_index(strs, str_i);
+		ft_free_n_str_tab(strs, str_i);
 		return (NULL);
 	}
 	// printf("nb_new_s(trim_s, set) = %d\n", nb_new_s(trim_s, set));

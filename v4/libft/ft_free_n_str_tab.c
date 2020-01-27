@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_str_tab.c                                  :+:      :+:    :+:   */
+/*   ft_free_n_str_tab.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/17 23:56:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:04:12 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/27 07:03:24 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/27 07:03:25 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/*
-** free 2D str array
-*/
-
-void	ft_free_str_tab(char **strs)
+void	ft_free_n_str_tab(char **strs, int str_i)
 {
-	int i;
-
-	i = -1;
-	while (strs && strs[++i])
-		ft_strdel(&strs[i]);
 	if (strs)
 	{
+		while (str_i-- > 0)
+			ft_strdel(&strs[str_i]);
 		free(strs);
-		strs = NULL;
 	}
 }
