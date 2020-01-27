@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 06:42:12 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:43:05 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,6 @@ int		main(int argc, char **argv, char **env_tab)
 ** ls -la | cat -e | env
 ** ls -la | cat -e | sort > filename
 ** comprendre le pb 'Uninitialised value was created by a heap allocation' avec 'make re && valgrind --leak-check=full --track-origins=yes ./minishell'
+** trouver comment free les leaks des fork (exemple faire la cmd 'env | cat -e | sort' avec valgrind)
+** on peut utiliser les exec echo et pwd mais il va falloir passer l'env à execve cf .is_builtin(char **cmd_tab)
 */

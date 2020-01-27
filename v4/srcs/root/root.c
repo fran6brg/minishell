@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 06:41:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:41:33 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	single_execv(char **cmd_tab)
 				dup2(fd, STDIN_FILENO);
 			exit((execv(formated_args[0], formated_args) == -1) ? EXIT_FAILURE : EXIT_SUCCESS);
 			close((fd && fd != -1) ? fd : -1);
+			ft_free_str_tab(formated_args);
 		}
 		else // 3. parent
 		{
@@ -83,8 +84,8 @@ int		is_builtin(char **cmd_tab)
 {
 	return (/* ft_strequ(cmd_tab[0], "echo")
 	|| */ ft_strequ(cmd_tab[0], "cd")
-	|| ft_strequ(cmd_tab[0], "pwd")
-	|| ft_strequ(cmd_tab[0], "env")
+	|| /* ft_strequ(cmd_tab[0], "pwd")
+	|| */ ft_strequ(cmd_tab[0], "env")
 	|| ft_strequ(cmd_tab[0], "setenv")
 	|| ft_strequ(cmd_tab[0], "unset")
 	|| ft_strequ(cmd_tab[0], "exit")
@@ -176,6 +177,7 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
        		dup2(pdes[WRITE], STDOUT_FILENO);
 		root_args(left_args);
 		close((fd && fd != -1) ? fd : -1);
+		ft_free_str_tab(left_args);
     }
 	else // 3.parent
 	{
@@ -208,24 +210,23 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 			if (DEBUG)
 				ft_print_str_tab(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, "cmd inside child right > exec");
 			if (!process_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
-			{
-				return (0);
-			}
+				return (ft_free_str_tab_ret(right_args, 0));
 		}
 		close((fd && fd != -1) ? fd : -1);
-		// ft_free_str_tab(right_args);
+		ft_free_str_tab(right_args);
     }
 	else // 3. parent
 	{
 		close(pdes[WRITE]);
 		close(pdes[READ]);    
 		waitpid(child_right, &status, 0);
-		ft_free_str_tab(right_args); /* nb il faut free apres la fin du pid */
+		ft_free_str_tab(right_args); /* nb il faut aussi free apres la fin du pid */
 	}
 
 
     if (recursive_call)
 		exit(EXIT_SUCCESS); // seulement si recursif
+
 	if (DEBUG)
 		printf("**********END PIPE*********\n");
     return (1);
