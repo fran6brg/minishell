@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 06:43:12 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:17:17 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 **	DEBUG
 */
 
-# define DEBUG 1
+# define DEBUG 0
 
 /*
 **	CONSTANTES
