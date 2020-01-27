@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/21 05:43:45 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/27 02:48:53 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME 	= minishell
 
 CC		= gcc
 
-FLAGS 	= -Wall -Wextra -Werror -g -g3
+FLAGS 	= -Wall -Wextra -Werror -g
 
 SRCS 	= srcs/main.c \
 		srcs/builtins/echo.c srcs/builtins/echo_utils.c \

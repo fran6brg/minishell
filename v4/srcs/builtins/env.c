@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 01:07:18 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 05:29:42 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@ t_env	*g_env;
 
 /*
 ** get value from var name
+** ft_strequci ci = case insensitive
+** pour opti je test d'abord sans trim ce qui évite un malloc
 */
 
 char	*var_value(char *name)
 {
-	t_env			*var;
+	char	*trim;
+	t_env	*var;
 
 	var = g_env;
 	while (var)
@@ -29,6 +32,20 @@ char	*var_value(char *name)
 			return (var->value);
 		var = var->next;
 	}
+	trim = NULL;
+	if (!(trim = ft_strtrim_set(name, "$()")))
+		return (0);
+	var = g_env;
+	while (var)
+	{
+		if (ft_strequci(var->name, trim))
+		{
+			ft_strdel(&trim);
+			return (var->value);
+		}
+		var = var->next;
+	}
+	ft_strdel(&trim);
 	return (NULL);
 }
 
@@ -58,46 +75,26 @@ void	builtin_env()
 ** autrement, une nouvelle variable est créée
 **
 ** observations : 
-** setenv n'existe pas sur ZSH, à la place il y a export Name=Value
+** setenv n'existe pas sur ZSH
 */
 
 int	builtin_setenv(char **cmd_tab)
 {
-	t_env   *var;
-	t_env   *new;
-
 	if (count_arg(cmd_tab) != 3)
 	{
 		if (!cmd_tab[1])
 			builtin_env();
 		else
-			ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
-		return (1);
+			ft_printf("error: too %s arguments\n", count_arg(cmd_tab) < 3 ? "few" : "much");
+		return (0);
 	}
 	else if (ft_strchr(cmd_tab[1], '='))
 	{
 		ft_printf("error: variable name can not contain '='\n");
-		return (1);
-	}
-	var = g_env;
-	while (var)
-	{
-		if (ft_strequ(var->name, cmd_tab[1]))
-	 	{
-			var->value = ft_strdup(cmd_tab[2]);
-			return (1);
-		}
-		var = var->next;
-	}
-	if (!(new = (t_env *)malloc(sizeof(t_env))))
 		return (0);
-	new->name = ft_strdup(cmd_tab[1]);
-	new->value = ft_strdup(cmd_tab[2]);
-	new->next = NULL;
-	var = g_env;
-	while (var->next)
-		var = var->next;
-	var->next = new;
+	}
+	else if (!push_back_var(cmd_tab))
+		return (0);
 	return (1);
 }
 
@@ -113,28 +110,27 @@ void	 builtin_unsetenv(char **cmd_tab)
 	t_env	*current;
 	t_env	*next;
 
-	if (count_arg(cmd_tab) != 2)
+	if (count_arg(cmd_tab) == 2)
 	{
-		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
-		return ;
-	}
-	current = g_env;
-	previous = g_env;
-	while (current)
-	{
-		next = current->next;
-		if (ft_strequ(current->name, cmd_tab[1]))
+		current = g_env;
+		previous = g_env;
+		while (current)
 		{
-			if (current == g_env)
-				g_env = next;
-			previous->next = next;
-			ft_strdel(&current->name);
-			ft_strdel(&current->value);
-			free(current);
+			next = current->next;
+			if (ft_strequ(current->name, cmd_tab[1]))
+			{
+				g_env = (current == g_env) ? next : g_env;
+				previous->next = next;
+				ft_strdel(&current->name);
+				ft_strdel(&current->value);
+				free(current);
+			}
+			previous = current;
+			current = current->next;
 		}
-		previous = current;
-		current = current->next;
 	}
+	else
+		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
 }
 
 /*

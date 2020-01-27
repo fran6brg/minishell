@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 04:46:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 23:25:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int parse_filename(char **cmd_tab, char **filename, int *fd)
 	int pos;
 
 	pos = 1;
-	while (!ft_strchr(cmd_tab[pos], '>') && !arg_is_in_quotes(cmd_tab[pos]))
+	while (!ft_strchr(">", cmd_tab[pos][0]))
 		pos++;
 	pos++; // pour decaler apres le >
 	*filename = NULL;
@@ -75,7 +75,7 @@ void apply_redirect_right(char **cmd_tab)
 		if (i > 1 && !is_n_option(i - 1, cmd_tab))
 			write(fd, " ", 1);
 		printf("%s -%.*s- in %s\n", "append || overwrite", (int)ft_next_char_pos(cmd_tab[i], ">"), cmd_tab[i], filename);
-		if (is_dollar_env_var(cmd_tab[i]))
+		if (is_env_var(cmd_tab[i]))
 			write(fd, var_value(cmd_tab[i] + 1), ft_strlen(var_value(cmd_tab[i] + 1)));
 		else if (arg_is_in_quotes(cmd_tab[i]))
 			write(fd, cmd_tab[i] + 1, ft_next_char_pos(cmd_tab[i], ">") - 2);
@@ -102,11 +102,14 @@ void	builtin_echo(char **cmd_tab)
 	int i;
 
 	i = 0;
-	// printf("cmd_is_right_redirected(cmd_tab) = %d\n", cmd_is_right_redirected(cmd_tab));
+	// printf("right_redirected_cmd(cmd_tab) = %d\n", right_redirected_cmd(cmd_tab));
 	if (cmd_tab[1] == 0)
 		write(1, "\n", 1);
-	else if (cmd_is_right_redirected(cmd_tab) >= 2)
+	else if (right_redirected_cmd(cmd_tab))
 		apply_redirect_right(cmd_tab);
+	// todo :
+	// else if (left_redirected_cmd(cmd_tab))
+	// 	apply_redirect_left(cmd_tab);
 	else
 	{
 		i = 0;
@@ -114,7 +117,7 @@ void	builtin_echo(char **cmd_tab)
 		{
 			if (is_n_option(i, cmd_tab))
 				continue ;
-			else if (is_dollar_env_var(cmd_tab[i]))
+			else if (is_env_var(cmd_tab[i]))
 				ft_printf("%s", var_value(cmd_tab[i] + 1));
 			else if (arg_is_in_quotes(cmd_tab[i]))
 				write(1, cmd_tab[i] + 1, ft_strlen(cmd_tab[i]) - 2);

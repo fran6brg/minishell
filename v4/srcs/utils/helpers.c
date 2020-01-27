@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 02:42:37 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 05:26:06 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/26 23:25:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int arg_is_in_quotes(char *arg)
 }
 
 /*
-** cmd_is_right_redirected()
+** right_redirected_cmd()
 */
 
-int	cmd_is_right_redirected(char **cmd_tab)
+int	right_redirected_cmd(char **cmd_tab)
 {
 	int i;
 
@@ -63,10 +63,10 @@ int	cmd_is_right_redirected(char **cmd_tab)
 }
 
 /*
-** cmd_is_left_redirected()
+** left_redirected_cmd()
 */
 
-int	cmd_is_left_redirected(char **cmd_tab)
+int	left_redirected_cmd(char **cmd_tab)
 {
 	int i;
 
@@ -109,7 +109,7 @@ int		get_fd(char **args)
         }
 		i++;
 	}
-    return (fd);
+    return (-1);
 }
 
 /*
@@ -125,5 +125,6 @@ int		is_builtin(char **cmd_tab)
 	|| ft_strequ(cmd_tab[0], "setenv")
 	|| ft_strequ(cmd_tab[0], "unset")
 	|| ft_strequ(cmd_tab[0], "exit")
+	|| is_env_var(cmd_tab[0])
 	);
 }

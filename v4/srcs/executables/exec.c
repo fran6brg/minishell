@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 05:20:03 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 05:28:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,16 @@ int		path_to_exec_is_valid(char *tested_path, struct stat *s)
 }
 
 /*
-** first check if path || direct path to command instead of exec name
-** if not then operate normal case
+** first check if path || direct path to command instead of exec
+** if not then find path
 */
 
-int		check_paths(char **cmd_tab, char **exec_path)
+int		find_path(char **cmd_tab, char **exec_path)
 {
 	int 	i;
 	char	**tab;
 	struct	stat s;
 
-	// ft_print_str_tab(cmd_tab, "INSIDE CHECK PATH\n");
 	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
 		*exec_path = cmd_tab[0];
@@ -75,14 +74,19 @@ int		check_paths(char **cmd_tab, char **exec_path)
 	tab = ft_split(var_value("PATH"), ':');
 	while (tab[++i])
 	{
-		if (!(*exec_path = ft_strjoin(tab[i], ft_strjoin("/", cmd_tab[0]))))
-			return (0);
-		// printf("exec_path =%s\n", *exec_path);
+		if (!(*exec_path = ft_strjoin_ter(tab[i], "/", cmd_tab[0])))
+		{
+            ft_free_str_tab(tab);
+            return (0);
+        }
 		if (path_to_exec_is_valid(*exec_path, &s))
-			return (1);			
+		{
+			ft_free_str_tab(tab);
+        	return (1);
+        }
 		ft_strdel(exec_path);
-		*exec_path = NULL;
 	}
+	ft_free_str_tab(tab);
 	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 	return (0);
 }
@@ -90,7 +94,7 @@ int		check_paths(char **cmd_tab, char **exec_path)
 /*
 ** get_first_args();
 ** meaning before pipe if pipe
-** here j is used to skip '>' || '>>' || <filename> args
+** here offset is used to skip '>' || '>>' || <filename> args
 */
 
 char **get_first_args(char **cmd_tab)
@@ -99,7 +103,9 @@ char **get_first_args(char **cmd_tab)
     char    **left_args;
 	int		offset;
 
+	ft_print_str_tab(cmd_tab, "inside first_args");
 	i = next_pipe_pos_or_len(cmd_tab);
+	printf("i = %d\n", i);
     if (!(left_args = malloc(sizeof(char *) * (i + 1))))
         return (NULL);
     left_args[i] = NULL;
@@ -113,16 +119,20 @@ char **get_first_args(char **cmd_tab)
             if (is_builtin(cmd_tab))
                 left_args[i] = ft_strdup(cmd_tab[i]);
             else
-                check_paths(cmd_tab, left_args);
+                find_path(cmd_tab, left_args);
         }
 		else if (ft_strchr("<>", cmd_tab[i][0]) || ft_strchr(">", cmd_tab[i - 1][0]))
 			offset++;
         else
             left_args[i - offset] = ft_strdup(cmd_tab[i]);
+		printf("i = %d\n", i);
+		printf("left_args[i - offset] = %s\n", left_args[i - offset]);
         i++;
     }
+	ft_print_str_tab(left_args, "inside first_args");
 	while (offset)
 		left_args[i - offset--] = NULL;
+	// ft_strdel(left_args + i - offset--);
 	ft_print_str_tab(left_args, "inside first_args");
     return (left_args);
 }
@@ -130,7 +140,7 @@ char **get_first_args(char **cmd_tab)
 /*
 ** get_second_args();
 ** meaning after pipe
-** here k is used to skip '>' || '>>' || <filename> args
+** here offset is used to skip '>' || '>>' || <filename> args
 */
 
 char **get_second_args(char **cmd_tab)
@@ -155,7 +165,7 @@ char **get_second_args(char **cmd_tab)
             if (is_builtin(cmd_tab + j))
                 right_args[j - i] = ft_strdup(cmd_tab[j]);
             else
-                check_paths(cmd_tab + j, right_args);
+                find_path(cmd_tab + j, right_args);
         }
 		else if (ft_strchr("<>", cmd_tab[j][0]) || ft_strchr(">", cmd_tab[j - 1][0]))
 			offset++;
@@ -165,46 +175,7 @@ char **get_second_args(char **cmd_tab)
     }
 	while (offset)
 		right_args[j - i - offset--] = NULL;
+	// ft_strdel(right_args + j - i - offset--);
 	ft_print_str_tab(right_args, "inside second_args");
     return (right_args);
-}
-
-/*
-** single_execv()
-*/
-
-void	single_execv(char **cmd_tab)
-{
-	char	**formated_args;
-	pid_t   child;
-	int		status;
-	int		fd;
-
-	status = 0;
-	if ((formated_args = get_first_args(cmd_tab)))
-	{
-		ft_print_str_tab(formated_args, "one shot execv"); // pour debug
-		child = fork();
-		if (child == -1) // 1.err
-			exit(EXIT_FAILURE);
-		else if (child == 0) // 2.fils
-		{
-			if (cmd_is_right_redirected(cmd_tab))
-			{
-				fd = get_fd(cmd_tab);
-				dup2(fd, STDOUT_FILENO);
-				// dup2(fd, STDERR_FILENO); // to debug
-			}
-			else if (cmd_is_left_redirected(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1)) // todo : get fd of file to open
-			{
-				fd = get_fd(cmd_tab);
-				dup2(fd, STDIN_FILENO);
-			}
-			exit((execv(formated_args[0], formated_args) == -1) ? EXIT_FAILURE : EXIT_SUCCESS);
-			close((cmd_is_right_redirected(cmd_tab) && fd) ? fd : -1);
-		}
-		else // 3. parent
-			waitpid(child, &status, 0);
-		ft_free_str_tab(formated_args);
-	}
 }
