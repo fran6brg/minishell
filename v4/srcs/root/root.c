@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 05:46:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 06:21:27 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,11 +159,11 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
        		dup2(pdes[WRITE], STDOUT_FILENO);
 		root_args(left_args);
 		close((fd && fd != -1) ? fd : -1);
-		ft_free_str_tab(left_args);
     }
 	else // 3.parent
 	{
 		waitpid(child_left, &status, 0);
+		ft_free_str_tab(left_args); /* nb il faut free apres la fin du pid */
 	}
 
 
@@ -192,18 +192,18 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 				ft_print_str_tab(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, "cmd inside child right > exec");
 			if (!process_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
 			{
-				ft_free_str_tab(right_args);
 				return (0);
 			}
 		}
 		close((fd && fd != -1) ? fd : -1);
-		ft_free_str_tab(right_args);
+		// ft_free_str_tab(right_args);
     }
 	else // 3. parent
 	{
 		close(pdes[WRITE]);
 		close(pdes[READ]);    
 		waitpid(child_right, &status, 0);
+		ft_free_str_tab(right_args); /* nb il faut free apres la fin du pid */
 	}
 
 

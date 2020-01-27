@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 05:47:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 06:16:44 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,29 @@ int		find_path(char **cmd_tab, char **exec_path)
 }
 
 /*
+** nb_args_wo_offset()
+** wo = without
+*/
+
+int		nb_args_wo_offset(char **cmd_tab)
+{
+	int		i;
+	int		offset;
+
+	i = 0;
+	offset = 0;
+	while (cmd_tab[i] && cmd_tab[i][0] != '|')
+    {
+		if (ft_strchr("<>", cmd_tab[i][0]) || (i > 0 && ft_strchr(">", cmd_tab[i - 1][0])))
+			offset++;
+        i++;
+    }
+	if (DEBUG)
+		printf("nb_args_wo_offset = %d\n", i - offset);
+	return (i - offset);
+}
+
+/*
 ** get_first_args();
 ** meaning before pipe if pipe
 ** here offset is used to skip '>' || '>>' || <filename> args
@@ -104,7 +127,7 @@ char **get_first_args(char **cmd_tab)
     char    **left_args;
 	int		offset;
 
-	i = next_pipe_pos_or_len(cmd_tab);
+	i = nb_args_wo_offset(cmd_tab);
     if (!(left_args = malloc(sizeof(char *) * (i + 1))))
         return (NULL);
     left_args[i] = NULL;
@@ -126,8 +149,6 @@ char **get_first_args(char **cmd_tab)
             left_args[i - offset] = ft_strdup(cmd_tab[i]);
         i++;
     }
-	while (offset)
-		left_args[i - offset--] = NULL;
 	if (DEBUG)
 		ft_print_str_tab(left_args, "inside first_args");
     return (left_args);
@@ -147,7 +168,8 @@ char **get_second_args(char **cmd_tab)
 	int		offset;
 
     i = next_pipe_pos_or_len(cmd_tab) + 1;
-    j = i + next_pipe_pos_or_len(cmd_tab + i);
+    // j = next_pipe_pos_or_len(cmd_tab + i);
+    j = i + nb_args_wo_offset(cmd_tab + i);
     if (!(right_args = malloc(sizeof(char *) * (j - i + 1))))
         return (NULL);
     right_args[j - i] = NULL;
@@ -169,8 +191,6 @@ char **get_second_args(char **cmd_tab)
             right_args[j - i - offset] = ft_strdup(cmd_tab[j]);
         j++;
     }
-	while (offset)
-		right_args[j - i - offset--] = NULL;
 	if (DEBUG)
 		ft_print_str_tab(right_args, "inside second_args");
     return (right_args);

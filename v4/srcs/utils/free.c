@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 20:22:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 02:47:38 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 06:24:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void   free_env()
 		tmp = g_env->next;
 		ft_strdel(&g_env->name);
 		ft_strdel(&g_env->value);
+		free(g_env);
 		g_env = tmp;
 	}
 }
