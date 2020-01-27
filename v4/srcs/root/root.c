@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:41:33 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:54:46 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,9 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 	int    		pdes[2];
     int			status;
     pid_t   	child_left;
-	char 		**left_args = get_first_args(cmd_tab);
+	char 		**left_args;
     pid_t   	child_right;
-	char 		**right_args = get_second_args(cmd_tab);
+	char 		**right_args;
 	int			fd;
 
 	if (DEBUG)
@@ -160,6 +160,9 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 	
 	status = 0;
 	fd = -1;
+	left_args = NULL;
+	if (!(left_args = get_first_args(cmd_tab)))
+		return (0);
     child_left = fork();
 	if (child_left == -1) // 1.err
 		exit_process(&pdes[2], child_left);
@@ -188,6 +191,9 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 
 	status = 0;
 	fd = -1;
+	right_args = NULL;
+	if (!(right_args = get_second_args(cmd_tab)))
+		return (0);
 	child_right = fork();
 	if (child_right == -1) // 1.err
 		exit_process(&pdes[2], child_right);
