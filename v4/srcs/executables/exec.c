@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:11:00 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:48:06 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ int		find_path(char **cmd_tab, char **exec_path)
 		ft_strdel(exec_path);
 	}
 	ft_free_str_tab(tab);
-	if (DEBUG)
-		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
+	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 	return (0);
 }
 

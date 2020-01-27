@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:43:05 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 07:46:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ void	put_prompt(void)
 		pwd = NULL;
 		if ((pwd = ft_strrchr(tmp, '/') + 1))
 			ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDCYAN, pwd, BOLDGREEN, RESET);
-		// ft_strdel(&pwd);
-		// ft_strdel(&tmp);
 	}
 	else
 		ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDCYAN, "bash", BOLDGREEN, RESET);
