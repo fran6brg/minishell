@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 05:32:28 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 05:46:23 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	single_execv(char **cmd_tab)
 	status = 0;
 	if ((formated_args = get_first_args(cmd_tab)))
 	{
-		ft_print_str_tab(formated_args, "one shot execv"); // pour debug
+		if (DEBUG)
+			ft_print_str_tab(formated_args, "one shot execv"); // pour debug
 		child = fork();
 		if (child == -1) // 1.err
 			exit(EXIT_FAILURE);
@@ -131,8 +132,10 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 	char 		**right_args = get_second_args(cmd_tab);
 	int			fd;
 
-	printf("**********PIPE*********\n");
-	ft_print_str_tab(cmd_tab, "process_pipeline");
+	if (DEBUG)
+		printf("**********PIPE*********\n");
+	if (DEBUG)
+		ft_print_str_tab(cmd_tab, "process_pipeline");
 		
 	if (pipe(pdes) == -1)
 		return (0);
@@ -144,7 +147,8 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 		exit_process(&pdes[2], child_left);
 	else if (child_left == 0) // 2.fils
     {
-		printf("inside left process pid = %d\n", child_left);
+		if (DEBUG)
+			printf("inside left process pid = %d\n", child_left);
         close(pdes[READ]);
 		fd = get_fd(cmd_tab);
 		if (fd != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
@@ -170,7 +174,8 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 		exit_process(&pdes[2], child_right);
 	else if (child_right == 0) // 2.fils
     {
-		printf("inside right son pid = %d\n", child_right);
+		if (DEBUG)
+			printf("inside right son pid = %d\n", child_right);
         close(pdes[WRITE]);
 		fd = get_fd(cmd_tab);
 		if (fd != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
@@ -183,7 +188,8 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 			root_args(right_args);
 		else /* or recursive call */
 		{
-			ft_print_str_tab(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, "cmd inside child right > exec");
+			if (DEBUG)
+				ft_print_str_tab(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, "cmd inside child right > exec");
 			if (!process_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
 			{
 				ft_free_str_tab(right_args);
@@ -203,7 +209,8 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 
     if (recursive_call)
 		exit(EXIT_SUCCESS); // seulement si recursif
-	printf("**********END PIPE*********\n");
+	if (DEBUG)
+		printf("**********END PIPE*********\n");
     return (1);
 }
 

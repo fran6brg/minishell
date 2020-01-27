@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 05:28:18 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 05:47:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ int		find_path(char **cmd_tab, char **exec_path)
 		ft_strdel(exec_path);
 	}
 	ft_free_str_tab(tab);
-	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
+	if (DEBUG)
+		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 	return (0);
 }
 
@@ -103,9 +104,7 @@ char **get_first_args(char **cmd_tab)
     char    **left_args;
 	int		offset;
 
-	ft_print_str_tab(cmd_tab, "inside first_args");
 	i = next_pipe_pos_or_len(cmd_tab);
-	printf("i = %d\n", i);
     if (!(left_args = malloc(sizeof(char *) * (i + 1))))
         return (NULL);
     left_args[i] = NULL;
@@ -125,15 +124,12 @@ char **get_first_args(char **cmd_tab)
 			offset++;
         else
             left_args[i - offset] = ft_strdup(cmd_tab[i]);
-		printf("i = %d\n", i);
-		printf("left_args[i - offset] = %s\n", left_args[i - offset]);
         i++;
     }
-	ft_print_str_tab(left_args, "inside first_args");
 	while (offset)
 		left_args[i - offset--] = NULL;
-	// ft_strdel(left_args + i - offset--);
-	ft_print_str_tab(left_args, "inside first_args");
+	if (DEBUG)
+		ft_print_str_tab(left_args, "inside first_args");
     return (left_args);
 }
 
@@ -175,7 +171,7 @@ char **get_second_args(char **cmd_tab)
     }
 	while (offset)
 		right_args[j - i - offset--] = NULL;
-	// ft_strdel(right_args + j - i - offset--);
-	ft_print_str_tab(right_args, "inside second_args");
+	if (DEBUG)
+		ft_print_str_tab(right_args, "inside second_args");
     return (right_args);
 }

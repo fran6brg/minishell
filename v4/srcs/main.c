@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 05:38:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/27 05:47:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	parse_and_root_cmds(char **cmds)
 	{
 		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i], " \t")))
 			continue ;
-		ft_print_str_tab(cmd_tab, "inside parse_and_root_cmds");
+		if (DEBUG)
+			ft_print_str_tab(cmd_tab, "inside parse_and_root_cmds");
 		if (count_pipe(cmd_tab) > 0)
 		{
 			if (!process_pipeline(cmd_tab, 0))
