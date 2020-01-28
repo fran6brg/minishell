@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 03:28:32 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 05:02:04 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,10 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** apparement pas un pb car du a valgrind cf slack : trouver comment free les leaks des fork (exemple faire la cmd 'env | cat -e | sort' avec valgrind)
 
-** on peut utiliser les exec echo et pwd mais il va falloir passer l'env à execve cf .is_builtin(char **cmd_tab)
-
 ** norme
 
 ** cat < filename
 
-** echo < filename
+** echo < filename left redirection
 
 */

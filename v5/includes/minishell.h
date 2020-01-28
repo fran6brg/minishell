@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 03:53:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 04:57:32 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <signal.h>
 
 /*
-**	DEBUG
+**	DEBUG PRINTF
 */
 
 # define DEBUG 0
@@ -40,21 +40,6 @@
 /*
 **	structs
 */
-
-// typedef	struct			s_env
-// {
-// 	char				**env_array;
-// 	struct	s_env_list	*env_list;
-// }						t_env;
-
-// extern t_env *g_env;
-
-// typedef	struct			s_env_list
-// {
-// 	char				*name;
-// 	char				*value;
-// 	struct	s_env_list	*next;
-// }						t_env_list;
 
 typedef	struct			s_env
 {
@@ -172,6 +157,14 @@ int		single_builtin(char **cmd_tab);
 void	single_execv(char **cmd_tab);
 int		is_builtin(char **cmd_tab);
 int		root_args(char **cmd_tab);
+
+/*
+**	process.c
+*/
+
+void	wait_child_process(pid_t child, int pdes[2], int right_side);
+void	process_left_child(char **cmd_tab, int pdes[2], char **left_args);
+void	process_right_child(char **cmd_tab, int pdes[2], char **right_args);
 int		process_pipeline(char **cmd_tab, int recursive_call);
 
 /*

@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/27 02:48:53 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/28 04:58:20 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS 	= srcs/main.c \
 		srcs/builtins/pwd.c \
 		srcs/builtins/exit.c \
 		srcs/executables/exec.c srcs/executables/exec_utils.c \
-		srcs/root/root.c \
+		srcs/root/root.c srcs/root/process.c \
 		srcs/utils/free.c \
 		srcs/utils/helpers.c \
 		srcs/utils/signal.c \
