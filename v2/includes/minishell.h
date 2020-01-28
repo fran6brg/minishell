@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 02:17:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 06:42:22 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ int		main(int argc, char **argv, char **env);
 **	echo.c
 */
 
-void	apply_redirect_right(char **cmd_tab, int pos);
+int		store_filename(char **filename, char **cmd_tab, int pos);
+int		parse_filename(char **cmd_tab, char **filename, int *fd);
+void	apply_redirect_right(char **cmd_tab);
 void	builtin_echo(char **cmd_tab);
 
 /*
@@ -76,6 +78,7 @@ int		no_option_n(char **cmd_tab);
 int		change_dir(char **cmd_tab, char *dest);
 void	go_path(char **cmd_tab, char *dest);
 void	print_cd_error(int nb_arg, char **cmd_tab);
+void	get_destination(char **cmd_tab, char **dest);
 void	builtin_cd(char **cmd_tab);
 
 /*
@@ -165,6 +168,7 @@ void	sig_handler(void);
 
 int		count_arg(char **s);
 int		arg_is_in_quotes(char *arg);
+int		check_if_redirect(char **cmd_tab);
 
 /*
 **	free.c

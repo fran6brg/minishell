@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 01:53:58 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 06:51:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,48 +16,37 @@
 ** store_filename()
 */
 
-int	store_filename(char **filename, char **cmd_tab, int pos, int i)
+int	store_filename(char **filename, char **cmd_tab, int pos)
 {
-	if (cmd_tab[pos][i + 1])
+	if (cmd_tab[pos + 1])
 	{
-		if (!(*filename = ft_substr(cmd_tab[pos], i + 1, ft_next_char_pos(cmd_tab[pos] + i + 1, " "))))
+		if (!(*filename = ft_strdup(cmd_tab[pos + 1])))
 			return (0);
+		return (1);
 	}
-	else
+	else // par ex : 'echo abc >'
 	{
-		if (cmd_tab[pos + 1])
-		{
-			if (!(*filename = ft_strdup(cmd_tab[pos + 1])))
-				return (0);
-		}
-		else // par ex : 'echo abc >'
-		{
-			ft_printf("zsh: parse error near `\\n'\n");
-			return (0);
-		}
+		ft_printf("zsh: parse error near `\\n'\n");
+		return (0);
 	}
-	return (1);
 }
 
 /*
 ** parse_filename()
 */
 
-int parse_filename(char **cmd_tab, int pos, char **filename, int *fd)
+int parse_filename(char **cmd_tab, char **filename, int *fd)
 {
-	int	i;
-	int	append;
+	int pos;
 
-	i = 0;
-	i = ft_next_char_pos(cmd_tab[pos] + i, ">");
-	printf("%c %c\n", cmd_tab[pos][i], cmd_tab[pos][i + 1]);
-	append = cmd_tab[pos][i + 1] == '>' ? 1 : 0;
-	i += append;
+	pos = 1;
+	while (!ft_strchr(cmd_tab[pos], '>') && !arg_is_in_quotes(cmd_tab[pos]))
+		pos++;
 	*filename = NULL;
-	if (!store_filename(filename, cmd_tab, pos, i))
-		return (ft_strdel_ret(filename, 0));
-	// printf("filename = %s\n", *filename);
-	if ((*fd = open(*filename, O_CREAT | O_WRONLY | (append ? O_APPEND : O_TRUNC), 0777)) == -1)
+	if (!store_filename(filename, cmd_tab, pos))
+		return (0);
+	printf("filename = -%s-\n", *filename);
+	if ((*fd = open(*filename, O_CREAT | O_WRONLY | (cmd_tab[pos][1] == '>' ? O_APPEND : O_TRUNC), 0777)) == -1)
 		return (ft_strdel_ret(filename, 0));
 	return (1);
 }
@@ -69,20 +58,20 @@ int parse_filename(char **cmd_tab, int pos, char **filename, int *fd)
 ** int open(const char *pathname, int flags, mode_t mode);
 */
 
-void apply_redirect_right(char **cmd_tab, int pos)
+void apply_redirect_right(char **cmd_tab)
 {
 	int		i;
 	char	*filename;
 	int		fd;
 
-	i = 0;
-	if (!parse_filename(cmd_tab, pos, &filename, &fd))
+	if (!parse_filename(cmd_tab, &filename, &fd))
 		return ;
+	i = 0;
 	while (cmd_tab[++i])
 	{
-		if (is_n_option(i, cmd_tab) || *cmd_tab[i] == '<' || *cmd_tab[i] == '>' || ft_strequ(cmd_tab[i], filename)) // continuer si cmd_tab[i] == -n (option) || si l'arg est le filename
+		if (is_n_option(i, cmd_tab) || cmd_tab[i][0] == '>' || cmd_tab[i - 1][0] == '>')
 			continue ;
-		else if (i > 1 && !is_n_option(i - 1, cmd_tab))
+		if (i > 1 && !is_n_option(i - 1, cmd_tab))
 			write(fd, " ", 1);
 		printf("%s -%.*s- in %s\n", "append || overwrite", (int)ft_next_char_pos(cmd_tab[i], ">"), cmd_tab[i], filename);
 		if (is_dollar_env_var(cmd_tab[i]))
@@ -103,9 +92,6 @@ void apply_redirect_right(char **cmd_tab, int pos)
 ** dernier.
 ** option ’-n’ = ne pas effectuer le saut de ligne final.
 **
-** premier if gère les cas de double -n cf. observations
-** else print var || print arg as usual
-**
 ** observations :
 ** echo -n -n n'affiche rien
 */
@@ -115,16 +101,13 @@ void	builtin_echo(char **cmd_tab)
 	int i;
 
 	i = 0;
+	// printf("check_if_redirect(cmd_tab) = %d\n", check_if_redirect(cmd_tab));
 	if (cmd_tab[1] == 0)
 		write(1, "\n", 1);
+	else if (check_if_redirect(cmd_tab) >= 2)
+		apply_redirect_right(cmd_tab);
 	else
 	{
-		i = 0;
-		while (cmd_tab[++i])
-		{
-			if (ft_strchr(cmd_tab[i], '>') && !arg_is_in_quotes(cmd_tab[i]))
-				return (apply_redirect_right(cmd_tab, i));
-		}
 		i = 0;
 		while (cmd_tab[++i])
 		{

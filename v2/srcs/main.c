@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 02:47:51 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:10:11 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		store_env(char **env_tab)
 
 void	root(char **cmd_tab)
 {
-	// ft_print_str_tab(cmd_tab);
+	ft_print_str_tab(cmd_tab); // pour debug
 	if (is_dollar_env_var(cmd_tab[0]))
 		ft_printf("%s\n", var_value(cmd_tab[0] + 1));
 	else if (ft_strequci(cmd_tab[0], "echo"))
@@ -134,4 +134,5 @@ int		main(int argc, char **argv, char **env_tab)
 ** ls $VAR ; ls ~
 ** valider le comportemenet ctrl bl
 ** echo "lol\'"> a 123 456
+** cat -e abc
 */

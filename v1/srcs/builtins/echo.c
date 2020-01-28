@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 06:37:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/18 07:24:10 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,13 +133,13 @@ int parse_filename(char **cmd_tab, int pos, char **filename, int *fd)
 }
 
 /*
-** apply_redirect()
+** apply_redirect_right()
 **
 ** open || create it with rights as 3rd arg (mode)
 ** int open(const char *pathname, int flags, mode_t mode);
 */
 
-void apply_redirect(t_env *env, char **cmd_tab, int pos)
+void apply_redirect_right(t_env *env, char **cmd_tab, int pos)
 {
 	int		i;
 	char	*filename;
@@ -195,7 +195,7 @@ void	builtin_echo(t_env *env, char **cmd_tab)
 		while (cmd_tab[++i])
 		{
 			if (ft_strchr(cmd_tab[i], '>') && !arg_is_in_quotes(cmd_tab[i]))
-				return (apply_redirect(env, cmd_tab, i));
+				return (apply_redirect_right(env, cmd_tab, i));
 		}
 		i = 0;
 		while (cmd_tab[++i])

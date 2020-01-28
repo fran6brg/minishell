@@ -6,11 +6,32 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/18 23:29:40 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 07:01:23 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/*
+** replace_dollar_vars();
+*/
+
+void	replace_dollar_vars(char **cmd_tab)
+{
+	int		i;
+	char	*tmp;
+
+    i = 0;
+    while (cmd_tab[++i])
+	{
+		if (is_dollar_env_var(cmd_tab[i]))
+		{
+			tmp = var_value(cmd_tab[i]);
+			ft_strdel(&cmd_tab[i]);
+			cmd_tab[i] = tmp;
+		}
+	}
+}
 
 /*
 ** int stat(const char *path, struct stat *buf);
@@ -45,25 +66,41 @@
 ** access : cf. cd.c
 */
 
-char	*check_paths(char **cmd_tab, struct stat *s, char *path, char *exec_path)
+int		check_direct_path_to_exec(char *tested_path, struct stat *s)
 {
-	int i;
-	char **tab;
+	if (!stat(tested_path, s) && !access(tested_path, X_OK))
+	{
+		if ((s->st_mode & S_IFREG) && (s->st_mode & S_IXUSR))
+			return (1);
+	}
+	return (0);
+}
 
+/*
+** first check if path || direct path to command instead of exec name
+** if not then operate normal case
+*/
+
+int		check_paths(char **cmd_tab, struct stat *s, char *path, char **exec_path)
+{
+	int 	i;
+	char	**tab;
+
+	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
+	{
+		*exec_path = cmd_tab[0];
+		return (check_direct_path_to_exec(*exec_path, s));
+	}
 	i = -1;
 	tab = ft_split(path, ':');
 	while (tab[++i])
 	{
-		exec_path = ft_strjoin(tab[i], ft_strjoin("/", cmd_tab[0]));
-		if (!stat(exec_path, s) && !access(exec_path, X_OK))
-			if ((s->st_mode & S_IFREG) && (s->st_mode & S_IXUSR))
-				return (exec_path);
-		ft_strdel(&exec_path);
-		exec_path = NULL;
+		*exec_path = ft_strjoin(tab[i], ft_strjoin("/", cmd_tab[0]));
+		if (check_direct_path_to_exec(*exec_path, s))
+			return (1);			
+		ft_strdel(exec_path);
+		*exec_path = NULL;
 	}
-	if (ft_str_start_with(cmd_tab[0], "./") && !access(cmd_tab[0], X_OK))
-		return (cmd_tab[0]);
-	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 	return (0);
 }
 
@@ -86,29 +123,29 @@ char	*check_paths(char **cmd_tab, struct stat *s, char *path, char *exec_path)
 
 int		execute(char **cmd_tab)
 {
-	pid_t pid;
+	pid_t child;
 	char *exec_path;
 	struct stat s;
 	int	status;
 
-	exec_path = 0;
-	if (!var_value("PATH")) // si 'unset PATH' a été lancé
+	replace_dollar_vars(cmd_tab);
+	if (ft_str_start_with(cmd_tab[0], "./") && !access(cmd_tab[0], X_OK))
+		exec_path = cmd_tab[0];
+	else if (!check_paths(cmd_tab, &s, var_value("PATH"), &exec_path))
 	{
 		ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
-		return (-1);		
-	}
-	if (!(exec_path = check_paths(cmd_tab, &s, var_value("PATH"), exec_path)))
 		return (-1);
-	if ((pid = fork()) == 0)
+	}
+	if ((child = fork()) == 0)
 		execv(exec_path, cmd_tab);
-	else if (pid < 0)
+	else if (child == -1)
 	{
 		ft_putstr("Fork Failed\n");
 		return (-1);
 	}
 	status = 0;
-	waitpid(pid, &status, 0);
-	kill(pid, SIGTERM);
+	waitpid(child, &status, 0);
+	kill(child, SIGTERM);
 	write(1, "\n", ft_strequci(cmd_tab[0], "cat"));
 	return (0);
 }

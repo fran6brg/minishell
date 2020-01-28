@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:58:16 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 01:24:49 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int		store_env(char **env_tab)
 	t_env	*last;
 	int		len;
 	
-	g_env = NULL;
 	i = -1;
 	last = NULL;
 	if (!env_tab || !*env_tab) // env -i

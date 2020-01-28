@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 01:41:21 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/19 04:19:50 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*var_value(char *name)
 	var = g_env;
 	while (var)
 	{
-		if (!ft_strcmp(var->name, name))
+		if (ft_strequci(var->name, name))
 			return (var->value);
 		var = var->next;
 	}

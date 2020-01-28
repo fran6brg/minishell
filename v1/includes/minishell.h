@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alamorth <alamorth@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/16 13:47:44 by alamorth         ###   ########.fr       */
+/*   Updated: 2020/01/18 07:24:10 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		main(int argc, char **argv, char **env);
 */
 
 int		is_$env_var(t_env *env, char *var);
-void	apply_redirect(t_env *env, char **cmd_tab, int pos);
+void	apply_redirect_right(t_env *env, char **cmd_tab, int pos);
 void	builtin_echo(t_env *env, char **cmd_tab);
 
 /*
