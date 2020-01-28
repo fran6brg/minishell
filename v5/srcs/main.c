@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 07:51:24 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 08:11:15 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void	parse_and_root_cmds(char **cmds)
 			continue ;
 		if (DEBUG)
 			ft_print_str_tab(cmd_tab, "inside parse_and_root_cmds");
+		replace_dollar_vars(cmd_tab);
 		if (count_pipe(cmd_tab) > 0)
 		{
-			replace_dollar_vars(cmd_tab);
 			if (!process_pipeline(cmd_tab, 0))
 				ft_putstr("minishell: broken pipe error\n");
 		}
@@ -132,21 +132,19 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** remove # include <stdio.h> in .h
 
-** valider le comportemenet ctrl bl
-
-** ls -la | cat -e | sort > filename
+** ls -la | cat -e | sort > filename ne fonctionne pas
 
 ** comprendre le pb 'Uninitialised value was created by a heap allocation' avec 'make re && valgrind --leak-check=full --track-origins=yes ./minishell'
 
-** apparement pas un pb car du a valgrind cf slack : trouver comment free les leaks des fork (exemple faire la cmd 'env | cat -e | sort' avec valgrind)
+** apparement ok car c'est juste un pb dans valgrind cf slack : trouver comment free les leaks des fork (exemple faire la cmd 'env | cat -e | sort' avec valgrind)
 
 ** norme
 
 ** cat < filename
 
-** echo < filename left redirection
+** est-ce que le echo < filename (left redirection) existe/est à faire ?
 
-** comprendre pq le promt se decale avec cette commande
+** comprendre pq le prompt se decale avec cette commande
 ~ v5 > ls -la > 1
  v5 >
  v5 >
@@ -161,4 +159,9 @@ int		main(int argc, char **argv, char **env_tab)
 ** compiler avec -fsanitize=address (attention ne pas combiner fsanitize avec valgrind sinon bug)
 
 ** regler les pb de 'valgrind --leak-check=full --track-origins=yes ./minishell'
+
+** si on lance ./minishell dans ./minishell il faut que le second ait bien les variables d'env du premier ?
+
+** lister tous les tests qui passent / passent pas, en attendant que d'avoir le sujet d'exam
+
 */

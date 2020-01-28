@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 06:16:59 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 08:08:05 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 
 int	single_builtin(char **cmd_tab)
 {
-	// replace_dollar_vars(cmd_tab);
 	if (is_env_var(cmd_tab[0]))
 		ft_printf("%s\n", var_value(cmd_tab[0]));
 	else if (ft_strequci(cmd_tab[0], "echo"))
@@ -52,7 +51,6 @@ void	single_execv(char **cmd_tab)
 	pid_t   child;
 	int		fd;
 
-	replace_dollar_vars(cmd_tab);
 	if ((formated_args = get_first_args(cmd_tab)))
 	{
 		if (DEBUG)

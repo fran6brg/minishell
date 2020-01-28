@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:14:21 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 08:07:56 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	replace_dollar_vars(char **cmd_tab)
 	int		i;
 	char	*tmp;
 
-    i = -1;
+    i = 0;
     while (cmd_tab[++i])
 	{
 		if (is_env_var(cmd_tab[i]))
