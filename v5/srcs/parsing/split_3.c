@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francisberger <francisberger@student.42    +#+  +:+       +#+        */
+/*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:34:47 by alamorth          #+#    #+#             */
-/*   Updated: 2020/01/19 22:33:09 by francisberg      ###   ########.fr       */
+/*   Updated: 2020/01/28 06:55:46 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i)
 			strs[*str_i][j - k + 1] = s[j];
 		j++;
 	}
-	printf("k = %d\n", k);
 	strs[*str_i][j - k] = quote[0]; // dernier "
 	strs[*str_i][j - k + 1] = '\0';
 	*str_i += 1;

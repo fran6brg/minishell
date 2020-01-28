@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/01/27 07:07:16 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/28 06:13:59 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ NAME=libft.a
 SRCS=ft_putchar.c \
 	ft_putchar_fd.c \
 	ft_putstr.c \
+	ft_putstr_ret.c \
 	ft_putstr_fd.c \
 	ft_putendl.c \
 	ft_putendl_fd.c \

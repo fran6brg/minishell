@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 04:57:32 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 07:47:48 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,12 @@ int		process_pipeline(char **cmd_tab, int recursive_call);
 /*
 ** ----------------------------------------------------------------------------
 */
+
+/*
+**	split_cmds.c
+*/
+
+char	**ft_split_cmds(char *s, char *set);
 
 /*
 **	split_1.c

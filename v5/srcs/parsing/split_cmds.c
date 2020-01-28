@@ -1,31 +1,58 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_set.c                                     :+:      :+:    :+:   */
+/*   split_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 18:42:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 06:33:06 by fberger          ###   ########.fr       */
+/*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
+/*   Updated: 2020/01/28 07:39:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-static int		is_separator(char c, char *set)
+static int		is_valid_quote_pattern(char *s, int i, int j)
 {
-	int i;
+	int k;
 
-	i = -1;
-	while (set[++i])
+	k = j;
+	ft_inc_to_closing_quote(&k, s);
+	return ((k > i));
+}
+
+static int		is_in_quotes(char *s, int i)
+{
+	int j;
+
+	j = -1;
+	while (++j < i)
 	{
-		if (c == set[i])
+		if (s[j] != '\"' && s[j] != '"')
+		{
+			if (is_valid_quote_pattern(s, i, j))
+				return (1);
+		}
+	}
+	return (0);
+}
+
+static int		is_separator_cmds(char *s, int i, char *set)
+{
+	int j;
+
+    if (is_in_quotes(s, i))
+        return (0);
+	j = -1;
+	while (set[++j])
+	{
+		if (s[i] == set[j])
 			return (1);
 	}
 	return (0);
 }
 
-static int		nb_new_s(char const *s, char *set)
+static int		nb_new_s_cmds(char *s, char *set)
 {
 	int i;
 	int nb;
@@ -35,7 +62,7 @@ static int		nb_new_s(char const *s, char *set)
 	nb = 0;
 	flag = 1;
 	while (s[++i])
-		if (is_separator(s[i], set))
+		if (is_separator_cmds(s, i, set))
 			flag = 1;
 		else if (flag)
 		{
@@ -45,24 +72,24 @@ static int		nb_new_s(char const *s, char *set)
 	return (nb);
 }
 
-static char		*ft_create_new_s(const char *s, char *set)
+static char		*ft_create_new_s(char *s, char *set)
 {
 	int		i;
 	char	*new_s;
 
 	i = 0;
-	while (s[i] && !(is_separator(s[i], set)))
+	while (s[i] && !(is_separator_cmds(s, i, set)))
 		i++;
 	if (!(new_s = malloc(sizeof(char) * (i + 1))))
 		return ((char *)NULL);
 	i = -1;
-	while (s[++i] && !(is_separator(s[i], set)))
+	while (s[++i] && !(is_separator_cmds(s, i, set)))
 		new_s[i] = s[i];
 	new_s[i] = '\0';
 	return (new_s);
 }
 
-static int		ft_create_strs(char **strs, const char *s, char *set)
+static int		ft_create_strs_cmds(char **strs, char *s, char *set)
 {
 	int i;
 	int str_i;
@@ -72,7 +99,7 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 	str_i = 0;
 	flag = 1;
 	while (s[++i])
-		if (is_separator(s[i], set))
+		if (is_separator_cmds(s, i, set))
 			flag = 1;
 		else if (flag)
 		{
@@ -88,7 +115,11 @@ static int		ft_create_strs(char **strs, const char *s, char *set)
 	return (1);
 }
 
-char			**ft_split_set(char const *s, char *set)
+/*
+** ft_split_set() modifié pour tenir compte des quotes
+*/
+
+char			**ft_split_cmds(char *s, char *set)
 {
 	char	**strs;
 	char	*trim_s;
@@ -96,14 +127,14 @@ char			**ft_split_set(char const *s, char *set)
 	if (!s)
 		return (NULL);
 	trim_s = ft_strtrim(s, ";");
-	if (!(strs = malloc(sizeof(char *) * (nb_new_s(trim_s, set) + 1))))
+	if (!(strs = malloc(sizeof(char *) * (nb_new_s_cmds(trim_s, set) + 1))))
 		return (0);
-	if (!ft_create_strs(strs, trim_s, set))
+	if (!ft_create_strs_cmds(strs, trim_s, set))
 	{
 		free(strs);
 		return (NULL);
 	}
-	strs[nb_new_s(trim_s, set)] = 0;
+	strs[nb_new_s_cmds(trim_s, set)] = 0;
 	ft_strdel(&trim_s);
 	return (strs);
 }

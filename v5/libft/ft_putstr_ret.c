@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   ft_putstr_ret.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/13 19:41:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 06:11:53 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 06:14:15 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr(char const *s)
+int	ft_putstr_ret(char const *s, int ret)
 {
-	int i;
-
-	if (!s)
-		return ;
-	i = -1;
-	while (s[++i])
-		write(1, &s[i], 1);
+	ft_putstr(s);
+	return (ret);
 }

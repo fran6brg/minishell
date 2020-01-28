@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/28 04:58:20 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/28 07:48:33 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS 	= srcs/main.c \
 		srcs/utils/signal.c \
 		srcs/parsing/errors.c \
 		srcs/parsing/split_1.c srcs/parsing/split_2.c srcs/parsing/split_3.c \
+		srcs/parsing/split_cmds.c 
 
 OBJS 	= ${SRCS:.c=.o}
 

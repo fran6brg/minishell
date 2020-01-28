@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 05:02:04 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 07:51:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	parse_and_root_cmds(char **cmds)
 			ft_print_str_tab(cmd_tab, "inside parse_and_root_cmds");
 		if (count_pipe(cmd_tab) > 0)
 		{
+			replace_dollar_vars(cmd_tab);
 			if (!process_pipeline(cmd_tab, 0))
 				ft_putstr("minishell: broken pipe error\n");
 		}
@@ -89,10 +90,10 @@ void	put_prompt(void)
 	{
 		pwd = NULL;
 		if ((pwd = ft_strrchr(tmp, '/') + 1))
-			ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDCYAN, pwd, BOLDGREEN, RESET);
+			ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDMAGENTA, pwd, BOLDGREEN, RESET);
 	}
 	else
-		ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDCYAN, "bash", BOLDGREEN, RESET);
+		ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDMAGENTA, "bash", BOLDGREEN, RESET);
 }
 
 /*
@@ -117,7 +118,7 @@ int		main(int argc, char **argv, char **env_tab)
 			free_and_exit(EXIT_FAILURE, NULL);
 		else
 		{
-			if (!(cmds = ft_split_set(line, ";")))
+			if (!(cmds = ft_split_cmds(line, ";")))
 				continue ;
 			parse_and_root_cmds(cmds);
 			free_cmds(line, cmds);
@@ -145,4 +146,19 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** echo < filename left redirection
 
+** comprendre pq le promt se decale avec cette commande
+~ v5 > ls -la > 1
+ v5 >
+ v5 >
+~ v5 >
+
+** protection des mallocs ?
+
+** mettre certaines fonctions en static pour la forme
+
+** cleaner split_cmds.c (fonctionnel), renommer les fonctions de facon explicite, repenser le code etc
+
+** compiler avec -fsanitize=address (attention ne pas combiner fsanitize avec valgrind sinon bug)
+
+** regler les pb de 'valgrind --leak-check=full --track-origins=yes ./minishell'
 */

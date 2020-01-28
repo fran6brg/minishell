@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 05:06:00 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 06:16:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 int	single_builtin(char **cmd_tab)
 {
+	// replace_dollar_vars(cmd_tab);
 	if (is_env_var(cmd_tab[0]))
 		ft_printf("%s\n", var_value(cmd_tab[0]));
 	else if (ft_strequci(cmd_tab[0], "echo"))
@@ -41,15 +42,17 @@ int	single_builtin(char **cmd_tab)
 	return (1);
 }
 
+/*
+** single_execv()
+*/
+
 void	single_execv(char **cmd_tab)
 {
 	char	**formated_args;
 	pid_t   child;
-	int		status;
 	int		fd;
 
 	replace_dollar_vars(cmd_tab);
-	status = 0;
 	if ((formated_args = get_first_args(cmd_tab)))
 	{
 		if (DEBUG)
@@ -68,11 +71,9 @@ void	single_execv(char **cmd_tab)
 			close((fd && fd != -1) ? fd : -1);
 			ft_free_str_tab(formated_args);
 		}
-		else // 3. parent
-		{
-			waitpid(child, &status, 0);
-			ft_free_str_tab(formated_args);
-		}
+		else // 3.parent
+			wait_child_process(child, NULL, 0);
+		ft_free_str_tab(formated_args);
 	}
 }
 
@@ -83,8 +84,8 @@ void	single_execv(char **cmd_tab)
 int		is_builtin(char **cmd_tab)
 {
 	return (is_env_var(cmd_tab[0])
-	|| /* ft_strequci(cmd_tab[0], "echo")
-	|| */ ft_strequci(cmd_tab[0], "cd")
+	|| ft_strequci(cmd_tab[0], "echo")
+	|| ft_strequci(cmd_tab[0], "cd")
 	|| ft_strequci(cmd_tab[0], "pwd")
 	|| ft_strequci(cmd_tab[0], "env")
 	|| ft_strequci(cmd_tab[0], "setenv")

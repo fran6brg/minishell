@@ -6,14 +6,14 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:03:10 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 06:46:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-**
+** is_separator()
 */
 
 int		is_separator(char c, char *set)
@@ -30,7 +30,7 @@ int		is_separator(char c, char *set)
 }
 
 /*
-**
+** ft_create_strs()
 */
 
 int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
