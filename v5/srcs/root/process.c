@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 08:04:03 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 08:21:05 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ void	process_left_child(char **cmd_tab, int pdes[2], char **left_args)
 		if (DEBUG)
 			printf("inside left process pid = %d\n", child_left);
         close(pdes[READ]);
-		fd = get_fd(cmd_tab);
-		if (fd != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 			dup2(fd, STDOUT_FILENO);
 		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 			dup2(fd, STDIN_FILENO);
@@ -108,8 +107,7 @@ void	process_right_child(char **cmd_tab, int pdes[2], char 		**right_args)
 		if (DEBUG)
 			printf("inside right son pid = %d\n", child_right);
         close(pdes[WRITE]);
-		fd = get_fd(cmd_tab);
-		if (fd != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 			dup2(fd, STDOUT_FILENO);
 		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 			dup2(fd, STDIN_FILENO);
