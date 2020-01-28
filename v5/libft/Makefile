@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/01/28 06:13:59 by fberger          ###   ########.fr        #
+#    Updated: 2020/01/28 08:28:08 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,6 @@ SRCS=ft_putchar.c \
 	ft_strlcat.c \
 	ft_strjoin.c \
 	ft_strjoin_ter.c \
-	ft_strjoin_free.c \
 	ft_strtrim.c \
 	ft_strtrim_ws.c \
 	ft_strtrim_set.c \

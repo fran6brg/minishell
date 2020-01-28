@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 02:59:11 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/08 02:16:14 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 08:23:15 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_functions_pointers	g_option_to_function[NB_ACCEPTED_OPTIONS] =
 	{'x', &ft_print_base},
 	{'X', &ft_print_base},
 	{'b', &ft_print_base},
-	// {'f', &ft_print_floats},
+	{'f', &ft_print_floats},
 	{'%', &ft_print_modulo}
 };
 
