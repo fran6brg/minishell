@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 04:57:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/28 05:06:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,13 @@ void	single_execv(char **cmd_tab)
 
 int		is_builtin(char **cmd_tab)
 {
-	return (/* ft_strequci(cmd_tab[0], "echo")
+	return (is_env_var(cmd_tab[0])
+	|| /* ft_strequci(cmd_tab[0], "echo")
 	|| */ ft_strequci(cmd_tab[0], "cd")
 	|| ft_strequci(cmd_tab[0], "pwd")
 	|| ft_strequci(cmd_tab[0], "env")
 	|| ft_strequci(cmd_tab[0], "setenv")
+	|| ft_strequci(cmd_tab[0], "export")
 	|| ft_strequci(cmd_tab[0], "unset")
 	|| ft_strequci(cmd_tab[0], "exit")
 	|| is_env_var(cmd_tab[0])
