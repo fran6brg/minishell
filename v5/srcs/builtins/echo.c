@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 06:28:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 01:25:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@
 
 int	store_filename(char **filename, char **cmd_tab, int pos)
 {
-	if (cmd_tab[pos + 1])
+	if (DEBUG)
+			ft_print_str_tab(cmd_tab + pos, "store_filename");
+	if (cmd_tab[pos])
 	{
-		if (!(*filename = ft_strdup(cmd_tab[pos + 1])))
+		if (!(*filename = ft_strdup(cmd_tab[pos])))
 			return (0);
 		return (1);
 	}
