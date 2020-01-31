@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:34:47 by alamorth          #+#    #+#             */
-/*   Updated: 2020/01/28 06:55:46 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 01:58:41 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,17 @@ int	ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i)
     int     j;
 	int		k;
 
-	i = 1;
+	if (DEBUG)
+		printf("ft_new_str_with_quotes | s = -%s-\n", s);
+	i = -1;
+	if (DEBUG)
+		printf("ft_new_str_with_quotes | s[i] = -%c-\n", s[i]);
 	ft_inc_to_closing_quote(&i, s);
+	if (DEBUG)
+		printf("ft_new_str_with_quotes | s[i] = -%c-\n", s[i]);
 	if (!(strs[*str_i] = malloc(sizeof(char) * (1 + i + 1))))
 		return (0);
-	// printf("s[0] = -%c-\n", s[0]); // s[0] = 1ere lettre apres premier "
+	printf("s[0] = -%c-\n", s[0]); // s[0] = 1ere lettre apres premier "
 	strs[*str_i][0] = quote[0]; // premier "
 	j = 0; // place 0 reservee au premier "
 	k = 0; // nombre d'escape rencontres
@@ -64,16 +70,20 @@ int	ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i)
 	}
 	strs[*str_i][j - k] = quote[0]; // dernier "
 	strs[*str_i][j - k + 1] = '\0';
+	if (DEBUG)
+		printf("strs[*str_i] = -%s-\n", strs[*str_i]);
 	*str_i += 1;
 	return (1);
 }
 
 /*
-**
+** ft_str_with_quotes()
 */
 
 int	ft_str_with_quotes(char *s, int *i, char **strs, int *str_i)
 {
+	if (DEBUG)
+		printf("ft_str_with_quotes | s = -%s-\n", s);
 	if (!ft_new_str_with_quotes(s + *i + 1, s[*i] == '\'' ? "'" : "\"", strs, str_i))
 		return (0);
 	ft_inc_to_closing_quote(i, s);
