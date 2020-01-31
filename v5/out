@@ -1,9 +1,0 @@
-inside right redirect fd = 5
-count_pipe(cmd_tab) = 1
-
-__________________
-inside root args
-------------------
-str_tab[0] = -/usr/bin/sort-
-__________________
-
