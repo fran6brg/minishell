@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 08:21:05 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 02:31:25 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,22 @@ void	process_left_child(char **cmd_tab, int pdes[2], char **left_args)
     {
 		if (DEBUG)
 			printf("inside left process pid = %d\n", child_left);
-        close(pdes[READ]);
 		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+		{
+			close(pdes[READ]);
 			dup2(fd, STDOUT_FILENO);
+		}
 		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+		{
+			if (DEBUG)
+				printf("left_redirected fd = %d\n", fd);	
 			dup2(fd, STDIN_FILENO);
+		}
 		else
-       		dup2(pdes[WRITE], STDOUT_FILENO);
+       	{
+			close(pdes[READ]);
+			dup2(pdes[WRITE], STDOUT_FILENO);
+		}
 		exit(root_args(left_args));
 		close((fd && fd != -1) ? fd : -1);
 		ft_free_str_tab(left_args);

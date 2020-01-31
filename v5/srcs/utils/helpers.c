@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 02:42:37 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 06:29:57 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 02:47:49 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,14 @@ int	left_redirected_cmd(char **cmd_tab)
 {
 	int i;
 
+	if (DEBUG)
+		ft_print_str_tab(cmd_tab, "left_redirected_cmd"); // pour debug	
 	i = 0;
 	while (cmd_tab[++i])
 	{
 		if (!arg_is_in_quotes(cmd_tab[i]))
 		{
-			if (ft_strequ(cmd_tab[i], "<"))
+			if (cmd_tab[i][0] == '<')
 				return (1);
 		}
 		else if (cmd_tab[i][0] == '|')
@@ -104,7 +106,7 @@ int		get_fd(char **args)
         }
 		else if (args[i][0] == '<')
 		{
-			fd = open(args[i + 1], O_CREAT | O_WRONLY, 0777);
+			fd = open(args[i + 1], O_RDONLY, 0777);
 			return (fd);
         }
 		i++;

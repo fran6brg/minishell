@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 01:20:06 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 02:43:45 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,32 @@ void	single_execv(char **cmd_tab)
 	else if ((formated_args = get_first_args(cmd_tab)))
 	{
 		if (DEBUG)
-			ft_print_str_tab(formated_args, "one shot execv"); // pour debug
+			ft_print_str_tab(formated_args, "single_execv"); // pour debug
 		child = fork();
 		if (child == -1) // 1.err
 			exit(EXIT_FAILURE);
 		else if (child == 0) // 2.fils
 		{
 			fd = get_fd(cmd_tab);
+			if (DEBUG)
+				printf("fd = %d\n", fd);	
 			if (fd != -1 && right_redirected_cmd(cmd_tab))
+			{
+				if (DEBUG)
+					printf("right_redirected fd = %d\n", fd);
 				dup2(fd, STDOUT_FILENO);
-			else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+			}
+			else if (fd != -1 && left_redirected_cmd(cmd_tab))
+			{
+				if (DEBUG)
+					printf("left_redirected fd = %d\n", fd);
 				dup2(fd, STDIN_FILENO);
+			}
+			else
+			{
+				if (DEBUG)
+					printf("ELSE\n");	
+			}
 			exit((execv(formated_args[0], formated_args) == -1) ? EXIT_FAILURE : EXIT_SUCCESS);
 			close((fd && fd != -1) ? fd : -1);
 			ft_free_str_tab(formated_args);
