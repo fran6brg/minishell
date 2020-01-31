@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 06:03:37 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 08:54:24 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,19 @@ void	set_fd_if_redirection(char **cmd_tab, int *fd)
 
 /*
 ** restore_std_if_redirection()
+** https://stackoverflow.com/questions/9084099/re-opening-stdout-and-stdin-file-descriptors-after-closing-them
 */
 
 void	restore_std_if_redirection(char **cmd_tab, int *fd)
 {
 	if (*fd != -1 && right_redirected_cmd(cmd_tab))
 	{
-		close((*fd && *fd != -1) ? *fd : -1); // close fd, classique
+		close((*fd && *fd != -1) ? *fd : -1); // close fd, as usual
 		dup2(STDIN_FILENO, 1); // restore stdin
 	}
 	else if (*fd != -1 && left_redirected_cmd(cmd_tab))
 	{
-		close((*fd && *fd != -1) ? *fd : -1); // close fd, classique
+		close((*fd && *fd != -1) ? *fd : -1); // close fd, as usual
 		dup2(STDOUT_FILENO, 0); // restore stdout
 	}
 }
@@ -56,6 +57,8 @@ int	single_builtin(char **cmd_tab)
 {	
 	int		fd;
 
+	if (DEBUG)
+		ft_print_str_tab(cmd_tab, "single_builtin"); // pour debug
 	set_fd_if_redirection(cmd_tab, &fd);
 	if (is_env_var(cmd_tab[0]))
 		ft_printf("%s\n", var_value(cmd_tab[0]));
@@ -131,17 +134,9 @@ void	single_execv(char **cmd_tab)
 			if (DEBUG)
 				printf("fd = %d\n", fd);
 			if (fd != -1 && right_redirected_cmd(cmd_tab))
-			{
-				if (DEBUG)
-					printf("right_redirected fd = %d\n", fd);
 				dup2(fd, STDOUT_FILENO);
-			}
 			else if (fd != -1 && left_redirected_cmd(cmd_tab))
-			{
-				if (DEBUG)
-					printf("left_redirected fd = %d\n", fd);
 				dup2(fd, STDIN_FILENO);
-			}
 			else
 			{
 				if (DEBUG)
@@ -177,7 +172,10 @@ int		is_builtin(char **cmd_tab)
 }
 
 /*
-** root_args
+** root_args()
+**
+** return 1 if error
+** return 0 if success
 */
 
 int	root_args(char **cmd_tab)

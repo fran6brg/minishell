@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 01:31:38 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 06:17:28 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
 	while (s[++i])
 	{
 
-		if (DEBUG)
+		if (DEBUGPARSE)
 			printf("ft_create_strs | s[%d] = -%c- | flag = %d\n", i, s[i], flag);
 		if ((s[i] == '\'' || s[i] == '"') && !(flag = 0))
 			ret = ft_str_with_quotes(s, &i, strs, str_i);

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 05:44:16 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 08:54:40 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 **	DEBUG PRINTF
 */
 
-// # define DEBUGPARSE 1
+# define DEBUGPARSE 0
 # define DEBUG 0
 
 /*

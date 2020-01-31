@@ -1,0 +1,8 @@
+after RIGHT dup2 fd = 5
+
+__________________
+inside root args
+------------------
+str_tab[0] = -/usr/bin/wc-
+__________________
+
