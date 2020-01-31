@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 02:31:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 05:51:11 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,24 @@ void	process_right_child(char **cmd_tab, int pdes[2], char 		**right_args)
     {
 		if (DEBUG)
 			printf("inside right son pid = %d\n", child_right);
-        close(pdes[WRITE]);
 		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+		{
+			if (DEBUG)
+				printf("inside right redirect fd = %d\n", fd);
 			dup2(fd, STDOUT_FILENO);
+			if (DEBUG)
+				printf("inside right redirect fd = %d\n", fd);
+		}
 		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+		{
+	        close(pdes[WRITE]);
 			dup2(fd, STDIN_FILENO);
+		}
 		else
-	   		dup2(pdes[READ], STDIN_FILENO);
+	   	{
+    		close(pdes[WRITE]);
+		  	dup2(pdes[READ], STDIN_FILENO);
+		}
 		if (DEBUG)
 			printf("count_pipe(cmd_tab) = %d\n", count_pipe(cmd_tab));
         if (count_pipe(cmd_tab) == 1) /* execution of last command */
@@ -130,6 +141,8 @@ void	process_right_child(char **cmd_tab, int pdes[2], char 		**right_args)
 			if (!process_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
 				return (ft_free_str_tab(right_args));
 		close((fd && fd != -1) ? fd : -1);
+		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+			dup2(STDIN_FILENO, pdes[WRITE]);
 		ft_free_str_tab(right_args);
     }
 	else // 3. parent

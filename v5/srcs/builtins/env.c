@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 05:29:42 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 05:49:20 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,4 +149,6 @@ void	builtins_env(char **cmd_tab)
 	}
 	else if (ft_strequci(cmd_tab[0], "unset"))
 		builtin_unsetenv(cmd_tab);
+	if (DEBUG)
+		printf("end builtins_env\n");
 }

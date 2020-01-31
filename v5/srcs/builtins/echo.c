@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 01:25:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 06:10:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,25 +107,23 @@ void	builtin_echo(char **cmd_tab)
 	// printf("right_redirected_cmd(cmd_tab) = %d\n", right_redirected_cmd(cmd_tab));
 	if (cmd_tab[1] == 0)
 		write(1, "\n", 1);
-	else if (right_redirected_cmd(cmd_tab))
-		apply_redirect_right(cmd_tab);
-	// todo :
-	// else if (left_redirected_cmd(cmd_tab))
-	// 	apply_redirect_left(cmd_tab);
+	// else if (right_redirected_cmd(cmd_tab)) // not needed since set_fd_if_redirection
+	// 	apply_redirect_right(cmd_tab);
 	else
 	{
 		i = 0;
 		while (cmd_tab[++i])
 		{
-			if (is_n_option(i, cmd_tab))
+			if (is_n_option(i, cmd_tab) || cmd_tab[i][0] == '>' || cmd_tab[i - 1][0] == '>')
 				continue ;
-			else if (is_env_var(cmd_tab[i]))
-				ft_printf("%s", var_value(cmd_tab[i] + 1));
+			if (i > 1 && !is_n_option(i - 1, cmd_tab))
+				write(1, " ", 1);
+			if (is_env_var(cmd_tab[i]))
+				ft_putstr(var_value(cmd_tab[i] + 1));
 			else if (arg_is_in_quotes(cmd_tab[i]))
 				write(1, cmd_tab[i] + 1, ft_strlen(cmd_tab[i]) - 2);
 			else
 				write(1, cmd_tab[i], ft_strlen(cmd_tab[i]));
-			write(1, " ", cmd_tab[i + 1] != 0);
 		}
 		write(1, "\n", no_option_n(cmd_tab));
 	}

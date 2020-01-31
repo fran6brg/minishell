@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 01:26:40 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 04:44:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,8 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** si on lance ./minishell dans ./minishell il faut que le second ait bien les variables d'env du premier ?
 
-** lister tous les tests qui passent / passent pas, en attendant que d'avoir le sujet d'exam
+** lister tous les tests qui passent / passent pas, en attendant d'avoir le sujet d'exam
+
+** env > filename
 
 */
