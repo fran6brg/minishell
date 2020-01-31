@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:48:06 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 01:15:29 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,13 @@
 ** access : cf. cd.c
 */
 
-int		path_to_exec_is_valid(char *tested_path, struct stat *s)
+int		path_to_exec_is_valid(char *tested_path)
 {
-	if (!stat(tested_path, s) && !access(tested_path, X_OK))
+	struct	stat s;
+
+	if (!stat(tested_path, &s) && !access(tested_path, X_OK))
 	{
-		if ((s->st_mode & S_IFREG) && (s->st_mode & S_IXUSR))
+		if ((s.st_mode & S_IFREG) && (s.st_mode & S_IXUSR))
 			return (1);
 	}
 	return (0);
@@ -63,12 +65,11 @@ int		find_path(char **cmd_tab, char **exec_path)
 {
 	int 	i;
 	char	**tab;
-	struct	stat s;
 
 	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
 		*exec_path = cmd_tab[0];
-		return (path_to_exec_is_valid(*exec_path, &s));
+		return (path_to_exec_is_valid(*exec_path));
 	}
 	i = -1;
 	tab = ft_split(var_value("PATH"), ':');
@@ -76,7 +77,7 @@ int		find_path(char **cmd_tab, char **exec_path)
 	{
 		if (!(*exec_path = ft_strjoin_ter(tab[i], "/", cmd_tab[0])))
 			return (ft_free_str_tab_ret(tab, 0));
-		if (path_to_exec_is_valid(*exec_path, &s))
+		if (path_to_exec_is_valid(*exec_path))
 			return (ft_free_str_tab_ret(tab, 1));
 		ft_strdel(exec_path);
 	}
@@ -137,6 +138,7 @@ char **get_first_args(char **cmd_tab)
                 left_args[i] = ft_strdup(cmd_tab[i]);
             else
                 find_path(cmd_tab, left_args);
+			
         }
 		else if (ft_strchr("<>", cmd_tab[i][0]) || ft_strchr("<>", cmd_tab[i - 1][0]))
 			offset++;
@@ -163,7 +165,6 @@ char **get_second_args(char **cmd_tab)
 	int		offset;
 
     i = next_pipe_pos_or_len(cmd_tab) + 1;
-    // j = next_pipe_pos_or_len(cmd_tab + i);
     j = i + nb_args_wo_offset(cmd_tab + i);
     if (!(right_args = malloc(sizeof(char *) * (j - i + 1))))
         return (NULL);

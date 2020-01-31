@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/21 05:42:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 08:08:05 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 01:16:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,36 @@ int	single_builtin(char **cmd_tab)
 }
 
 /*
+** inception()
+**
+** call an ./exec like ./minishell
+*/
+
+void	inception(char **cmd_tab)
+{
+	pid_t   child;
+	int		fd;
+
+	if (DEBUG)
+		ft_print_str_tab(cmd_tab, "inception"); // pour debug
+	child = fork();
+	if (child == -1) // 1.err
+		exit(EXIT_FAILURE);
+	else if (child == 0) // 2.fils
+	{
+		fd = get_fd(cmd_tab);
+		if (fd != -1 && right_redirected_cmd(cmd_tab))
+			dup2(fd, STDOUT_FILENO);
+		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+			dup2(fd, STDIN_FILENO);
+		execv(cmd_tab[0], cmd_tab);
+		close((fd && fd != -1) ? fd : -1);
+	}
+	else // 3.parent
+		wait_child_process(child, NULL, 0);
+}
+
+/*
 ** single_execv()
 */
 
@@ -51,7 +81,9 @@ void	single_execv(char **cmd_tab)
 	pid_t   child;
 	int		fd;
 
-	if ((formated_args = get_first_args(cmd_tab)))
+	if (ft_str_start_with(cmd_tab[0], "./") && path_to_exec_is_valid(cmd_tab[0]))
+		inception(cmd_tab);
+	else if ((formated_args = get_first_args(cmd_tab)))
 	{
 		if (DEBUG)
 			ft_print_str_tab(formated_args, "one shot execv"); // pour debug

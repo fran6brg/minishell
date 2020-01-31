@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 20:22:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/27 07:18:50 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 00:52:31 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ void	free_and_exit(int exit_value, char *msg)
 {
 	if (msg)
 		ft_printf("%s\n", msg);
-	free_env();
+	// free_env();
 	exit(exit_value);
 }

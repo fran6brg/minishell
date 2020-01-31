@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 07:47:48 by fberger          ###   ########.fr       */
+/*   Updated: 2020/01/31 01:15:44 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 **	DEBUG PRINTF
 */
 
-# define DEBUG 0
+# define DEBUG 1
 
 /*
 **	CONSTANTES
@@ -132,7 +132,7 @@ void	exit_minishell(char **cmd_tab);
 **	exec.c
 */
 
-int		path_to_exec_is_valid(char *tested_path, struct stat *s);
+int		path_to_exec_is_valid(char *tested_path);
 int		find_path(char **cmd_tab, char **exec_path);
 char	**get_first_args(char **cmd_tab);
 char	**get_second_args(char **cmd_tab);
