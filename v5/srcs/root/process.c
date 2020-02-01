@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 08:53:04 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 04:08:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,29 +40,42 @@
 */
 
 /*
-** wait_child_process
+** run_builtin_or_execv()
+**
+** return 1 if error
+** return 0 if success
 */
 
-void	wait_child_process(pid_t child, int tube[2], int right_side)
+int	run_builtin_or_execv(char **cmd_tab)
 {
-	int	status;
-	
+	int ret;
+
+	ret = 0;
 	if (DEBUG)
-		printf("inside %s parent pid = %d\n", right_side ? "right" : "left", child);
-	if (right_side)
+		ft_print_str_tab(cmd_tab, "cmd_tab inside root args"); // pour debug
+	if (cmd_is_builtin(cmd_tab))
 	{
-		close(tube[WRITE]);
-		close(tube[READ]);
+		if (!reach_builtin_funct(cmd_tab))
+			return (1);
 	}
-	status = 0;
-	waitpid(child, &status, 0);
+	else
+	{
+		if (DEBUG)
+			printf("BEFORE RET EXECV\n"); // pour debug
+		ret = execv(cmd_tab[0], cmd_tab);
+		if (DEBUG)
+			printf("RET EXECV = %d\n", ret); // pour debug
+		if (ret == -1)
+			return (1);
+	}
+	return (0);
 }
 
 /*
-** process_left_child
+** fork_left_cmd
 */
 
-void	process_left_child(char **cmd_tab, int tube[2], char **left_args)
+void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
 {
 	int	fd;
     pid_t	child_left;
@@ -73,39 +86,35 @@ void	process_left_child(char **cmd_tab, int tube[2], char **left_args)
 	else if (child_left == 0) // 2.fils
     {
 		if (DEBUG)
-			printf("inside left process pid = %d\n", child_left);
+			printf("1. inside left process pid = %d\n", child_left);
+		close(tube[READ]);
 		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 		{
-			close(tube[READ]);
 			dup2(fd, STDOUT_FILENO);
 		}
 		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
-		{	
-			// close(tube[READ]); // ?
+		{
 			dup2(fd, STDIN_FILENO);
 		}
 		else
        	{
-			close(tube[READ]);
 			dup2(tube[WRITE], STDOUT_FILENO);
 		}
 		if (DEBUG)
-			ft_print_str_tab(left_args, "before sending root args"); // pour debug
-		root_args(left_args);
+			ft_print_str_tab(left_args, "2. before sending root args"); // pour debug
+		printf("LEFT ROOT RET = %d\n", run_builtin_or_execv(left_args));
 		close((fd && fd != -1) ? fd : -1);
-		ft_free_str_tab(left_args);
 		exit(EXIT_SUCCESS); // apparently useless
     }
 	else // 3.parent
-		wait_child_process(child_left, tube, 0);
-
+		waitpid_and_free_args(child_left, tube, 0, left_args);
 }
 
 /*
-** process_right_child
+** fork_right_cmd
 */
 
-void	process_right_child(char **cmd_tab, int tube[2], char 		**right_args)
+void	fork_right_cmd(char **cmd_tab, int tube[2], char 		**right_args)
 {
 	int	fd;
     pid_t   child_right;
@@ -123,7 +132,7 @@ void	process_right_child(char **cmd_tab, int tube[2], char 		**right_args)
 				printf("before RIGHT dup2 fd = %d\n", fd);
 			close(tube[WRITE]); // ok: on close le write car il sert a rien ici
 			dup2(tube[READ], STDIN_FILENO); // ok: on lit sur le stdin == le stdout de left child
-			dup2(fd, STDOUT_FILENO); // ok: ecrire sur stdout revient desormais a ecrire sur fd
+			dup2(fd, STDOUT_FILENO); // ici il y a un pb ... ecrire sur stdout revient desormais a ecrire sur fd
 			if (DEBUG)
 				printf("after RIGHT dup2 fd = %d\n", fd);
 		}
@@ -137,21 +146,25 @@ void	process_right_child(char **cmd_tab, int tube[2], char 		**right_args)
 			close(tube[WRITE]); // ok: on close le write car il sert a rien ici
 			dup2(tube[READ], STDIN_FILENO); // ok
 		}
+		if (DEBUG)
+			printf("RIGHT count_pipe(cmd_tab) = %d\n", count_pipe(cmd_tab));
         if (count_pipe(cmd_tab) == 1) /* execution of last command */
-			exit(root_args(right_args));
+			run_builtin_or_execv(right_args);
 		else /* or recursive call */
-			if (!process_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
+			if (!pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
 				return (ft_free_str_tab(right_args));
 		close((fd && fd != -1) ? fd : -1);
-		ft_free_str_tab(right_args);
+		exit(EXIT_SUCCESS);
     }
 	else // 3. parent
-	{
-		wait_child_process(child_right, tube, 1);
-	}
+		waitpid_and_free_args(child_right, tube, 1, right_args);
 }
 
-int		process_pipeline(char **cmd_tab, int recursive_call)
+/*
+** pipeline()
+*/
+
+int		pipeline(char **cmd_tab, int recursive_call)
 {
 	int    		tube[2];
 	char 		**left_args;
@@ -160,17 +173,15 @@ int		process_pipeline(char **cmd_tab, int recursive_call)
 	if (DEBUG)
 		printf("**********PIPE*********\n");
 	if (DEBUG)
-		ft_print_str_tab(cmd_tab, "process_pipeline");
+		ft_print_str_tab(cmd_tab, "pipeline");
 	left_args = NULL;
 	right_args = NULL;
 	if (!(left_args = get_first_args(cmd_tab)) || !(right_args = get_second_args(cmd_tab)))
 		return (0);
 	if (pipe(tube) == -1)
 		return (0);
-    process_left_child(cmd_tab, tube, left_args);
-	ft_free_str_tab(left_args); /* nb il faut free apres la fin du pid */
-    process_right_child(cmd_tab, tube, right_args);
-	ft_free_str_tab(right_args);
+    fork_left_cmd(cmd_tab, tube, left_args);
+    fork_right_cmd(cmd_tab, tube, right_args);
 	if (recursive_call)
 		exit(EXIT_SUCCESS); // seulement si recursif
 	if (DEBUG)

@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 04:28:51 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 01:15:29 by fberger          ###   ########.fr       */
+/*   Created: 2020/02/01 03:16:52 by fberger           #+#    #+#             */
+/*   Updated: 2020/02/01 03:42:15 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
+** path_to_exec_is_valid()
+**
 ** int stat(const char *path, struct stat *buf);
 ** retourne une structure stat contenant les champs suivants :
 ** struct stat {
@@ -57,18 +59,25 @@ int		path_to_exec_is_valid(char *tested_path)
 }
 
 /*
+** find_exec_path()
+**
 ** first check if path || direct path to command instead of exec
 ** if not then find path
 */
 
-int		find_path(char **cmd_tab, char **exec_path)
+int		find_exec_path(char **cmd_tab, char **exec_path)
 {
 	int 	i;
 	char	**tab;
 
-	if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
+	if (path_to_exec_is_valid(cmd_tab[0]))
 	{
-		*exec_path = cmd_tab[0];
+		*exec_path = ft_strdup(cmd_tab[0]);
+		return (1);
+	}
+	else if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
+	{
+		*exec_path = ft_strdup(cmd_tab[0]);
 		return (path_to_exec_is_valid(*exec_path));
 	}
 	i = -1;
@@ -84,110 +93,4 @@ int		find_path(char **cmd_tab, char **exec_path)
 	ft_free_str_tab(tab);
 	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
 	return (0);
-}
-
-/*
-** nb_args_wo_offset()
-** wo = without
-*/
-
-int		nb_args_wo_offset(char **cmd_tab)
-{
-	int		i;
-	int		offset;
-
-	i = 0;
-	offset = 0;
-	while (cmd_tab[i] && cmd_tab[i][0] != '|')
-    {
-		if (ft_strchr("<>", cmd_tab[i][0]) || (i > 0 && ft_strchr("<>", cmd_tab[i - 1][0])))
-			offset++;
-        i++;
-    }
-	if (DEBUG)
-		printf("nb_args_wo_offset = %d\n", i - offset);
-	return (i - offset);
-}
-
-/*
-** get_first_args();
-** meaning before pipe if pipe
-** here offset is used to skip '>' || '>>' || <filename> args
-*/
-
-char **get_first_args(char **cmd_tab)
-{
-    int     i;
-    char    **left_args;
-	int		offset;
-
-	i = nb_args_wo_offset(cmd_tab);
-    if (!(left_args = malloc(sizeof(char *) * (i + 1))))
-        return (NULL);
-    left_args[i] = NULL;
-    i = 0;
-	offset = 0;
-    while (cmd_tab[i] && cmd_tab[i][0] != '|')
-    {
-		if (DEBUG)
-			printf("inside first_args cmd_tab[%d] = %s\n", i, cmd_tab[i]);
-        if (i == 0)
-        {
-            left_args[0] = NULL;
-            if (is_builtin(cmd_tab))
-                left_args[i] = ft_strdup(cmd_tab[i]);
-            else
-                find_path(cmd_tab, left_args);
-			
-        }
-		else if (ft_strchr("<>", cmd_tab[i][0]) || ft_strchr("<>", cmd_tab[i - 1][0]))
-			offset++;
-        else
-            left_args[i - offset] = ft_strdup(cmd_tab[i]);
-        i++;
-    }
-	if (DEBUG)
-		ft_print_str_tab(left_args, "inside first_args");
-    return (left_args);
-}
-
-/*
-** get_second_args();
-** meaning after pipe
-** here offset is used to skip '>' || '>>' || <filename> args
-*/
-
-char **get_second_args(char **cmd_tab)
-{
-    int 	i;
-    int 	j;
-    char    **right_args;
-	int		offset;
-
-    i = next_pipe_pos_or_len(cmd_tab) + 1;
-    j = i + nb_args_wo_offset(cmd_tab + i);
-    if (!(right_args = malloc(sizeof(char *) * (j - i + 1))))
-        return (NULL);
-    right_args[j - i] = NULL;
-    j = i;
-	offset = 0;
-    while (cmd_tab[j] && cmd_tab[j][0] != '|')
-    {
-        if (j == i)
-        {
-            right_args[0] = NULL;
-            if (is_builtin(cmd_tab + j))
-                right_args[j - i] = ft_strdup(cmd_tab[j]);
-            else
-                find_path(cmd_tab + j, right_args);
-        }
-		else if (ft_strchr("<>", cmd_tab[j][0]) || ft_strchr("<>", cmd_tab[j - 1][0]))
-			offset++;
-        else
-            right_args[j - i - offset] = ft_strdup(cmd_tab[j]);
-        j++;
-    }
-	if (DEBUG)
-		ft_print_str_tab(right_args, "inside second_args");
-    return (right_args);
 }

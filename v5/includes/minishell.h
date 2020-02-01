@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 08:54:40 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 04:07:21 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef	struct			s_env
 extern t_env *g_env;
 
 /*
-** ----------------------------------------------------------------------------
+** ./ -------------------------------------------------------------------------
 */
 
 /*
@@ -65,8 +65,16 @@ void	put_prompt(void);
 int		main(int argc, char **argv, char **env);
 
 /*
-** ----------------------------------------------------------------------------
+** builtins/ ------------------------------------------------------------------
 */
+
+/*
+**	single_builtin.c
+*/
+
+int		cmd_is_builtin(char **cmd_tab);
+int		reach_builtin_funct(char **cmd_tab);
+int		run_single_builtin(char **cmd_tab);
 
 /*
 **	echo.c
@@ -126,17 +134,22 @@ int		push_back_var(char **cmd_tab);
 void	exit_minishell(char **cmd_tab);
 
 /*
-** ----------------------------------------------------------------------------
+** exec/ ----------------------------------------------------------------------
 */
 
 /*
-**	exec.c
+**	single_execv.c
+*/
+
+void	waitpid_and_free_args(pid_t child, int pdes[2], int right_side, char **args);
+void	run_single_execv(char **cmd_tab);
+
+/*
+**	path.c
 */
 
 int		path_to_exec_is_valid(char *tested_path);
-int		find_path(char **cmd_tab, char **exec_path);
-char	**get_first_args(char **cmd_tab);
-char	**get_second_args(char **cmd_tab);
+int		find_exec_path(char **cmd_tab, char **exec_path);
 
 /*
 **	exec_utils.c
@@ -147,29 +160,62 @@ int		count_pipe(char **cmd_tab);
 int		exit_process(int pdes[2], pid_t child);
 
 /*
-** ----------------------------------------------------------------------------
+** root/ ----------------------------------------------------------------------
 */
-
-/*
-**	root.c
-*/
-
-int		single_builtin(char **cmd_tab);
-void	single_execv(char **cmd_tab);
-int		is_builtin(char **cmd_tab);
-int		root_args(char **cmd_tab);
 
 /*
 **	process.c
 */
 
-void	wait_child_process(pid_t child, int pdes[2], int right_side);
-void	process_left_child(char **cmd_tab, int pdes[2], char **left_args);
-void	process_right_child(char **cmd_tab, int pdes[2], char **right_args);
-int		process_pipeline(char **cmd_tab, int recursive_call);
+int		run_builtin_or_execv(char **cmd_tab);
+void	fork_left_cmd(char **cmd_tab, int pdes[2], char **left_args);
+void	fork_right_cmd(char **cmd_tab, int pdes[2], char **right_args);
+int		pipeline(char **cmd_tab, int recursive_call);
 
 /*
-** ----------------------------------------------------------------------------
+** utils/ ---------------------------------------------------------------------
+*/
+
+/*
+**	fd.c
+*/
+
+void	set_fd_if_redirection(char **cmd_tab, int *fd);
+void	restore_std_if_redirection(char **cmd_tab, int *fd);
+
+/*
+**	args.c
+*/
+
+int		nb_args_wo_offset(char **cmd_tab);
+char	**get_first_args(char **cmd_tab);
+char	**get_second_args(char **cmd_tab);
+
+/*
+**	signal.c
+*/
+
+void	listen_sig(void);
+
+/*
+**	helpers.c
+*/
+
+int		count_arg(char **s);
+int		arg_is_in_quotes(char *arg);
+int		right_redirected_cmd(char **cmd_tab);
+int		left_redirected_cmd(char **cmd_tab);
+int		get_fd(char **args);
+/*
+**	free.c
+*/
+
+void	free_cmds(char *line, char **cmds);
+void	free_env();
+void	free_and_exit(int exit_value, char *msg);
+
+/*
+** parse/ ---------------------------------------------------------------------
 */
 
 /*
@@ -210,28 +256,5 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set);
 
 int		parse_error(char *line);
 int		multilines(char *s, char *set);
-
-/*
-**	signal.c
-*/
-
-void	listen_sig(void);
-
-/*
-**	helpers.c
-*/
-
-int		count_arg(char **s);
-int		arg_is_in_quotes(char *arg);
-int		right_redirected_cmd(char **cmd_tab);
-int		left_redirected_cmd(char **cmd_tab);
-int		get_fd(char **args);
-/*
-**	free.c
-*/
-
-void	free_cmds(char *line, char **cmds);
-void	free_env();
-void	free_and_exit(int exit_value, char *msg);
 
 #endif

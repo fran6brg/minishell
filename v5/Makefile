@@ -6,30 +6,39 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/01/28 07:48:33 by fberger          ###   ########.fr        #
+#    Updated: 2020/02/01 04:03:40 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 	= minishell
+NAME 	= 	minishell
 
-CC		= gcc
+CC		= 	gcc
 
-FLAGS 	= -Wall -Wextra -Werror -g
+FLAGS 	= 	-Wall -Wextra -Werror -g
 
-SRCS 	= srcs/main.c \
-		srcs/builtins/echo.c srcs/builtins/echo_utils.c \
-		srcs/builtins/cd.c \
-		srcs/builtins/env.c srcs/builtins/env_utils.c \
-		srcs/builtins/pwd.c \
-		srcs/builtins/exit.c \
-		srcs/executables/exec.c srcs/executables/exec_utils.c \
-		srcs/root/root.c srcs/root/process.c \
-		srcs/utils/free.c \
-		srcs/utils/helpers.c \
-		srcs/utils/signal.c \
-		srcs/parsing/errors.c \
-		srcs/parsing/split_1.c srcs/parsing/split_2.c srcs/parsing/split_3.c \
-		srcs/parsing/split_cmds.c 
+SRCS 	= 	srcs/main.c \
+			srcs/builtins/single_builtin.c \
+			srcs/builtins/echo.c \
+			srcs/builtins/echo_utils.c \
+			srcs/builtins/cd.c \
+			srcs/builtins/env.c \
+			srcs/builtins/env_utils.c \
+			srcs/builtins/pwd.c \
+			srcs/builtins/exit.c \
+			srcs/exec/single_execv.c \
+			srcs/exec/path.c \
+			srcs/exec/exec_utils.c \
+			srcs/root/process.c \
+			srcs/utils/args.c \
+			srcs/utils/fd.c \
+			srcs/utils/free.c \
+			srcs/utils/helpers.c \
+			srcs/utils/signal.c \
+			srcs/parsing/errors.c \
+			srcs/parsing/split_1.c \
+			srcs/parsing/split_2.c \
+			srcs/parsing/split_3.c \
+			srcs/parsing/split_cmds.c 
 
 OBJS 	= ${SRCS:.c=.o}
 

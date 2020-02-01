@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 05:49:20 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 02:47:44 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 t_env	*g_env;
 
 /*
-** get value from var name
+** var_value()
+**
+** get value for var name
 ** ft_strequci ci = case insensitive
 ** pour opti je test d'abord sans trim ce qui évite un malloc
 */
@@ -51,6 +53,7 @@ char	*var_value(char *name)
 
 /*
 ** builtin_env()
+**
 ** print toutes les var d'env
 */
 
@@ -70,7 +73,9 @@ void	builtin_env()
 }
 
 /*
-** builtin_setenv() ajoute une var d'env
+** builtin_setenv()
+**
+** ajoute une var d'env
 ** si elle existe déja, la valeur de la variable est modifiée
 ** autrement, une nouvelle variable est créée
 **
@@ -130,7 +135,7 @@ void	 builtin_unsetenv(char **cmd_tab)
 		}
 	}
 	else
-		ft_printf("error: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
+		ft_printf("unset: too %s argument\n", count_arg(cmd_tab) < 3 ? "few" : "much");
 }
 
 /*
@@ -145,10 +150,8 @@ void	builtins_env(char **cmd_tab)
 	|| ft_strequci(cmd_tab[0], "export"))
 	{
 		if (!builtin_setenv(cmd_tab))
-			free_and_exit(0, "exit: malloc failed\n");
+			free_and_exit(0, "error: malloc failed\n");
 	}
 	else if (ft_strequci(cmd_tab[0], "unset"))
 		builtin_unsetenv(cmd_tab);
-	if (DEBUG)
-		printf("end builtins_env\n");
 }

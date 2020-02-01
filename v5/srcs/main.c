@@ -6,13 +6,15 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 04:44:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 03:46:49 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /*
+** store_env()
+**
 ** store env inside list
 */
 
@@ -47,7 +49,8 @@ int		store_env(char **env_tab)
 
 /*
 ** parse_and_root_cmds()
-** 3 possibilités : pipeline || single builtin || single execv
+**
+** 3 possibilités donc 3 if : pipeline || single builtin || single execv
 */
 
 void	parse_and_root_cmds(char **cmds)
@@ -60,18 +63,16 @@ void	parse_and_root_cmds(char **cmds)
 	{
 		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i], " \t")))
 			continue ;
-		if (DEBUG)
-			ft_print_str_tab(cmd_tab, "inside parse_and_root_cmds");
 		replace_dollar_vars(cmd_tab);
 		if (count_pipe(cmd_tab) > 0)
 		{
-			if (!process_pipeline(cmd_tab, 0))
+			if (!pipeline(cmd_tab, 0))
 				ft_putstr("minishell: broken pipe error\n");
 		}
-		else if (is_builtin(cmd_tab))
-			single_builtin(cmd_tab);
+		else if (cmd_is_builtin(cmd_tab))
+			run_single_builtin(cmd_tab);
 		else if (cmd_tab[0]) // meaning if at leat 1 arg
-			single_execv(cmd_tab);
+			run_single_execv(cmd_tab);
 		ft_free_str_tab(cmd_tab);
 	}
 }
@@ -140,8 +141,6 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** norme
 
-** cat < filename
-
 ** est-ce que le echo < filename (left redirection) existe/est à faire ?
 
 ** comprendre pq le prompt se decale avec cette commande
@@ -165,5 +164,7 @@ int		main(int argc, char **argv, char **env_tab)
 ** lister tous les tests qui passent / passent pas, en attendant d'avoir le sujet d'exam
 
 ** env > filename
+
+** replace_dollar_vars(cmd_tab); // pb si unset setenv
 
 */
