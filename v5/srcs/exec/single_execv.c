@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 06:21:00 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 07:53:27 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	run_single_execv(char **cmd_tab)
 	{
 		if (DEBUG)
 			ft_print_str_tab(args, "args inside run_single_execv");
-        ret = execv(args[0], args);
 		if ((child = fork()) == -1)
 			exit(EXIT_FAILURE);
 		else if (child == 0)

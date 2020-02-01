@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process.c                                          :+:      :+:    :+:   */
+/*   pipeline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 07:48:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 08:00:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,17 +155,17 @@ void	fork_right_cmd(char **cmd_tab, int tube[2], char 		**right_args)
 			exit(ret);
 		}
 		else /* or recursive call */
-			pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1);
+			run_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1);
     }
 	else // 3. parent
 		waitpid_and_free_args(child_right, tube, 1, right_args);
 }
 
 /*
-** pipeline()
+** run_pipeline()
 */
 
-int		pipeline(char **cmd_tab, int recursive_call)
+int		run_pipeline(char **cmd_tab, int recursive_call)
 {
 	int    		tube[2];
 	char 		**left_args;

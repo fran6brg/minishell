@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:48:45 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 06:59:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 07:47:51 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	parse_error(char *line)
 {
 	if (ft_strstr(line, ";;"))
 		return (ft_putstr_ret("zsh: parse error near `;;'\n", 1));
-	else if (ft_strstr(line, ">>>"))
-		return (ft_putstr_ret("zsh: parse error near `>'\n", 1));
-	else if (ft_strstr(line, "<<<"))
-		return (ft_putstr_ret("zsh: parse error near `<'\n", 1));
+	// else if (ft_strstr(line, ">>>"))
+	// 	return (ft_putstr_ret("zsh: parse error near `>'\n", 1));
+	// else if (ft_strstr(line, "<<<"))
+	// 	return (ft_putstr_ret("zsh: parse error near `<'\n", 1));
 	else if (ft_str_end_with(line, ">") || ft_str_end_with(line, "<"))
 		return (ft_putstr_ret("zsh: parse error near `\\n'\n", 1));
 	else

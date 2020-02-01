@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 06:58:18 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 08:02:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,7 @@ void	parse_and_root_cmds(char **cmds)
 			continue ;
 		replace_dollar_vars(cmd_tab);
 		if (count_pipe(cmd_tab) > 0)
-		{
-			if (!pipeline(cmd_tab, 0))
-				ft_putstr("minishell: broken pipe error\n");
-		}
+			run_pipeline(cmd_tab, 0);
 		else if (cmd_is_builtin(cmd_tab))
 			run_single_builtin(cmd_tab);
 		else if (cmd_tab[0]) // meaning if at leat 1 arg
@@ -165,5 +162,9 @@ int		main(int argc, char **argv, char **env_tab)
 ** lister tous les tests qui passent / passent pas, en attendant d'avoir le sujet d'exam
 
 ** handle errors ">>>"
+
+** ** SIGQUIT ctrl backslash -> todo : quit without displaying new prompt (right behaviour)
+
+** env | sort | abc (abc qui ne correspond a rien)
 
 */

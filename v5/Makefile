@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/02/01 04:22:52 by fberger          ###   ########.fr        #
+#    Updated: 2020/02/01 07:55:38 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ SRCS 	= 	srcs/main.c \
 			srcs/exec/single_execv.c \
 			srcs/exec/path.c \
 			srcs/exec/exec_utils.c \
-			srcs/root/process.c \
+			srcs/pipeline/pipeline.c \
 			srcs/utils/args.c \
 			srcs/utils/fd.c \
 			srcs/utils/free.c \
