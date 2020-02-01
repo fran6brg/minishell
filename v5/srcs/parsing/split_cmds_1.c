@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 04:22:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 04:36:45 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static int		ft_create_strs_cmds(char **strs, char *s, char *set)
 }
 
 /*
-** ft_split_set() modifié pour tenir compte des quotes
+** ft_split_set(";") modifié pour tenir compte des quotes
 */
 
 char			**ft_split_cmds(char *s, char *set)

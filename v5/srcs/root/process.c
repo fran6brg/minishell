@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 04:15:49 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 04:50:01 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,9 @@ int	run_builtin_or_execv(char **cmd_tab)
 
 void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
 {
-	int	fd;
+	int		fd;
     pid_t	child_left;
+	int		ret;
 
     child_left = fork();
 	if (child_left == -1) // 1.err
@@ -102,9 +103,9 @@ void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
 		}
 		if (DEBUG)
 			ft_print_str_tab(left_args, "2. before sending root args"); // pour debug
-		printf("LEFT ROOT RET = %d\n", run_builtin_or_execv(left_args));
+		ret = run_builtin_or_execv(left_args);
 		close((fd && fd != -1) ? fd : -1);
-		exit(EXIT_SUCCESS); // apparently useless
+		exit(ret); // apparently useless
     }
 	else // 3.parent
 		waitpid_and_free_args(child_left, tube, 0, left_args);
@@ -116,8 +117,9 @@ void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
 
 void	fork_right_cmd(char **cmd_tab, int tube[2], char 		**right_args)
 {
-	int	fd;
+	int		fd;
     pid_t   child_right;
+	int 	ret;
 
 	child_right = fork();
 	if (child_right == -1) // 1.err
@@ -131,8 +133,8 @@ void	fork_right_cmd(char **cmd_tab, int tube[2], char 		**right_args)
 			if (DEBUG)
 				printf("before RIGHT dup2 fd = %d\n", fd);
 			close(tube[WRITE]); // ok: on close le write car il sert a rien ici
-			dup2(tube[READ], STDIN_FILENO); // ok: on lit sur le stdin == le stdout de left child
-			dup2(fd, STDOUT_FILENO); // ici il y a un pb ... ecrire sur stdout revient desormais a ecrire sur fd
+			dup2(tube[READ], STDIN_FILENO); // ok: avec dup2 le stdin de right est le stdout de left child
+			dup2(fd, STDOUT_FILENO); // ici il y a un pb ... ? pourtant ecrire sur stdout revient desormais a ecrire sur fd
 			if (DEBUG)
 				printf("after RIGHT dup2 fd = %d\n", fd);
 		}
@@ -146,15 +148,14 @@ void	fork_right_cmd(char **cmd_tab, int tube[2], char 		**right_args)
 			close(tube[WRITE]); // ok: on close le write car il sert a rien ici
 			dup2(tube[READ], STDIN_FILENO); // ok
 		}
-		if (DEBUG)
-			printf("RIGHT count_pipe(cmd_tab) = %d\n", count_pipe(cmd_tab));
         if (count_pipe(cmd_tab) == 1) /* execution of last command */
-			run_builtin_or_execv(right_args);
+		{
+			ret = run_builtin_or_execv(right_args);
+			close((fd && fd != -1) ? fd : -1);
+			exit(ret);
+		}
 		else /* or recursive call */
-			if (!pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1))
-				return (ft_free_str_tab(right_args));
-		close((fd && fd != -1) ? fd : -1);
-		exit(EXIT_SUCCESS);
+			pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1);
     }
 	else // 3. parent
 		waitpid_and_free_args(child_right, tube, 1, right_args);

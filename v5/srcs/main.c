@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 03:46:49 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 04:56:12 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,23 +137,15 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** comprendre le pb 'Uninitialised value was created by a heap allocation' avec 'make re && valgrind --leak-check=full --track-origins=yes ./minishell'
 
-** apparement ok car c'est juste un pb dans valgrind cf slack : trouver comment free les leaks des fork (exemple faire la cmd 'env | cat -e | sort' avec valgrind)
-
 ** norme
 
 ** est-ce que le echo < filename (left redirection) existe/est à faire ?
-
-** comprendre pq le prompt se decale avec cette commande
-~ v5 > ls -la > 1
- v5 >
- v5 >
-~ v5 >
 
 ** protection des mallocs ?
 
 ** mettre certaines fonctions en static pour la forme
 
-** cleaner split_cmds.c (fonctionnel), renommer les fonctions de facon explicite, repenser le code etc
+** cleaner split_cmds.c (fonctionnel mais code pas super propre), renommer les fonctions de facon explicite / repenser le code etc
 
 ** compiler avec -fsanitize=address (attention ne pas combiner fsanitize avec valgrind sinon bug)
 
@@ -162,8 +154,6 @@ int		main(int argc, char **argv, char **env_tab)
 ** si on lance ./minishell dans ./minishell il faut que le second ait bien les variables d'env du premier ?
 
 ** lister tous les tests qui passent / passent pas, en attendant d'avoir le sujet d'exam
-
-** env > filename
 
 ** replace_dollar_vars(cmd_tab); // pb si unset setenv
 
