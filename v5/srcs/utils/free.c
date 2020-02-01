@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/10 20:22:59 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/31 00:52:31 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 07:40:38 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ void	free_cmds(char *line, char **cmds)
 {
 	if (cmds)
 		ft_free_str_tab(cmds);
-    ft_strdel(&line);
+	ft_strdel(&line);
 }
 
 /*
 ** free env list
 */
 
-void   free_env()
+void	free_env(void)
 {
-    t_env *tmp;
+	t_env *tmp;
 
 	while (g_env)
 	{
@@ -50,6 +50,5 @@ void	free_and_exit(int exit_value, char *msg)
 {
 	if (msg)
 		ft_printf("%s\n", msg);
-	// free_env();
 	exit(exit_value);
 }
