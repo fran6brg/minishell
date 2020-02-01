@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 05:25:58 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 06:25:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,32 +183,32 @@ t_list					*ft_lstmap(t_list *lst, void *(*f)(void *),
 */
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE	10
 # endif
 
-int					get_next_line(const int fd, char **line);
+int						get_next_line(const int fd, char **line);
 
 /*
 ** printf ---------------------------------------------------------------------
 */
 
-# define RESET   		"\033[0m"
-# define BLACK   		"\033[30m"
-# define RED     		"\033[31m"
-# define GREEN   		"\033[32m"
-# define YELLOW  		"\033[33m"
-# define BLUE    		"\033[34m"
-# define MAGENTA 		"\033[35m"
-# define CYAN    		"\033[36m"
-# define WHITE  		"\033[37m"
-# define BBLACK  		"\033[1m\033[30m"
-# define BRED     		"\033[1m\033[31m"
-# define BGREEN   		"\033[1m\033[32m"
-# define BYELLOW  		"\033[1m\033[33m"
-# define BBLUE    		"\033[1m\033[34m"
+# define RESET			"\033[0m"
+# define BLACK			"\033[30m"
+# define RED			"\033[31m"
+# define GREEN			"\033[32m"
+# define YELLOW			"\033[33m"
+# define BLUE			"\033[34m"
+# define MAGENTA		"\033[35m"
+# define CYAN			"\033[36m"
+# define WHITE			"\033[37m"
+# define BBLACK			"\033[1m\033[30m"
+# define BRED			"\033[1m\033[31m"
+# define BGREEN			"\033[1m\033[32m"
+# define BYELLOW		"\033[1m\033[33m"
+# define BBLUE			"\033[1m\033[34m"
 # define BMAGENTA		"\033[1m\033[35m"
-# define BCYAN    		"\033[1m\033[36m"
-# define BWHITE   		"\033[1m\033[37m"
+# define BCYAN			"\033[1m\033[36m"
+# define BWHITE			"\033[1m\033[37m"
 
 typedef struct			s_options
 {
@@ -241,12 +241,12 @@ typedef struct			s_options
 	struct s_options	*next;
 }						t_options;
 
-# define NB_ACCEPTED_OPTIONS 13
+# define NB_OPTIONS		13
 
 typedef struct			s_func
 {
-	char	option;
-	int		(*f)(t_options*, va_list*);
+	char				option;
+	int					(*f)(t_options*, va_list*);
 }						t_functions_pointers;
 
 int						ft_printf(const char *f, ...);

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/15 02:59:11 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 08:23:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 06:25:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** {'D', &ft_print_integer} à inclure
 */
 
-t_functions_pointers	g_option_to_function[NB_ACCEPTED_OPTIONS] =
+t_functions_pointers	g_option_to_function[NB_OPTIONS] =
 {
 	{'c', &ft_print_char},
 	{'s', &ft_print_string},
@@ -66,7 +66,7 @@ static int		get_option_output(t_options *option, va_list *args)
 	int			i;
 
 	i = -1;
-	while (++i < NB_ACCEPTED_OPTIONS)
+	while (++i < NB_OPTIONS)
 		if (g_option_to_function[i].option == option->type)
 			return (g_option_to_function[i].f(option, args));
 	return (0);
