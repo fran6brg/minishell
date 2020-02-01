@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 03:16:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 03:42:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 06:07:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int		path_to_exec_is_valid(char *tested_path)
 {
 	struct	stat s;
 
-	if (!stat(tested_path, &s) && !access(tested_path, X_OK))
+	if (!stat(tested_path, &s) && !access(tested_path, F_OK | X_OK))
 	{
 		if ((s.st_mode & S_IFREG) && (s.st_mode & S_IXUSR))
 			return (1);
@@ -58,27 +58,31 @@ int		path_to_exec_is_valid(char *tested_path)
 	return (0);
 }
 
-/*
-** find_exec_path()
-**
-** first check if path || direct path to command instead of exec
-** if not then find path
-*/
-
 int		find_exec_path(char **cmd_tab, char **exec_path)
 {
 	int 	i;
 	char	**tab;
 
+	if (DEBUG)
+		printf("INSIDE find_exec_path\n"); // pour debug
 	if (path_to_exec_is_valid(cmd_tab[0]))
 	{
+		if (DEBUG)
+			printf("path_to_exec_is_valid\n"); // pour debug
 		*exec_path = ft_strdup(cmd_tab[0]);
 		return (1);
 	}
 	else if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
+		if (DEBUG)
+			printf("!var_value(PATH)\n"); // pour debug
 		*exec_path = ft_strdup(cmd_tab[0]);
-		return (path_to_exec_is_valid(*exec_path));
+		if (!path_to_exec_is_valid(*exec_path))
+		{
+			ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
+			return (0);
+		}
+		return (1);
 	}
 	i = -1;
 	tab = ft_split(var_value("PATH"), ':');

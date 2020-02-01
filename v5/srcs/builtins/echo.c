@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 05:14:29 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 05:17:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	builtin_echo(char **cmd_tab)
 		write(1, "\n", 1);
 	else
 	{
-		args = get_first_args(cmd_tab);
+		args = format_args(cmd_tab);
 		i = 0;
 		while (args[++i])
 		{

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/28 08:35:38 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 05:25:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,14 +193,6 @@ int					get_next_line(const int fd, char **line);
 */
 
 # define RESET   		"\033[0m"
-# define COL_NRM  		"\x1B[0m"
-# define COL_RED  		"\x1B[31m"
-# define COL_GRN  		"\x1B[32m"
-# define COL_YEL  		"\x1B[33m"
-# define COL_BLU  		"\x1B[34m"
-# define COL_MAG  		"\x1B[35m"
-# define COL_CYN  		"\x1B[36m"
-# define COL_WHT  		"\x1B[37m"
 # define BLACK   		"\033[30m"
 # define RED     		"\033[31m"
 # define GREEN   		"\033[32m"
@@ -209,14 +201,14 @@ int					get_next_line(const int fd, char **line);
 # define MAGENTA 		"\033[35m"
 # define CYAN    		"\033[36m"
 # define WHITE  		"\033[37m"
-# define BOLDBLACK  	"\033[1m\033[30m"
-# define BOLDRED     	"\033[1m\033[31m"
-# define BOLDGREEN   	"\033[1m\033[32m"
-# define BOLDYELLOW  	"\033[1m\033[33m"
-# define BOLDBLUE    	"\033[1m\033[34m"
-# define BOLDMAGENTA	"\033[1m\033[35m"
-# define BOLDCYAN    	"\033[1m\033[36m"
-# define BOLDWHITE   	"\033[1m\033[37m"
+# define BBLACK  		"\033[1m\033[30m"
+# define BRED     		"\033[1m\033[31m"
+# define BGREEN   		"\033[1m\033[32m"
+# define BYELLOW  		"\033[1m\033[33m"
+# define BBLUE    		"\033[1m\033[34m"
+# define BMAGENTA		"\033[1m\033[35m"
+# define BCYAN    		"\033[1m\033[36m"
+# define BWHITE   		"\033[1m\033[37m"
 
 typedef struct			s_options
 {

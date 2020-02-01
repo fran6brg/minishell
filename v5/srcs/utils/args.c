@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 03:17:50 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 05:11:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 05:58:37 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 /*
 ** nb_args_wo_offset()
-** wo = without
+**
+** '_wo_' == without
 */
 
 int		nb_args_wo_offset(char **cmd_tab)
@@ -36,12 +37,13 @@ int		nb_args_wo_offset(char **cmd_tab)
 }
 
 /*
-** get_first_args();
-** meaning before pipe if pipe
+** format_args();
+**
+** get args before pipe if pipe : args | args_after_pipe
 ** here offset is used to skip '>' || '>>' || <filename> args
 */
 
-char **get_first_args(char **cmd_tab)
+char **format_args(char **cmd_tab)
 {
     int     i;
     char    **left_args;
@@ -55,15 +57,15 @@ char **get_first_args(char **cmd_tab)
 	offset = 0;
     while (cmd_tab[i] && cmd_tab[i][0] != '|')
     {
-		if (DEBUG)
-			printf("inside first_args cmd_tab[%d] = %s\n", i, cmd_tab[i]);
         if (i == 0)
         {
+            if (DEBUG)
+                printf("inside i == 0 | find_exec_path(cmd_tab, left_args) = %d\n", find_exec_path(cmd_tab, left_args));
             left_args[0] = NULL;
             if (cmd_is_builtin(cmd_tab))
                 left_args[i] = ft_strdup(cmd_tab[i]);
-            else
-                find_exec_path(cmd_tab, left_args);
+            else if (!find_exec_path(cmd_tab, left_args))
+                return (NULL);
         }
 		else if (ft_strchr("<>", cmd_tab[i][0]) || ft_strchr("<>", cmd_tab[i - 1][0]))
 			offset++;
@@ -77,12 +79,13 @@ char **get_first_args(char **cmd_tab)
 }
 
 /*
-** get_second_args();
-** meaning after pipe
+** format_args_after_pipe();
+**
+** get args after pipe : args_before_pipe | args
 ** here offset is used to skip '>' || '>>' || <filename> args
 */
 
-char **get_second_args(char **cmd_tab)
+char **format_args_after_pipe(char **cmd_tab)
 {
     int 	i;
     int 	j;
@@ -103,8 +106,8 @@ char **get_second_args(char **cmd_tab)
             right_args[0] = NULL;
             if (cmd_is_builtin(cmd_tab + j))
                 right_args[j - i] = ft_strdup(cmd_tab[j]);
-            else
-                find_exec_path(cmd_tab + j, right_args);
+            else if (!find_exec_path(cmd_tab + j, right_args))
+                return (NULL);
         }
 		else if (ft_strchr("<>", cmd_tab[j][0]) || ft_strchr("<>", cmd_tab[j - 1][0]))
 			offset++;

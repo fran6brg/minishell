@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 03:46:49 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 05:53:43 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int		cmd_is_builtin(char **cmd_tab)
 {
-	return (is_env_var(cmd_tab[0])
+	return ((is_env_var(cmd_tab[0])
 	|| ft_strequci(cmd_tab[0], "echo")
 	|| ft_strequci(cmd_tab[0], "cd")
 	|| ft_strequci(cmd_tab[0], "pwd")
@@ -26,7 +26,7 @@ int		cmd_is_builtin(char **cmd_tab)
 	|| ft_strequci(cmd_tab[0], "setenv")
 	|| ft_strequci(cmd_tab[0], "export")
 	|| ft_strequci(cmd_tab[0], "unset")
-	|| ft_strequci(cmd_tab[0], "exit"));
+	|| ft_strequci(cmd_tab[0], "exit")) ? 1 : 0);
 }
 
 /*

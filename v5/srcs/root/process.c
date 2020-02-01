@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 04:50:01 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 05:18:20 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ int		pipeline(char **cmd_tab, int recursive_call)
 		ft_print_str_tab(cmd_tab, "pipeline");
 	left_args = NULL;
 	right_args = NULL;
-	if (!(left_args = get_first_args(cmd_tab)) || !(right_args = get_second_args(cmd_tab)))
+	if (!(left_args = format_args(cmd_tab)) || !(right_args = format_args_after_pipe(cmd_tab)))
 		return (0);
 	if (pipe(tube) == -1)
 		return (0);

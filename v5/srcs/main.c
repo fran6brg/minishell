@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 05:02:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 06:18:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,11 @@ void	parse_and_root_cmds(char **cmds)
 }
 
 /*
-** put prompt isolé pour pouvoir l'appeler depuis les fonctions de gestion des sig
+** put_prompt()
+**
+** isolé ds une fonction pour pouvoir l'appeler depuis les fonctions de gestion des SIG
+** nb : ces fonctions de gestion des SIG ne prennent pas d'argument donc cela justifie
+** le recours à une variable globale g_env pour pouvoir afficher le path
 */
 
 void	put_prompt(void)
@@ -91,14 +95,14 @@ void	put_prompt(void)
 	{
 		pwd = NULL;
 		if ((pwd = ft_strrchr(tmp, '/') + 1))
-			ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDMAGENTA, pwd, BOLDGREEN, RESET);
+			ft_printf("%s~ %s%s%s >%s ", BGREEN, BMAGENTA, pwd, BGREEN, RESET);
 	}
 	else
-		ft_printf("%s~ %s%s%s >%s ", BOLDGREEN, BOLDMAGENTA, "bash", BOLDGREEN, RESET);
+		ft_printf("%s~ %s%s%s >%s ", BGREEN, BMAGENTA, "bash", BGREEN, RESET);
 }
 
 /*
-** good old main
+** main()
 **
 ** listen_sig(); pour les CTRL + c || d || z
 ** put_prompt(); self-explained
@@ -134,7 +138,7 @@ int		main(int argc, char **argv, char **env_tab)
 }
 
 /*
-** TODO
+** TODO :
 
 ** remove # include <stdio.h> in .h
 
@@ -159,7 +163,5 @@ int		main(int argc, char **argv, char **env_tab)
 ** si on lance ./minishell dans ./minishell il faut que le second ait bien les variables d'env du premier ?
 
 ** lister tous les tests qui passent / passent pas, en attendant d'avoir le sujet d'exam
-
-** replace_dollar_vars(cmd_tab); // pb si unset setenv
 
 */

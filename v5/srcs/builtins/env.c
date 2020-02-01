@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 02:47:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 05:34:23 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	 builtin_unsetenv(char **cmd_tab)
 		while (current)
 		{
 			next = current->next;
-			if (ft_strequ(current->name, cmd_tab[1]))
+			if (ft_strequ(current->value, cmd_tab[1]))
 			{
 				g_env = (current == g_env) ? next : g_env;
 				previous->next = next;
