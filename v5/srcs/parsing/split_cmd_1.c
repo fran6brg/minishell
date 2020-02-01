@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 06:29:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 07:02:14 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int		is_separator(char c, char *set)
 {
-	int i;
+	int		i;
 
 	i = -1;
 	while (set[++i])
@@ -44,12 +44,11 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
 	ret = 1;
 	while (s[++i])
 	{
-
 		if (PARSE)
 			printf("ft_create_strs | s[%d] = -%c- | flag = %d\n", i, s[i], flag);
 		if ((s[i] == '\'' || s[i] == '"') && !(flag = 0))
 			ret = ft_str_with_quotes(s, &i, strs, str_i);
-        else if ((s[i] == '<' || s[i] == '>') && !(flag = 0))
+		else if ((s[i] == '<' || s[i] == '>') && !(flag = 0))
 			ret = ft_str_with_chevron(s, &i, strs, str_i, set);
 		else if (s[i] == '|')
 		{
@@ -72,7 +71,7 @@ int		ft_create_strs(char *s, char **strs, int *str_i, char *set)
 ** malloc and returns strs array
 */
 
-char			**ft_split_set_quotes_chevrons(char *s, char *set)
+char	**ft_split_set_quotes_chevrons(char *s, char *set)
 {
 	char	**strs;
 	char	*trim_s;
@@ -92,8 +91,6 @@ char			**ft_split_set_quotes_chevrons(char *s, char *set)
 		ft_free_n_str_tab(strs, str_i);
 		return (NULL);
 	}
-	// printf("nb_new_s(trim_s, set) = %d\n", nb_new_s(trim_s, set));
-	// printf("str_i = %d\n", str_i);
 	strs[str_i] = NULL;
 	ft_strdel(&trim_s);
 	return (strs);

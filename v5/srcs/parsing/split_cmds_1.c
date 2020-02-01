@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 04:36:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 07:16:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static int		is_separator_cmds(char *s, int i, char *set)
 {
 	int j;
 
-    if (is_in_quotes(s, i))
-        return (0);
+	if (is_in_quotes(s, i))
+		return (0);
 	j = -1;
 	while (set[++j])
 	{
