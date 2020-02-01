@@ -1,41 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_cmds.c                                       :+:      :+:    :+:   */
+/*   split_cmds_1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 04:21:09 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 04:22:15 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static int		is_valid_quote_pattern(char *s, int i, int j)
-{
-	int k;
-
-	k = j;
-	ft_inc_to_closing_quote(&k, s);
-	return ((k > i));
-}
-
-static int		is_in_quotes(char *s, int i)
-{
-	int j;
-
-	j = -1;
-	while (++j < i)
-	{
-		if (s[j] != '\"' && s[j] != '"')
-		{
-			if (is_valid_quote_pattern(s, i, j))
-				return (1);
-		}
-	}
-	return (0);
-}
 
 static int		is_separator_cmds(char *s, int i, char *set)
 {

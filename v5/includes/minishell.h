@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 04:07:21 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 04:28:33 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,13 +219,20 @@ void	free_and_exit(int exit_value, char *msg);
 */
 
 /*
-**	split_cmds.c
+**	split_cmds_1.c
 */
 
 char	**ft_split_cmds(char *s, char *set);
 
 /*
-**	split_1.c
+**	split_cmds_2.c
+*/
+
+int		is_valid_quote_pattern(char *s, int i, int j);
+int		is_in_quotes(char *s, int i);
+
+/*
+**	split_cmd_1.c
 */
 
 int		is_separator(char c, char *set);
@@ -236,25 +243,25 @@ int		ft_new_str(char *s, char *set, char **strs, int *str_i);
 int		ft_str_pipe(char **strs, int *str_i);
 
 /*
-**	split_2.c
+**	errors.c
+*/
+
+int		parse_error(char *line);
+int		multilines(char *s, char *set);
+
+/*
+**	split_cmd_2.c
 */
 
 void	ft_inc_to_closing_quote(int *i, char *s);
 int		nb_new_s(char *s, char *set);
 
 /*
-**	split_3.c
+**	split_cmd_3.c
 */
 
 int		ft_str_with_quotes(char *s, int *i, char **strs, int *str_i);
 int		ft_str_with_chevron(char *s, int *i, char **strs, int *str_i, char *set);
 int		ft_create_strs(char *s, char **strs, int *str_i, char *set);
-
-/*
-**	errors.c
-*/
-
-int		parse_error(char *line);
-int		multilines(char *s, char *set);
 
 #endif
