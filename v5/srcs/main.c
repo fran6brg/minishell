@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 04:56:12 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/01 05:02:45 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** store_env()
 **
-** store env inside list
+** store env inside global linked list g_env
 */
 
 int		store_env(char **env_tab)
@@ -99,6 +99,11 @@ void	put_prompt(void)
 
 /*
 ** good old main
+**
+** listen_sig(); pour les CTRL + c || d || z
+** put_prompt(); self-explained
+** if (!get_next_line(STDIN_FILENO, &line) : if GNL ret 0 it means CTRL + D
+** was hit which occurs EOF, that quits shell
 */
 
 int		main(int argc, char **argv, char **env_tab)
@@ -115,7 +120,7 @@ int		main(int argc, char **argv, char **env_tab)
 	{
 		listen_sig();
 		put_prompt();
-		if (!get_next_line(STDIN_FILENO, &line) || parse_error(line)) // if GNL ret 0 it means CTRL + D was hit which occurs EOF, that quits shell
+		if (!get_next_line(STDIN_FILENO, &line) || parse_error(line))
 			free_and_exit(EXIT_FAILURE, NULL);
 		else
 		{
