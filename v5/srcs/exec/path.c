@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 03:16:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 06:07:03 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/03 19:17:17 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,19 @@ int		find_exec_path(char **cmd_tab, char **exec_path)
 	int 	i;
 	char	**tab;
 
-	if (DEBUG)
-		printf("INSIDE find_exec_path\n"); // pour debug
+	// if (DEBUG)
+	// 	printf("INSIDE find_exec_path\n"); // pour debug
 	if (path_to_exec_is_valid(cmd_tab[0]))
 	{
-		if (DEBUG)
-			printf("path_to_exec_is_valid\n"); // pour debug
+		// if (DEBUG)
+		// 	printf("path_to_exec_is_valid\n"); // pour debug
 		*exec_path = ft_strdup(cmd_tab[0]);
 		return (1);
 	}
 	else if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
-		if (DEBUG)
-			printf("!var_value(PATH)\n"); // pour debug
+		// if (DEBUG)
+		// 	printf("!var_value(PATH)\n"); // pour debug
 		*exec_path = ft_strdup(cmd_tab[0]);
 		if (!path_to_exec_is_valid(*exec_path))
 		{

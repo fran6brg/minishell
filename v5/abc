@@ -1,0 +1,42 @@
+-rw-r--r--  1 fberger  2018_paris     15 Feb  3 18:16 1$
+-rw-r--r--  1 fberger  2018_paris   1955 Feb  1 07:55 Makefile$
+-rw-r--r--  1 fberger  2018_paris  14095 Jan 28 01:29 testfile.txt$
+-rwxr-xr-x  1 fberger  2018_paris    972 Feb  3 19:33 abc$
+-rwxr-xr-x  1 fberger  2018_paris  69244 Feb  3 19:35 minishell$
+drwxr-xr-x  2 fberger  2018_paris      3 Feb  1 06:39 includes$
+drwxr-xr-x  2 fberger  2018_paris      3 Jan 28 01:29 .vscode$
+drwxr-xr-x  2 fberger  2018_paris    205 Feb  3 18:40 libft$
+drwxr-xr-x  6 fberger  2018_paris     11 Feb  3 19:35 .$
+drwxr-xr-x  7 fberger  2018_paris     10 Feb  3 19:35 srcs$
+drwxr-xr-x  9 fberger  2018_paris      9 Feb  3 17:35 ..$
+total 177$
+Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.sOqm21dF0Z/Render
+COLORFGBG=7;0
+COLORTERM=truecolor
+HOME=/Users/fberger
+ITERM_PROFILE=Default
+ITERM_SESSION_ID=w0t0p0:FD957D61-9C9C-4C50-ABE0-C801C5DDD533
+LANG=en_US.UTF-8
+LC_TERMINAL=iTerm2
+LC_TERMINAL_VERSION=3.3.7
+LESS=-R
+LOGNAME=fberger
+LSCOLORS=Gxfxcxdxbxegedabagacad
+OLDPWD=/Users/fberger
+PAGER=less
+PATH=/Users/fberger/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mongodb/bin:/usr/local/munki
+PWD=/Users/fberger/Desktop/fberger/0.newCursus/0.fraberg/9.minishell/w1/v5
+SHELL=/bin/zsh
+SHLVL=1
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.h81lRHNh8y/Listeners
+TERM=xterm-256color
+TERM_PROGRAM=iTerm.app
+TERM_PROGRAM_VERSION=3.3.7
+TERM_SESSION_ID=w0t0p0:FD957D61-9C9C-4C50-ABE0-C801C5DDD533
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n0003pw8000xq2/T/
+USER=fberger
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+ZSH=/Users/fberger/.oh-my-zsh
+_=/Users/fberger/Desktop/fberger/0.newCursus/0.fraberg/9.minishell/w1/v5/./minishell
+__CF_USER_TEXT_ENCODING=0x76E2:0:0

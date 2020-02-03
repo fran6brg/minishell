@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:27:04 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 07:32:00 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/03 19:12:42 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ char	**format_args(char **cmd_tab)
 			left_args[i - offset] = ft_strdup(cmd_tab[i]);
 		i++;
 	}
-	if (DEBUG)
-		ft_print_str_tab(left_args, "inside first_args");
+	// if (DEBUG)
+	// 	ft_print_str_tab(left_args, "inside first_args");
 	return (left_args);
 }
 
@@ -115,7 +115,7 @@ char	**format_args_after_pipe(char **cmd_tab)
 			right_args[j - i - offset] = ft_strdup(cmd_tab[j]);
 		j++;
 	}
-	if (DEBUG)
-		ft_print_str_tab(right_args, "inside second_args");
+	// if (DEBUG)
+	// 	ft_print_str_tab(right_args, "inside second_args");
 	return (right_args);
 }

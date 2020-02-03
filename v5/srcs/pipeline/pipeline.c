@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 08:00:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/03 19:16:54 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,30 +81,17 @@ void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
     pid_t	child_left;
 	int		ret;
 
+	fd = 0;
     child_left = fork();
 	if (child_left == -1) // 1.err
 		exit_process(&tube[2], child_left);
 	else if (child_left == 0) // 2.fils
     {
 		if (DEBUG)
-			printf("1. inside left process pid = %d\n", child_left);
-		close(tube[READ]);
-		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
-		{
-			dup2(fd, STDOUT_FILENO);
-		}
-		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
-		{
-			dup2(fd, STDIN_FILENO);
-		}
-		else
-       	{
-			dup2(tube[WRITE], STDOUT_FILENO);
-		}
-		if (DEBUG)
-			ft_print_str_tab(left_args, "2. before sending root args"); // pour debug
+			ft_print_str_tab(left_args, "LEFT : before sending root args"); // pour debug
+		set_fd_for_left_pipped_cmd(cmd_tab, tube, &fd, left_args);
 		ret = run_builtin_or_execv(left_args);
-		close((fd && fd != -1) ? fd : -1);
+		restore_std_for_left_pipped_cmd(tube, &fd, left_args);
 		exit(ret); // apparently useless
     }
 	else // 3.parent
@@ -115,43 +102,26 @@ void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
 ** fork_right_cmd
 */
 
-void	fork_right_cmd(char **cmd_tab, int tube[2], char 		**right_args)
+void	fork_right_cmd(char **cmd_tab, int tube[2], char **right_args)
 {
 	int		fd;
     pid_t   child_right;
 	int 	ret;
 
+	fd = 0;
 	child_right = fork();
 	if (child_right == -1) // 1.err
 		exit_process(&tube[2], child_right);
 	else if (child_right == 0) // 2.fils
     {
 		if (DEBUG)
-			printf("inside right son pid = %d\n", child_right);
-		if ((fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
-		{
-			if (DEBUG)
-				printf("before RIGHT dup2 fd = %d\n", fd);
-			close(tube[WRITE]); // ok: on close le write car il sert a rien ici
-			dup2(tube[READ], STDIN_FILENO); // ok: avec dup2 le stdin de right est le stdout de left child
-			dup2(fd, STDOUT_FILENO); // ici il y a un pb ... ? pourtant ecrire sur stdout revient desormais a ecrire sur fd
-			if (DEBUG)
-				printf("after RIGHT dup2 fd = %d\n", fd);
-		}
-		else if (fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
-		{
-			close(tube[WRITE]); // ok: on close le write car il sert a rien ici
-			dup2(fd, STDIN_FILENO); // ok
-		}
-		else
-		{
-			close(tube[WRITE]); // ok: on close le write car il sert a rien ici
-			dup2(tube[READ], STDIN_FILENO); // ok
-		}
-        if (count_pipe(cmd_tab) == 1) /* execution of last command */
+			ft_print_str_tab(right_args, "RIGHT : before sending root args"); // pour debug
+		set_fd_for_right_pipped_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, tube, &fd, right_args);
+		/* execution of last command */
+		if (count_pipe(cmd_tab) == 1)
 		{
 			ret = run_builtin_or_execv(right_args);
-			close((fd && fd != -1) ? fd : -1);
+			restore_std_for_right_pipped_cmd(tube, &fd, right_args);
 			exit(ret);
 		}
 		else /* or recursive call */
@@ -173,12 +143,11 @@ int		run_pipeline(char **cmd_tab, int recursive_call)
 	
 	if (DEBUG)
 		printf("**********PIPE*********\n");
-	if (DEBUG)
-		ft_print_str_tab(cmd_tab, "pipeline");
+	// if (DEBUG)
+	// 	ft_print_str_tab(cmd_tab, "pipeline");
 	left_args = NULL;
 	right_args = NULL;
-	if (!(left_args = format_args(cmd_tab))
-	|| !(right_args = format_args_after_pipe(cmd_tab)))
+	if (!(left_args = format_args(cmd_tab))|| !(right_args = format_args_after_pipe(cmd_tab)))
 		return (0);
 	if (pipe(tube) == -1)
 		return (0);

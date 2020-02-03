@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 08:00:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/03 19:35:43 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void				exit_minishell(char **cmd_tab);
 **	single_execv.c
 */
 
-void				waitpid_and_free_args(pid_t child, int pdes[2],
+void				waitpid_and_free_args(pid_t child, int tube[2],
 					int right_side, char **args);
 void				run_single_execv(char **cmd_tab);
 
@@ -153,7 +153,7 @@ int					find_exec_path(char **cmd_tab, char **exec_path);
 
 int					next_pipe_pos_or_len(char **cmd_tab);
 int					count_pipe(char **cmd_tab);
-int					exit_process(int pdes[2], pid_t child);
+int					exit_process(int tube[2], pid_t child);
 
 /*
 ** srcs/pipeline/. ------------------------------------------------------------
@@ -164,9 +164,9 @@ int					exit_process(int pdes[2], pid_t child);
 */
 
 int					run_builtin_or_execv(char **cmd_tab);
-void				fork_left_cmd(char **cmd_tab, int pdes[2],
+void				fork_left_cmd(char **cmd_tab, int tube[2],
 					char **left_args);
-void				fork_right_cmd(char **cmd_tab, int pdes[2],
+void				fork_right_cmd(char **cmd_tab, int tube[2],
 					char **right_args);
 int					run_pipeline(char **cmd_tab, int recursive_call);
 
@@ -178,9 +178,13 @@ int					run_pipeline(char **cmd_tab, int recursive_call);
 **	fd.c
 */
 
-void				set_fd_if_redirection(char **cmd_tab, int *fd);
-void				restore_std_if_redirection(char **cmd_tab, int *fd);
-
+void				set_fd_for_single_cmd(char **cmd_tab, int *fd);
+void				restore_std_for_single_cmd(char **cmd_tab, int *fd);
+void				set_fd_for_left_pipped_cmd(char **cmd_tab, int tube[2], int *fd, char **args);
+void				restore_std_for_left_pipped_cmd(int tube[2], int *fd, char **args);
+void				set_fd_for_right_pipped_cmd(char **cmd_tab, int tube[2], int *fd, char **args);
+void				restore_std_for_right_pipped_cmd(int tube[2], int *fd, char **args);
+void				read_fd(void);
 /*
 **	args.c
 */

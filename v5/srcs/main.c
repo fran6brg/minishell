@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 08:02:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/03 19:17:37 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,5 +166,7 @@ int		main(int argc, char **argv, char **env_tab)
 ** ** SIGQUIT ctrl backslash -> todo : quit without displaying new prompt (right behaviour)
 
 ** env | sort | abc (abc qui ne correspond a rien)
+
+** ft_printf("minishell: command not found : %s\n", cmd_tab[0]); trop restrictif
 
 */

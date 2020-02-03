@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:41:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 07:42:45 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/03 19:33:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,16 +98,20 @@ int	get_fd(char **args)
 
 	i = 0;
 	fd = -1;
-	while (args[i])
+	while (args[i] && args[i][0] != '|')
 	{
 		if (args[i][0] == '>')
 		{
+			if (DEBUG)
+				printf("GET FD : open file O_WRONLY > -%s-\n", args[i + 1]);
 			fd = open(args[i + 1], O_CREAT | O_WRONLY
 			| (args[i][1] == '>' ? O_APPEND : O_TRUNC), 0777);
 			return (fd);
 		}
 		else if (args[i][0] == '<')
 		{
+			if (DEBUG)
+				printf("GET FD : open file O_RDONLY > -%s-\n", args[i + 1]);
 			fd = open(args[i + 1], O_RDONLY, 0777);
 			return (fd);
 		}
