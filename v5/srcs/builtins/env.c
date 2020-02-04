@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 08:02:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 11:15:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ char	*var_value(char *name)
 	char	*trim;
 	t_env	*var;
 
-	if (name[0] != '$')
-		return (NULL);
 	trim = NULL;
 	if (!(trim = ft_strtrim_set(name, "$()")))
 		return (0);
@@ -38,7 +36,7 @@ char	*var_value(char *name)
 		{
 			ft_strdel(&trim);
 			return (var->value);
-		}
+		}			
 		var = var->next;
 	}
 	ft_strdel(&trim);

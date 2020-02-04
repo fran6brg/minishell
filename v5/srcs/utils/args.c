@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:27:04 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 08:31:12 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 09:55:17 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int		nb_args_wo_offset(char **cmd_tab)
 			offset++;
 		i++;
 	}
-	if (DEBUG)
-		printf("nb_args_wo_offset = %d\n", i - offset);
+	// if (DEBUG)
+	// 	printf("nb_args_wo_offset = %d\n", i - offset);
 	return (i - offset);
 }
 
