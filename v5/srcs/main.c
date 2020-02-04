@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 14:16:54 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 15:13:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,10 @@ int		main(int argc, char **argv, char **env_tab)
 	{
 		listen_sig();
 		put_prompt();
-		if (!get_next_line(STDIN_FILENO, &line) || parse_error(line))
+		if (!get_next_line(STDIN_FILENO, &line))
 			free_and_exit(EXIT_FAILURE, NULL);
+		else if (parse_error(line))
+			;
 		else
 		{
 			if (!(cmds = ft_split_cmds(line, ";")))
@@ -173,7 +175,5 @@ int		main(int argc, char **argv, char **env_tab)
 **bash: syntax error near unexpected token `|'
 
 ** ls | ./minishell
-
-** echo "lol;;"
 
 */

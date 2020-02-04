@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:48:45 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 14:49:09 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 14:58:37 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	pattern_isnt_in_quotes(char *line, char *pattern)
 
 	i = -1;
 	inquotes = 0;
+	lastquote = 0;
 	while (line[++i])
 	{
 		if (!inquotes && ft_str_start_with(line + i, pattern))
@@ -51,13 +52,15 @@ int	pattern_isnt_in_quotes(char *line, char *pattern)
 int	parse_error(char *line)
 {
 	if (ft_strstr(line, ";;") && pattern_isnt_in_quotes(line, ";;"))
-		return (ft_putstr_ret("zsh: parse error near `;;'\n", 1));
+		return (ft_putstr_ret("minishell: parse error near `;;'\n", 1));
 	else if (ft_strstr(line, ">>>") && pattern_isnt_in_quotes(line, ">>>"))
-		return (ft_putstr_ret("zsh: parse error near `>'\n", 1));
+		return (ft_putstr_ret("minishell: parse error near `>'\n", 1));
 	else if (ft_strstr(line, "<<<") && pattern_isnt_in_quotes(line, "<<<"))
-		return (ft_putstr_ret("zsh: parse error near `<'\n", 1));
+		return (ft_putstr_ret("minishell: parse error near `<'\n", 1));
 	else if (ft_str_end_with(line, ">") || ft_str_end_with(line, "<"))
-		return (ft_putstr_ret("zsh: parse error near `\\n'\n", 1));
+		return (ft_putstr_ret("minishell: parse error near `\\n'\n", 1));
+	else if (ft_str_end_with(line, "|"))
+		return (ft_putstr_ret("minishell: syntax error near unexpected token `|'\n", 1));
 	return (0);
 }
 

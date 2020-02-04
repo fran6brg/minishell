@@ -6,9 +6,13 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 14:49:00 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 14:52:20 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+** pattern_isnt_in_quotes()
+*/
 
 #include "../../includes/minishell.h"
 
