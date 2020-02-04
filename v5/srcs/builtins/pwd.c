@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 00:36:06 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 22:41:19 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 08:38:31 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 
 void	builtin_pwd()
 {
-	if (var_value("PWD"))
-		ft_printf("%s\n", var_value("PWD"));
+	if (var_value("$PWD"))
+		ft_printf("%s\n", var_value("$PWD"));
 }

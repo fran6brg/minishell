@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/03 20:20:55 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 08:38:31 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	parse_and_root_cmds(char **cmds)
 	{
 		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i], " \t")))
 			continue ;
+		if (DEBUG)
+			ft_print_str_tab(cmd_tab, "parse_and_root_cmds"); // pour debug
 		replace_dollar_vars(cmd_tab);
 		if (count_pipe(cmd_tab) > 0)
 			run_pipeline(cmd_tab, 0);
@@ -88,7 +90,7 @@ void	put_prompt(void)
 	char	*pwd;
 
 	tmp = NULL;
-	if ((tmp = var_value("PWD")))
+	if ((tmp = var_value("$PWD")))
 	{
 		pwd = NULL;
 		if ((pwd = ft_strrchr(tmp, '/') + 1))
@@ -127,6 +129,8 @@ int		main(int argc, char **argv, char **env_tab)
 		{
 			if (!(cmds = ft_split_cmds(line, ";")))
 				continue ;
+			if (DEBUG)
+				ft_print_str_tab(cmds, "main"); // pour debug
 			parse_and_root_cmds(cmds);
 			free_cmds(line, cmds);
 		}
@@ -169,11 +173,10 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** ft_printf("minishell: command not found : %s\n", cmd_tab[0]); trop restrictif
 
-** echo 123 | echo 456 ; echo 789
-
 ** echo 789 pwd
 
 **echo > | | salut ; | ;
 **bash: syntax error near unexpected token `|'
 
+** echo 789 $(PWD)abc
 */

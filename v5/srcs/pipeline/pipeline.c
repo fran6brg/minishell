@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/03 19:16:54 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 08:46:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,7 @@ int	run_builtin_or_execv(char **cmd_tab)
 	}
 	else
 	{
-		if (DEBUG)
-			printf("BEFORE RET EXECV\n"); // pour debug
 		ret = execv(cmd_tab[0], cmd_tab);
-		if (DEBUG)
-			printf("RET EXECV = %d\n", ret); // pour debug
 		if (ret == -1)
 			return (1);
 	}
@@ -89,7 +85,7 @@ void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
     {
 		if (DEBUG)
 			ft_print_str_tab(left_args, "LEFT : before sending root args"); // pour debug
-		set_fd_for_left_pipped_cmd(cmd_tab, tube, &fd, left_args);
+		set_fd_for_left_pipped_cmd(cmd_tab, tube, &fd);
 		ret = run_builtin_or_execv(left_args);
 		restore_std_for_left_pipped_cmd(tube, &fd, left_args);
 		exit(ret); // apparently useless
@@ -116,7 +112,7 @@ void	fork_right_cmd(char **cmd_tab, int tube[2], char **right_args)
     {
 		if (DEBUG)
 			ft_print_str_tab(right_args, "RIGHT : before sending root args"); // pour debug
-		set_fd_for_right_pipped_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, tube, &fd, right_args);
+		set_fd_for_right_pipped_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, tube, &fd);
 		/* execution of last command */
 		if (count_pipe(cmd_tab) == 1)
 		{
@@ -143,12 +139,12 @@ int		run_pipeline(char **cmd_tab, int recursive_call)
 	
 	if (DEBUG)
 		printf("**********PIPE*********\n");
-	// if (DEBUG)
-	// 	ft_print_str_tab(cmd_tab, "pipeline");
 	left_args = NULL;
 	right_args = NULL;
-	if (!(left_args = format_args(cmd_tab))|| !(right_args = format_args_after_pipe(cmd_tab)))
-		return (0);
+	if (!(left_args = format_args(cmd_tab)))
+		exit(EXIT_FAILURE);
+	if (!(right_args = format_args_after_pipe(cmd_tab)))
+		exit(EXIT_FAILURE);
 	if (pipe(tube) == -1)
 		return (0);
     fork_left_cmd(cmd_tab, tube, left_args);

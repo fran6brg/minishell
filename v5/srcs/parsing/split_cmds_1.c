@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 07:16:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 07:40:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ static int		is_separator_cmds(char *s, int i, char *set)
 {
 	int j;
 
-	if (is_in_quotes(s, i))
-		return (0);
 	j = -1;
 	while (set[++j])
 	{
@@ -37,13 +35,19 @@ static int		nb_new_s_cmds(char *s, char *set)
 	nb = 0;
 	flag = 1;
 	while (s[++i])
-		if (is_separator_cmds(s, i, set))
+	{
+		// printf("s[%d] = %c\n", i, s[i]);
+		if (is_separator_cmds(s, i, set) && !is_in_quotes(s, i))
+		{
+			// printf("SEPARATOR | s[%d] = %c\n", i, s[i]);
 			flag = 1;
+		}
 		else if (flag)
 		{
 			flag = 0;
 			nb++;
 		}
+	}
 	return (nb);
 }
 

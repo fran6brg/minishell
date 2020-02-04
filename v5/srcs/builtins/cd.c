@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/19 04:11:54 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 08:38:31 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,23 +116,23 @@ void	print_cd_error(int nb_arg, char **cmd_tab)
 void		get_destination(char **cmd_tab, char **dest)
 {
 	if (!cmd_tab[1])
-		*dest = var_value("HOME");
+		*dest = var_value("$HOME");
 	else if (cmd_tab[1][0] == '-' && !cmd_tab[1][1])
 	{
-		*dest = var_value("OLDPWD");
-		ft_printf("%s\n", var_value("OLDPWD"));
+		*dest = var_value("$OLDPWD");
+		ft_printf("%s\n", var_value("$OLDPWD"));
 	}
 	else if (cmd_tab[1][0] == '-' && cmd_tab[1][1] == '/')
 	{
-		*dest = ft_strjoin(var_value("OLDPWD"), cmd_tab[1] + 1);
-		ft_printf("%s\n", var_value("OLDPWD"));
+		*dest = ft_strjoin(var_value("$OLDPWD"), cmd_tab[1] + 1);
+		ft_printf("%s\n", var_value("$OLDPWD"));
 	}
 	else if (cmd_tab[1][0] == '~' && !cmd_tab[1][1])
-		*dest = var_value("HOME");
+		*dest = var_value("$HOME");
 	else if (cmd_tab[1][0] == '~' && cmd_tab[1][1] == '/')
-		*dest = ft_strjoin(var_value("HOME"), cmd_tab[1] + 1);
+		*dest = ft_strjoin(var_value("$HOME"), cmd_tab[1] + 1);
 	else if (ft_str_start_with(cmd_tab[1], "$HOME"))
-		*dest = var_value("HOME");
+		*dest = var_value("$HOME");
 	else
 		*dest = cmd_tab[1];
 	// printf("*dest = %s\n", *dest);

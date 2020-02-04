@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 03:26:16 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/03 19:33:37 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 07:15:26 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,13 @@ void	restore_std_for_single_cmd(char **cmd_tab, int *fd)
 ** set_fd_for_left_pipped_cmd()
 */
 
-void	set_fd_for_left_pipped_cmd(char **cmd_tab, int tube[2], int *fd, char **args)
+void	set_fd_for_left_pipped_cmd(char **cmd_tab, int tube[2], int *fd)
 {
-	if (DEBUG)
-		ft_print_str_tab(args, "set_fd_for_left_pipped_cmd"); // pour debug
 	// close(tube[READ]);
-	// if ((*fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 	if ((*fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab))
 	{
 		dup2(*fd, STDOUT_FILENO);
 	}
-	// else if (*fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 	else if (*fd != -1 && left_redirected_cmd(cmd_tab))
 	{
 		dup2(*fd, STDIN_FILENO);
@@ -93,23 +89,16 @@ void	restore_std_for_left_pipped_cmd(int tube[2], int *fd, char **args)
 ** set_fd_for_right_pipped_cmd()
 */
 
-void	set_fd_for_right_pipped_cmd(char **cmd_tab, int tube[2], int *fd, char **args)
+void	set_fd_for_right_pipped_cmd(char **cmd_tab, int tube[2], int *fd)
 {
-	if (DEBUG)
-		ft_print_str_tab(args, "set_fd_for_right_pipped_cmd"); // pour debug
-	// if ((*fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
+	// if (DEBUG)
+	// 	ft_print_str_tab(args, "set_fd_for_right_pipped_cmd"); // pour debug
 	if ((*fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab))
 	{
-		if (DEBUG)
-			printf("before RIGHT dup2 fd = %d\n", *fd);
 		close(tube[WRITE]); // ok: on close le write car il sert a rien ici
-		// read_fd();
 		dup2(tube[READ], STDIN_FILENO); // ok: avec dup2 le stdin de right est le stdout de left child
 		dup2(*fd, STDOUT_FILENO); // ici il y a un pb ... ? pourtant ecrire sur stdout revient desormais a ecrire sur fd
-		if (DEBUG)
-			printf("after RIGHT dup2 fd = %d\n", *fd);
 	}
-	// else if (*fd != -1 && left_redirected_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1))
 	else if (*fd != -1 && left_redirected_cmd(cmd_tab))
 	{
 		close(tube[WRITE]); // ok: on close le write car il sert a rien ici

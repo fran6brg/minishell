@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/01 05:34:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 08:02:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_env	*g_env;
 **
 ** get value for var name
 ** ft_strequci ci = case insensitive
-** pour opti je test d'abord sans trim ce qui évite un malloc
 */
 
 char	*var_value(char *name)
@@ -27,20 +26,15 @@ char	*var_value(char *name)
 	char	*trim;
 	t_env	*var;
 
-	var = g_env;
-	while (var)
-	{
-		if (ft_strequci(var->name, name))
-			return (var->value);
-		var = var->next;
-	}
+	if (name[0] != '$')
+		return (NULL);
 	trim = NULL;
 	if (!(trim = ft_strtrim_set(name, "$()")))
 		return (0);
 	var = g_env;
 	while (var)
 	{
-		if (ft_strequci(var->name, trim))
+		if (ft_strequ(var->name, trim))
 		{
 			ft_strdel(&trim);
 			return (var->value);

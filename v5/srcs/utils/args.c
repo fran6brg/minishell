@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:27:04 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/03 19:12:42 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 08:31:12 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	**format_args(char **cmd_tab)
 		if (i == 0)
 		{
 			if (DEBUG)
-				printf("inside i == 0 | find_exec_path(cmd_tab, left_args) = %d\n", find_exec_path(cmd_tab, left_args));
+				ft_print_str_tab(cmd_tab, "LEFT TEST EXEC");
 			left_args[0] = NULL;
 			if (cmd_is_builtin(cmd_tab))
 				left_args[i] = ft_strdup(cmd_tab[i]);
@@ -103,6 +103,8 @@ char	**format_args_after_pipe(char **cmd_tab)
 	{
 		if (j == i)
 		{
+			if (DEBUG)
+				ft_print_str_tab(cmd_tab + j, "RIGHT TEST EXEC");
 			right_args[0] = NULL;
 			if (cmd_is_builtin(cmd_tab + j))
 				right_args[j - i] = ft_strdup(cmd_tab[j]);

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 03:16:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/03 19:17:17 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 08:40:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int		find_exec_path(char **cmd_tab, char **exec_path)
 	int 	i;
 	char	**tab;
 
-	// if (DEBUG)
-	// 	printf("INSIDE find_exec_path\n"); // pour debug
+	if (DEBUG)
+		printf("INSIDE find_exec_path cmd_tab[0] = %s\n", cmd_tab[0]); // pour debug
 	if (path_to_exec_is_valid(cmd_tab[0]))
 	{
 		// if (DEBUG)
@@ -72,20 +72,20 @@ int		find_exec_path(char **cmd_tab, char **exec_path)
 		*exec_path = ft_strdup(cmd_tab[0]);
 		return (1);
 	}
-	else if (!var_value("PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
+	else if (!var_value("$PATH") || ft_str_start_with(cmd_tab[0], "/bin/"))
 	{
 		// if (DEBUG)
 		// 	printf("!var_value(PATH)\n"); // pour debug
 		*exec_path = ft_strdup(cmd_tab[0]);
 		if (!path_to_exec_is_valid(*exec_path))
 		{
-			ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
+			ft_printf("minishell: %s: command not found\n", cmd_tab[0]);
 			return (0);
 		}
 		return (1);
 	}
 	i = -1;
-	tab = ft_split(var_value("PATH"), ':');
+	tab = ft_split(var_value("$PATH"), ':');
 	while (tab[++i])
 	{
 		if (!(*exec_path = ft_strjoin_ter(tab[i], "/", cmd_tab[0])))
@@ -95,6 +95,6 @@ int		find_exec_path(char **cmd_tab, char **exec_path)
 		ft_strdel(exec_path);
 	}
 	ft_free_str_tab(tab);
-	ft_printf("minishell: command not found : %s\n", cmd_tab[0]);
+	ft_printf("minishell: %s: command not found\n", cmd_tab[0]);
 	return (0);
 }
