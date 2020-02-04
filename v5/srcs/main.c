@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 08:50:36 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 14:16:54 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,6 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** remove # include <stdio.h> in .h
 
-** ls -la | cat -e | sort > filename ne fonctionne pas
-
 ** comprendre le pb 'Uninitialised value was created by a heap allocation' avec 'make re && valgrind --leak-check=full --track-origins=yes ./minishell'
 
 ** norme
@@ -174,5 +172,8 @@ int		main(int argc, char **argv, char **env_tab)
 **echo > | | salut ; | ;
 **bash: syntax error near unexpected token `|'
 
-** echo 789 $(PWD)abc
+** ls | ./minishell
+
+** echo "lol;;"
+
 */

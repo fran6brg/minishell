@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 07:40:59 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 14:35:02 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,9 @@ static int		nb_new_s_cmds(char *s, char *set)
 	flag = 1;
 	while (s[++i])
 	{
-		// printf("s[%d] = %c\n", i, s[i]);
+		// printf("s[%d] = %c | %d\n", i, s[i], is_in_quotes(s, i));
 		if (is_separator_cmds(s, i, set) && !is_in_quotes(s, i))
-		{
-			// printf("SEPARATOR | s[%d] = %c\n", i, s[i]);
 			flag = 1;
-		}
 		else if (flag)
 		{
 			flag = 0;
@@ -57,12 +54,12 @@ static char		*ft_create_new_s(char *s, char *set)
 	char	*new_s;
 
 	i = 0;
-	while (s[i] && !(is_separator_cmds(s, i, set)))
+	while (s[i] && !(is_separator_cmds(s, i, set) && !is_in_quotes(s, i)))
 		i++;
 	if (!(new_s = malloc(sizeof(char) * (i + 1))))
 		return ((char *)NULL);
 	i = -1;
-	while (s[++i] && !(is_separator_cmds(s, i, set)))
+	while (s[++i] && !(is_separator_cmds(s, i, set) && !is_in_quotes(s, i)))
 		new_s[i] = s[i];
 	new_s[i] = '\0';
 	return (new_s);
@@ -78,7 +75,7 @@ static int		ft_create_strs_cmds(char **strs, char *s, char *set)
 	str_i = 0;
 	flag = 1;
 	while (s[++i])
-		if (is_separator_cmds(s, i, set))
+		if (is_separator_cmds(s, i, set) && !is_in_quotes(s, i))
 			flag = 1;
 		else if (flag)
 		{

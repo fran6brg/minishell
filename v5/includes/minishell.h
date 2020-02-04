@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 11:14:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/04 13:52:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,6 @@ char				**ft_split_cmds(char *s, char *set);
 **	split_cmds_2.c
 */
 
-int					is_valid_quote_pattern(char *s, int i, int j);
 int					is_in_quotes(char *s, int i);
 
 /*
