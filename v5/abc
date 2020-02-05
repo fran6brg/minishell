@@ -1,0 +1,11 @@
+total 174
+drwxr-xr-x  6 fberger  2018_paris     10 Feb  5 09:16 .
+drwxr-xr-x  6 fberger  2018_paris      6 Feb  5 07:51 ..
+drwxr-xr-x  2 fberger  2018_paris      3 Jan 28 01:29 .vscode
+-rw-r--r--  1 fberger  2018_paris   1955 Feb  1 07:55 Makefile
+-rwxr-xr-x  1 fberger  2018_paris      0 Feb  5 09:16 abc
+drwxr-xr-x  2 fberger  2018_paris      3 Feb  1 06:39 includes
+drwxr-xr-x  2 fberger  2018_paris    205 Feb  4 15:14 libft
+-rwxr-xr-x  1 fberger  2018_paris  69396 Feb  5 09:13 minishell
+drwxr-xr-x  7 fberger  2018_paris     10 Feb  5 09:13 srcs
+-rw-r--r--  1 fberger  2018_paris  14095 Jan 28 01:29 testfile.txt

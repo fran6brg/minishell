@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 15:13:52 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 09:20:21 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** est-ce que le echo < filename (left redirection) existe/est à faire ?
 
-** protection des mallocs ?
+** protection des mallocs
 
 ** mettre certaines fonctions en static pour la forme
 
@@ -163,17 +163,15 @@ int		main(int argc, char **argv, char **env_tab)
 
 ** si on lance ./minishell dans ./minishell il faut que le second ait bien les variables d'env du premier ?
 
-** lister tous les tests qui passent / passent pas, en attendant d'avoir le sujet d'exam
-
-** handle errors ">>>"
-
 ** ** SIGQUIT ctrl backslash -> todo : quit without displaying new prompt (right behaviour)
 
-** ft_printf("minishell: command not found : %s\n", cmd_tab[0]); trop restrictif
-
-**echo > | | salut ; | ;
-**bash: syntax error near unexpected token `|'
-
 ** ls | ./minishell
+
+**echo 123 | 456 ; 789 ok si return 0
+**minishell: 456: command not found 789 ok si return 0
+
+ls -la "|"
+ls: "|": No such file or directory
+** enlever les "" dans les methodes get args
 
 */

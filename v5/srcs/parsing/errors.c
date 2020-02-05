@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:48:45 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/04 14:58:37 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 08:41:43 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ int	pattern_isnt_in_quotes(char *line, char *pattern)
 
 int	parse_error(char *line)
 {
+	if (ft_strlen(line) == 0)
+		return (1);
+	if (ft_strlen(line) == 1 && line[0] == ';')
+		return (ft_putstr_ret("minishell: parse error near `;'\n", 1));
 	if (ft_strstr(line, ";;") && pattern_isnt_in_quotes(line, ";;"))
 		return (ft_putstr_ret("minishell: parse error near `;;'\n", 1));
 	else if (ft_strstr(line, ">>>") && pattern_isnt_in_quotes(line, ">>>"))
