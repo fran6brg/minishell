@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 11:49:42 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 12:05:04 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,9 +180,12 @@ int					run_pipeline(char **cmd_tab, int recursive_call);
 
 void				set_fd_for_single_cmd(char **cmd_tab, int *fd);
 void				restore_std_for_single_cmd(char **cmd_tab, int *fd);
-void				set_fd_for_left_pipped_cmd(char **cmd_tab, int tube[2], int *fd);
-void				set_fd_for_right_pipped_cmd(char **cmd_tab, int tube[2], int *fd);
-void				restore_std_for_pipped_cmd(int tube[2], int *fd, char **args);
+void				set_fd_for_left_pipped_cmd(char **cmd_tab,
+					int tube[2], int *fd);
+void				set_fd_for_right_pipped_cmd(char **cmd_tab,
+					int tube[2], int *fd);
+void				restore_std_for_pipped_cmd(int tube[2],
+					int *fd, char **args);
 void				read_fd(void);
 /*
 **	args.c
