@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 11:11:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 13:36:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ int		run_builtin_or_execv(char **cmd_tab)
 	int ret;
 
 	ret = 0;
-	if (DEBUG)
-		ft_print_str_tab(cmd_tab, "cmd_tab inside root args");
 	if (cmd_is_builtin(cmd_tab))
 	{
 		if (!reach_builtin_funct(cmd_tab))
@@ -82,7 +80,7 @@ void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
 	fd = 0;
 	child_left = fork();
 	if (child_left == -1)
-		exit_process(&tube[2], child_left);
+		exit_process(&tube[2]);
 	else if (child_left == 0)
 	{
 		set_fd_for_left_pipped_cmd(cmd_tab, tube, &fd);
@@ -107,7 +105,7 @@ void	fork_right_cmd(char **cmd_tab, int tube[2], char **right_args)
 	fd = 0;
 	child_right = fork();
 	if (child_right == -1)
-		exit_process(&tube[2], child_right);
+		exit_process(&tube[2]);
 	else if (child_right == 0)
 	{
 		set_fd_for_right_pipped_cmd(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1,

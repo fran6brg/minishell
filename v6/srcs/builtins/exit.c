@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 23:38:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/01/26 01:18:12 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 12:47:53 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ void	exit_minishell(char **cmd_tab)
 {
 	if (count_arg(cmd_tab) > 2)
 		free_and_exit(0, "exit: too many arguments\n");
+	ft_printf("exit\n");
 	free_and_exit(cmd_tab[1] ? ft_atoi(cmd_tab[1]) : EXIT_SUCCESS, NULL);
 }

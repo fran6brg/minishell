@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 10:08:55 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 14:19:47 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	builtin_env(void)
 }
 
 /*
-** builtin_setenv()
+** builtin_export()
 **
 ** ajoute une var d'env
 ** si elle existe déja, la valeur de la variable est modifiée
@@ -75,24 +75,27 @@ void	builtin_env(void)
 ** setenv n'existe pas sur ZSH
 */
 
-int		builtin_setenv(char **cmd_tab)
+int		builtin_export(char **cmd_tab)
 {
-	if (count_arg(cmd_tab) != 3)
+	int		i;
+	char 	*name;
+	char 	*value;
+
+	i = 0;
+	while (cmd_tab[++i])
 	{
-		if (!cmd_tab[1])
-			builtin_env();
-		else
-			ft_printf("error: too %s arguments\n",
-			count_arg(cmd_tab) < 3 ? "few" : "much");
-		return (0);
+		if (cmd_tab[i][0] == '=')
+		{
+			ft_printf("bash: export: `%s': not a valid identifier\n", cmd_tab[i]);
+			return (0);
+		}
+		else if (cmd_tab[i][0] && ft_strchr(cmd_tab[i], '='))
+		{
+			name = ft_substr(cmd_tab[i], 0, ft_next_char_pos(cmd_tab[i], "="));
+			value = ft_substr(cmd_tab[i], ft_next_char_pos(cmd_tab[i], "=") + 1, ft_strlen(cmd_tab[i]));
+			push_back_var(name, value);
+		}
 	}
-	else if (ft_strchr(cmd_tab[1], '='))
-	{
-		ft_printf("error: variable name can not contain '='\n");
-		return (0);
-	}
-	else if (!push_back_var(cmd_tab))
-		return (0);
 	return (1);
 }
 
@@ -114,18 +117,21 @@ void	builtin_unsetenv(char **cmd_tab)
 		while (current)
 		{
 			next = current->next;
-			if (ft_strequ(current->value, cmd_tab[1]))
+			if (ft_strequ(current->name, cmd_tab[1])
+			|| (cmd_tab[1][0] == '$' && ft_strequ(current->name, cmd_tab[1] + 1)))
 			{
 				g_env = (current == g_env) ? next : g_env;
 				previous->next = next;
 				ft_strdel(&current->name);
 				ft_strdel(&current->value);
 				free(current);
+				return ;
 			}
 			previous = current;
 			current = current->next;
 		}
 	}
+	ft_printf("bash: unset: `%s': not a valid identifier\n", cmd_tab[1]);
 }
 
 /*
@@ -136,12 +142,8 @@ void	builtins_env(char **cmd_tab)
 {
 	if (ft_strequci(cmd_tab[0], "env"))
 		builtin_env();
-	else if (ft_strequci(cmd_tab[0], "setenv")
-	|| ft_strequci(cmd_tab[0], "export"))
-	{
-		if (!builtin_setenv(cmd_tab))
-			free_and_exit(0, "error: malloc failed\n");
-	}
+	else if (ft_strequci(cmd_tab[0], "export"))
+		builtin_export(cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "unset"))
 		builtin_unsetenv(cmd_tab);
 }

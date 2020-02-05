@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 10:20:42 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 12:31:08 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	run_single_execv(char **cmd_tab)
 
 	if ((args = format_args(cmd_tab)))
 	{
-		if (DEBUG)
-			ft_print_str_tab(args, "args inside run_single_execv");
 		if ((child = fork()) == -1)
 			exit(EXIT_FAILURE);
 		else if (child == 0)
@@ -59,7 +57,7 @@ void	run_single_execv(char **cmd_tab)
 			set_fd_for_single_cmd(cmd_tab, &fd);
 			ret = execv(args[0], args);
 			if (ret == -1 && !ft_str_start_with(args[0], "./"))
-				ft_printf("minishell: %s: command not found\n", args[0]);
+				;
 			restore_std_for_single_cmd(cmd_tab, &fd);
 			exit(ret == -1 ? EXIT_FAILURE : EXIT_SUCCESS);
 		}

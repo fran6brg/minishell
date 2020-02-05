@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 02:04:17 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 10:13:03 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 12:19:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,9 @@ int		count_pipe(char **cmd_tab)
 ** exit_process(int pdes[2], pid_t child);
 */
 
-int		exit_process(int pdes[2], pid_t child)
+int		exit_process(int pdes[2])
 {
 	close(pdes[READ]);
 	close(pdes[WRITE]);
-	printf("process pid = %d | FORK FAIL\n", child);
 	exit(EXIT_FAILURE);
 }

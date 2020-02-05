@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 10:10:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 13:57:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 int		cmd_is_builtin(char **cmd_tab)
 {
+	if (DEBUG)
+		ft_print_str_tab(cmd_tab, "builtins_env"); // pour debug
 	return ((is_env_var(cmd_tab[0])
 	|| ft_strequci(cmd_tab[0], "echo")
 	|| ft_strequci(cmd_tab[0], "cd")
@@ -49,7 +51,6 @@ int		reach_builtin_funct(char **cmd_tab)
 	else if (ft_strequci(cmd_tab[0], "pwd"))
 		builtin_pwd();
 	else if (ft_strequci(cmd_tab[0], "env")
-	|| ft_strequci(cmd_tab[0], "setenv")
 	|| ft_strequci(cmd_tab[0], "export")
 	|| ft_strequci(cmd_tab[0], "unset"))
 		builtins_env(cmd_tab);

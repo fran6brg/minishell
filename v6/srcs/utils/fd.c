@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 03:26:16 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 11:12:10 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 13:42:32 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,11 @@ void	restore_std_for_single_cmd(char **cmd_tab, int *fd)
 void	set_fd_for_left_pipped_cmd(char **cmd_tab, int tube[2], int *fd)
 {
 	if ((*fd = get_fd(cmd_tab)) != -1 && right_redirected_cmd(cmd_tab))
-	{
 		dup2(*fd, STDOUT_FILENO);
-	}
 	else if (*fd != -1 && left_redirected_cmd(cmd_tab))
-	{
 		dup2(*fd, STDIN_FILENO);
-	}
 	else
-	{
 		dup2(tube[WRITE], STDOUT_FILENO);
-	}
 }
 
 /*

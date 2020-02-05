@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 09:59:42 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 13:02:56 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ void	go_path(char **cmd_tab, char *dest)
 		return ;
 	cmd = ft_strjoin("cd OLDPWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
-	builtin_setenv(cmd_tab_tmp);
+	builtin_export(cmd_tab_tmp);
 	ft_strdel(&cmd);
 	ft_free_str_tab(cmd_tab_tmp);
 	tmp_path = getcwd(buf, PATH_MAX - 1);
 	cmd = ft_strjoin("setenv PWD ", tmp_path);
 	cmd_tab_tmp = ft_split(cmd, ' ');
-	builtin_setenv(cmd_tab_tmp);
+	builtin_export(cmd_tab_tmp);
 	ft_strdel(&cmd);
 	ft_free_str_tab(cmd_tab_tmp);
 }

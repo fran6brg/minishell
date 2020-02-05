@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:13:54 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 11:47:22 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 12:21:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ int	ft_new_str_with_quotes(char *s, char *quote, char **strs, int *str_i)
 
 int	ft_str_with_quotes(char *s, int *i, char **strs, int *str_i)
 {
-	if (PARSE)
-		printf("ft_str_with_quotes | s = -%s-\n", s);
 	if (!ft_new_str_with_quotes(s + *i + 1,
 	s[*i] == '\'' ? "'" : "\"", strs, str_i))
 		return (0);

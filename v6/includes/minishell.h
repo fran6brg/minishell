@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 12:05:04 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 13:55:34 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 # include "../libft/libft.h"
 # include <sys/types.h>
 # include <sys/stat.h>
-# include <stdio.h>
 # include <signal.h>
+# include <stdio.h>
 
 /*
 **	pour debugger
 */
 
 # define PARSE	0
-# define DEBUG	0
+# define DEBUG	1
 
 /*
 **	CONSTANTES
@@ -110,7 +110,7 @@ void				builtin_pwd();
 char				*var_value(char *name);
 void				builtin_env();
 void				builtin_unsetenv(char **cmds);
-int					builtin_setenv(char **cmds);
+int					builtin_export(char **cmds);
 void				builtins_env(char **cmds);
 
 /*
@@ -120,7 +120,7 @@ void				builtins_env(char **cmds);
 int					is_env_var(char *var);
 void				replace_dollar_vars(char **cmd_tab);
 int					is_dollar_env_var(char *var);
-int					push_back_var(char **cmd_tab);
+int					push_back_var(char *name, char *value);
 
 /*
 **	exit.c
@@ -153,7 +153,7 @@ int					find_exec_path(char **cmd_tab, char **exec_path);
 
 int					next_pipe_pos_or_len(char **cmd_tab);
 int					count_pipe(char **cmd_tab);
-int					exit_process(int tube[2], pid_t child);
+int					exit_process(int tube[2]);
 
 /*
 ** srcs/pipeline/. ------------------------------------------------------------
