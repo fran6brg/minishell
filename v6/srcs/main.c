@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 13:59:02 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 16:03:20 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ void	parse_and_root_cmds(char **cmds)
 	{
 		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i])))
 			continue ;
-		if (DEBUG)
-			ft_print_str_tab(cmd_tab, "parse_and_root_cmds"); // pour debug
 		replace_dollar_vars(cmd_tab);
 		if (count_pipe(cmd_tab) > 0)
 			run_pipeline(cmd_tab, 0);

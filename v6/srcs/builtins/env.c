@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 14:19:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 15:53:01 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,21 +78,23 @@ void	builtin_env(void)
 int		builtin_export(char **cmd_tab)
 {
 	int		i;
-	char 	*name;
-	char 	*value;
+	char	*name;
+	char	*value;
 
 	i = 0;
 	while (cmd_tab[++i])
 	{
 		if (cmd_tab[i][0] == '=')
 		{
-			ft_printf("bash: export: `%s': not a valid identifier\n", cmd_tab[i]);
+			ft_printf("bash: export: `%s': not a valid identifier\n",
+			cmd_tab[i]);
 			return (0);
 		}
 		else if (cmd_tab[i][0] && ft_strchr(cmd_tab[i], '='))
 		{
 			name = ft_substr(cmd_tab[i], 0, ft_next_char_pos(cmd_tab[i], "="));
-			value = ft_substr(cmd_tab[i], ft_next_char_pos(cmd_tab[i], "=") + 1, ft_strlen(cmd_tab[i]));
+			value = ft_substr(cmd_tab[i],
+			ft_next_char_pos(cmd_tab[i], "=") + 1, ft_strlen(cmd_tab[i]));
 			push_back_var(name, value);
 		}
 	}
@@ -106,32 +108,17 @@ int		builtin_export(char **cmd_tab)
 
 void	builtin_unsetenv(char **cmd_tab)
 {
-	t_env	*previous;
-	t_env	*current;
-	t_env	*next;
+	int		i;
 
-	if (count_arg(cmd_tab) == 2)
+	i = 0;
+	while (cmd_tab[++i])
 	{
-		current = g_env;
-		previous = g_env;
-		while (current)
-		{
-			next = current->next;
-			if (ft_strequ(current->name, cmd_tab[1])
-			|| (cmd_tab[1][0] == '$' && ft_strequ(current->name, cmd_tab[1] + 1)))
-			{
-				g_env = (current == g_env) ? next : g_env;
-				previous->next = next;
-				ft_strdel(&current->name);
-				ft_strdel(&current->value);
-				free(current);
-				return ;
-			}
-			previous = current;
-			current = current->next;
-		}
+		if (ft_strchr(cmd_tab[i], '='))
+			ft_printf("bash: unset: `%s': not a valid identifier\n",
+			cmd_tab[i]);
+		else
+			remove_var(cmd_tab[i]);
 	}
-	ft_printf("bash: unset: `%s': not a valid identifier\n", cmd_tab[1]);
 }
 
 /*

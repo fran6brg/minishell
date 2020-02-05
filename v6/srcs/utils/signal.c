@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 17:34:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 11:13:18 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 16:06:52 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	put_nl_and_prompt(int signum)
 {
 	(void)signum;
 	ft_putchar('\n');
-	put_prompt();
 }
 
 /*

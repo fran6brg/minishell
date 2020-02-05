@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 12:02:08 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 15:47:53 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ void	builtin_echo(char **cmd_tab)
 				continue ;
 			if (i > 1 && !is_n_option(i - 1, args))
 				write(1, " ", 1);
-			if (is_env_var(args[i]))
-				ft_putstr(var_value(args[i] + 1));
-			else
-				write(1, args[i], ft_strlen(args[i]));
+			write(1, args[i], ft_strlen(args[i]));
 		}
 		write(1, "\n", no_option_n(args));
 		ft_free_str_tab(args);

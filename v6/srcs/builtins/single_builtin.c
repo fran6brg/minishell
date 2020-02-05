@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 13:57:18 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 15:51:32 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 
 int		cmd_is_builtin(char **cmd_tab)
 {
-	if (DEBUG)
-		ft_print_str_tab(cmd_tab, "builtins_env"); // pour debug
 	return ((is_env_var(cmd_tab[0])
 	|| ft_strequci(cmd_tab[0], "echo")
 	|| ft_strequci(cmd_tab[0], "cd")
@@ -67,6 +65,8 @@ int		run_single_builtin(char **cmd_tab)
 {
 	int		fd;
 
+	fd = get_fd(cmd_tab);
+	set_fd_for_single_cmd(cmd_tab, &fd);
 	reach_builtin_funct(cmd_tab);
 	restore_std_for_single_cmd(cmd_tab, &fd);
 	return (1);

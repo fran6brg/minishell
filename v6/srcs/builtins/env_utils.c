@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 14:09:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 15:51:11 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	replace_dollar_vars(char **cmd_tab)
 	i = 0;
 	while (!ft_strequ(cmd_tab[0], "unset") && cmd_tab[++i])
 	{
+		if (!ft_strchr(cmd_tab[i], '$'))
+			continue;
 		start = ft_next_char_pos(cmd_tab[i], "$");
 		start += cmd_tab[i][start + 1] == '(' ? 2 : 1;
 		end = ft_next_char_pos(cmd_tab[i] + start, ")");
@@ -81,68 +83,31 @@ void	replace_dollar_vars(char **cmd_tab)
 	}
 }
 
-// /*
-// ** push_back_var()
-// **
-// ** self-explained
-// */
-
-// int		push_back_var(char **cmd_tab)
-// {
-// 	t_env	*var;
-// 	t_env	*new;
-
-// 	var = g_env;
-// 	while (var)
-// 	{
-// 		if (ft_strequ(var->name, cmd_tab[1]))
-// 		{
-// 			if (!(var->value = ft_strdup(cmd_tab[2])))
-// 				return (0);
-// 			return (1);
-// 		}
-// 		var = var->next;
-// 	}
-// 	if (!(new = (t_env *)malloc(sizeof(t_env))))
-// 		return (0);
-// 	new->name = ft_strdup(cmd_tab[1]);
-// 	new->value = ft_strdup(cmd_tab[2]);
-// 	new->next = NULL;
-// 	var = g_env;
-// 	while (var->next)
-// 		var = var->next;
-// 	var->next = new;
-// 	return (1);
-// }
-
 /*
 ** push_back_var()
 **
 ** self-explained
 */
 
-int		push_back_var(char *name, char *value)
+void	push_back_var(char *name, char *value)
 {
 	t_env	*var;
 	t_env	*new;
 
 	if (!name)
-		return (0);
-	printf("name = %s\n", name);
-	printf("value = %s\n", value);
+		return ;
 	var = g_env;
 	while (var)
 	{
 		if (ft_strequ(var->name, name))
 		{
-			if (!(var->value = ft_strdup(value)))
-				return (0);
-			return (1);
+			var->value = ft_strdup(value);
+			return ;
 		}
 		var = var->next;
 	}
 	if (!(new = (t_env *)malloc(sizeof(t_env))))
-		return (0);
+		return ;
 	new->name = ft_strdup(name);
 	new->value = ft_strdup(value);
 	new->next = NULL;
@@ -150,5 +115,33 @@ int		push_back_var(char *name, char *value)
 	while (var->next)
 		var = var->next;
 	var->next = new;
-	return (1);
+}
+
+/*
+** remove_var()
+*/
+
+void	remove_var(char *arg)
+{
+	t_env	*previous;
+	t_env	*current;
+	t_env	*next;
+
+	current = g_env;
+	previous = g_env;
+	while (current)
+	{
+		next = current->next;
+		if (ft_strequ(current->name, arg)
+		|| (arg[0] == '$' && ft_strequ(current->name, arg + 1)))
+		{
+			g_env = (current == g_env) ? next : g_env;
+			previous->next = next;
+			ft_strdel(&current->name);
+			ft_strdel(&current->value);
+			free(current);
+		}
+		previous = current;
+		current = current->next;
+	}
 }

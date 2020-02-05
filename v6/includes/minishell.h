@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 13:55:34 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/05 16:09:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,6 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <signal.h>
-# include <stdio.h>
-
-/*
-**	pour debugger
-*/
-
-# define PARSE	0
-# define DEBUG	1
 
 /*
 **	CONSTANTES
@@ -120,7 +112,8 @@ void				builtins_env(char **cmds);
 int					is_env_var(char *var);
 void				replace_dollar_vars(char **cmd_tab);
 int					is_dollar_env_var(char *var);
-int					push_back_var(char *name, char *value);
+void				push_back_var(char *name, char *value);
+void				remove_var(char *arg);
 
 /*
 **	exit.c
