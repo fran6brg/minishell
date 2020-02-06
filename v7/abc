@@ -1,12 +1,25 @@
-Makefile$
-abc$
-includes$
-libft$
-minishell$
-srcs$
-Makefile$
-abc$
-includes$
-libft$
-minishell$
-srcs$
+
+__________________
+builtin_echo 1
+------------------
+str_tab[0] = -echo-
+str_tab[1] = --
+str_tab[2] = -a-
+str_tab[3] = ->-
+str_tab[4] = -abc-
+__________________
+
+cmd_tab[0] = echo
+cmd_tab[1] = 
+cmd_tab[2] = a
+cmd_tab[3] = >
+cmd_tab[4] = abc
+
+__________________
+builtin_echo 2
+------------------
+str_tab[0] = -echo-
+str_tab[1] = -a-
+__________________
+
+a

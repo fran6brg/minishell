@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:28:06 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 14:32:46 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	builtin_env(void)
 		write(1, "\n", 1);
 		var = var->next;
 	}
-	*get_exit_status() = EXIT_SUCCESS;;
+	*last_cmd_exit() = EXIT_SUCCESS;;
 }
 
 /*
@@ -89,7 +89,7 @@ int		builtin_export(char **cmd_tab)
 		{
 			ft_printf("minishell: export: `%s': not a valid identifier\n",
 			cmd_tab[i]);
-			*get_exit_status() = EXIT_FAILURE;
+			*last_cmd_exit() = EXIT_FAILURE;
 			return (0);
 		}
 		else if (cmd_tab[i][0] && ft_strchr(cmd_tab[i], '='))
@@ -100,7 +100,7 @@ int		builtin_export(char **cmd_tab)
 			push_back_var(name, value);
 		}
 	}
-	*get_exit_status() = EXIT_SUCCESS;;
+	*last_cmd_exit() = EXIT_SUCCESS;;
 	return (1);
 }
 
@@ -120,12 +120,12 @@ void	builtin_unsetenv(char **cmd_tab)
 		{
 			ft_printf("minishell: unset: `%s': not a valid identifier\n",
 			cmd_tab[i]);
-			*get_exit_status() = EXIT_FAILURE;
+			*last_cmd_exit() = EXIT_FAILURE;
 		}
 		else
 		{
 			remove_var(cmd_tab[i]);
-			*get_exit_status() = EXIT_SUCCESS;;
+			*last_cmd_exit() = EXIT_SUCCESS;;
 		}
 	}
 }

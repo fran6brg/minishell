@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 23:38:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 11:45:08 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 15:55:50 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ int		replace_by_status(char **cmd_tab, int i)
 	if (ft_strequ(cmd_tab[i], "$?"))
 	{
 		ft_strdel(&cmd_tab[i]);
-		cmd_tab[i] = ft_strdup(ft_itoa(*get_exit_status()));
+		cmd_tab[i] = ft_itoa(*last_cmd_exit());
 		return (1);
 	}
 	return (0);
 }
 
 /*
-** get_exit_status()
+** last_cmd_exit()
 */
 
-int		*get_exit_status(void)
+int		*last_cmd_exit(void)
 {
 	static int status;
 

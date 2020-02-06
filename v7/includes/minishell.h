@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:45:58 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 18:07:53 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 # include <stdio.h>
 # define PARSE	1
-# define DEBUG	0
+# define DEBUG	1
 
 
 /*
@@ -129,7 +129,7 @@ void				remove_var(char *arg);
 */
 
 int					replace_by_status(char **cmd_tab, int i);
-int					*get_exit_status(void);
+int					*last_cmd_exit(void);
 void				exit_minishell(char **cmd_tab);
 
 /*
@@ -149,8 +149,8 @@ void				run_single_execv(char **cmd_tab);
 */
 
 int					path_to_exec_is_valid(char *tested_path);
-int					command_not_found_ret(char **cmd_tab);
-int					find_exec_path(char **cmd_tab, char **exec_path);
+int					command_not_found_ret(char **cmd_tab, int side);
+int					find_exec_path(char **cmd_tab, char **exec_path, int side);
 
 /*
 **	exec_utils.c
@@ -204,6 +204,7 @@ char				**format_args_after_pipe(char **cmd_tab);
 **	signal.c
 */
 
+int					*shell_is_running_cmd(void);
 void				put_nl_and_prompt(int signum);
 void				put_nothing(int signum);
 void				listen_sig(void);
@@ -254,10 +255,10 @@ int					multilines(char *s);
 */
 
 int					is_separator(char c);
-char				**ft_split_set_quotes_chevrons(char *s);
+char				**ft_split_set_quotes_redirects(char *s);
 int					ft_new_str_with_quotes(char *s, char *quote,
 					char **strs, int *str_i);
-int					ft_new_str_chevron(char *s, char *quote,
+int					ft_new_str_redirect(char *s, char *quote,
 					char **strs, int *str_i);
 // int					ft_new_str(char *s, char **strs, int *str_i);
 int					ft_new_str(char *s, int *i, char **strs, int *str_i);
@@ -277,7 +278,7 @@ int					nb_new_s(char *s);
 
 int					ft_str_with_quotes(char *s, int *i, char **strs,
 					int *str_i);
-int					ft_str_with_chevron(char *s, int *i, char **strs,
+int					ft_str_with_redirect(char *s, int *i, char **strs,
 					int *str_i);
 int					ft_create_strs(char *s, char **strs, int *str_i);
 

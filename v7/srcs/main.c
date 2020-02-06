@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 10:26:10 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 18:06:44 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	parse_and_root_cmds(char **cmds)
 	i = -1;
 	while (cmds[++i])
 	{
-		if (!(cmd_tab = ft_split_set_quotes_chevrons(cmds[i])))
+		if (!(cmd_tab = ft_split_set_quotes_redirects(cmds[i])))
 			continue ;
 		if (DEBUG)
 			ft_print_str_tab(cmd_tab, "parse_and_root_cmds | BEFORE REPLACE"); // pour debug
@@ -74,6 +74,8 @@ void	parse_and_root_cmds(char **cmds)
 			run_single_builtin(cmd_tab);
 		else if (cmd_tab[0])
 			run_single_execv(cmd_tab);
+		if (DEBUG)
+			ft_putstr("ok final\n");
 		ft_free_str_tab(cmd_tab);
 	}
 }
@@ -121,9 +123,10 @@ int		main(int argc, char **argv, char **env_tab)
 	(void)argv[argc];
 	if (!store_env(env_tab))
 		return (0);
+	listen_sig();
 	while (42)
 	{
-		listen_sig();
+		*shell_is_running_cmd() = 0;
 		put_prompt();
 		if (!get_next_line(STDIN_FILENO, &line))
 			free_and_exit(EXIT_FAILURE, NULL);
@@ -131,6 +134,7 @@ int		main(int argc, char **argv, char **env_tab)
 			;
 		else
 		{
+			*shell_is_running_cmd() = 1;
 			if (!(cmds = ft_split_cmds(line, ";")))
 				continue ;
 			parse_and_root_cmds(cmds);

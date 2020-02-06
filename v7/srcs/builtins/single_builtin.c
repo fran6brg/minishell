@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:28:02 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 18:08:06 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		reach_builtin_funct(char **cmd_tab)
 	if (is_env_var(cmd_tab[0]))
 	{
 		ft_printf("%s\n", var_value(cmd_tab[0]));
-		*get_exit_status() = EXIT_SUCCESS;;
+		*last_cmd_exit() = EXIT_SUCCESS;;
 	}
 	else if (ft_strequci(cmd_tab[0], "echo"))
 		builtin_echo(cmd_tab);
@@ -68,9 +68,15 @@ int		run_single_builtin(char **cmd_tab)
 {
 	int		fd;
 
+	if (DEBUG)
+		ft_putstr("ok deb built\n");
 	fd = get_fd(cmd_tab);
+	if (DEBUG)
+		ft_print_str_tab(cmd_tab, "run_single_builtin"); // pour debug
 	set_fd_for_single_cmd(cmd_tab, &fd);
 	reach_builtin_funct(cmd_tab);
 	restore_std_for_single_cmd(cmd_tab, &fd);
+	if (DEBUG)
+		ft_putstr("ok fin built\n");
 	return (1);
 }

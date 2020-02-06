@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:41:10 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:57:11 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 17:07:38 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ void	ft_inc_to_end_of_word(int *i, char *s)
 }
 
 /*
-** ft_count_chevron_and_filename()
+** ft_count_redirection()
 ** 	if (j > 0)
 **      *nb += 1; // filename
 */
 
-void	ft_count_chevron_and_filename(int *nb, int *i, char *s)
+void	ft_count_redirection(int *nb, int *i, char *s)
 {
 	int j;
 
@@ -73,8 +73,8 @@ int		nb_new_s(char *s)
 			printf(">> nb_new_s | s[%d] = %c | nb = %d\n", i, s[i], nb); // pour debug
 		if ((s[i] == '\'' || s[i] == '"') && !(flag = 0) && nb++ > 0)
 			ft_inc_to_closing_quote(&i, s);
-		else if ((s[i] == '>' || s[i] == '<') && !(flag = 0) && nb++ > 0)
-			ft_count_chevron_and_filename(&nb, &i, s);
+		else if ((s[i] == '>' || s[i] == '<') && !(flag = 0))
+			ft_count_redirection(&nb, &i, s);
 		else if (s[i] == '|' && (flag = 1))
 			nb++;
 		else if (is_separator(s[i]))

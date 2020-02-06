@@ -1,0 +1,17 @@
+
+__________________
+builtin_echo 1
+------------------
+str_tab[0] = -echo-
+str_tab[1] = --
+str_tab[2] = -a-
+str_tab[3] = -b-
+str_tab[4] = -c-
+str_tab[5] = -de-
+str_tab[6] = -djfnvslerkv-
+str_tab[7] = -rjfnfksjnv-
+str_tab[8] = ->-
+str_tab[9] = -abco-
+__________________
+
+b c de djfnvslerkv rjfnfksjnv

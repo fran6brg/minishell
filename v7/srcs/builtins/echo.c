@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 11:51:31 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 18:06:56 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,17 @@ void	builtin_echo(char **cmd_tab)
 		write(1, "\n", 1);
 	else
 	{
+		if (DEBUG)
+			ft_print_str_tab(cmd_tab, "builtin_echo 1"); // pour debug
 		args = format_args(cmd_tab);
+		if (DEBUG)
+			ft_print_str_tab(args, "builtin_echo 2"); // pour debug
 		i = 0;
 		while (args[++i])
 		{
-			if (is_n_option(i, args))
+			// if (DEBUG)
+			// 	printf("args[i] = %s\n", args[i]); // pour debug
+			if (ft_strlen(args[i]) == 0 || is_n_option(i, args))
 				continue ;
 			if (i > 1 && !is_n_option(i - 1, args))
 				write(1, " ", 1);
@@ -45,5 +51,5 @@ void	builtin_echo(char **cmd_tab)
 		write(1, "\n", no_option_n(args));
 		ft_free_str_tab(args);
 	}
-	*get_exit_status() = EXIT_SUCCESS;;
+	*last_cmd_exit() = EXIT_SUCCESS;;
 }

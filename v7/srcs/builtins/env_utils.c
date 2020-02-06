@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:31:17 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 17:44:15 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,25 @@ void	concat_and_replace(char **arg, int start, char *parsed_name, int end)
 	char	*tmp;
 	char	*suffix;
 
-	if (!(prefix = ft_substr(*arg, 0, ft_next_char_pos(*arg, "\"$")))
-	|| !(tmp = ft_strdup(var_value(parsed_name)))
-	|| !(suffix = ft_substr(*arg, start + end + 1, ft_strlen(*arg))))
-		return ;
-	ft_strdel(arg);
-	if (DEBUG)
-		printf("prefix = %s | tmp = %s | suffix = %s\n", prefix, tmp, suffix); // pour debug
-	*arg = ft_strjoin_ter(prefix, tmp, suffix);
-	ft_strdel(&prefix);
-	ft_strdel(&tmp);
-	ft_strdel(&suffix);
+	if (is_env_var(parsed_name))
+	{
+		if (!(prefix = ft_substr(*arg, 0, ft_next_char_pos(*arg, "\"$")))
+		|| !(tmp = ft_strdup(var_value(parsed_name)))
+		|| !(suffix = ft_substr(*arg, start + end + 1, ft_strlen(*arg))))
+			return ;
+		ft_strdel(arg);
+		*arg = ft_strjoin_ter(prefix, tmp, suffix);
+		ft_strdel(&prefix);
+		ft_strdel(&suffix);
+		ft_strdel(&tmp);
+	}
+	else
+	{
+		ft_strdel(&parsed_name);
+		parsed_name = *arg;
+		ft_strdel(arg);
+		*arg = ft_substr(parsed_name, 0, start - 1);
+	}
 }
 
 /*
@@ -62,7 +70,7 @@ void	replace_dollar_vars(char **cmd_tab)
 	int		i;
 	int		start;
 	int		end;
-	char	*tmp;
+	char	*parsed_name;
 
 	i = 0;
 	replace_by_status(cmd_tab, 0);
@@ -75,16 +83,8 @@ void	replace_dollar_vars(char **cmd_tab)
 		start += cmd_tab[i][start + 1] == '$' ? 1 : 0;
 		start += cmd_tab[i][start + 1] == '(' ? 1 : 0;
 		end = ft_next_char_pos(cmd_tab[i] + start, ")\"");
-		tmp = ft_substr(cmd_tab[i], start, end);
-		if (is_env_var(tmp))
-			concat_and_replace(cmd_tab + i, start, tmp, end);
-		else
-		{
-			ft_strdel(&tmp);
-			tmp = cmd_tab[i];
-			ft_strdel(&cmd_tab[i]);
-			cmd_tab[i] = ft_substr(tmp, 0, start - 1);
-		}
+		parsed_name = ft_substr(cmd_tab[i], start, end);
+		concat_and_replace(cmd_tab + i, start, parsed_name, end);
 	}
 }
 

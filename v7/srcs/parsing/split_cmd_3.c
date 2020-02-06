@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:13:54 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:48:41 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 17:18:12 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,18 @@ int	ft_new_str(char *s, int *i, char **strs, int *str_i)
 	j = *i;
 	if (PARSE)
 		printf("ft_new_strs | s[%d] = %c\n", j, s[j]); // pour debug
-	while (s[j] && !is_separator(s[j]) && s[j] != '>'
-	&& s[j] != '<' && s[j] != '|')
+	while (s[j] && !is_separator(s[j]) && s[j] != '>' && s[j] != '<' && s[j] != '|')
 		j++;
-	if (!(strs[*str_i] = malloc(sizeof(char) * (j + 1))))
+	if (PARSE)
+		printf("ft_new_strs | j = %d | i = %d\n", j, *i); // pour debug
+	if (!(strs[*str_i] = malloc(sizeof(char) * (j - *i + 1))))
 		return (0);
 	j = *i;
 	while (s[j] && !is_separator(s[j]) && s[j] != '>'
 	&& s[j] != '<' && s[j] != '|')
 	{
+		if (PARSE)
+			printf("ft_new_strs LOOP | s[%d] = -%c-\n", j, s[j]); // pour debug
 		strs[*str_i][j - *i] = s[j];
 		j++;
 	}
@@ -94,10 +97,10 @@ int	ft_str_with_quotes(char *s, int *i, char **strs, int *str_i)
 }
 
 /*
-** ft_new_str_chevron()
+** ft_new_str_redirect()
 */
 
-int	ft_new_str_chevron(char *s, char *quote, char **strs, int *str_i)
+int	ft_new_str_redirect(char *s, char *quote, char **strs, int *str_i)
 {
 	if (!(strs[*str_i] = malloc(sizeof(char) *
 	(1 + ((s[0] == '>' && s[1] == '>') ? 1 : 0) + 1))))
@@ -112,12 +115,12 @@ int	ft_new_str_chevron(char *s, char *quote, char **strs, int *str_i)
 }
 
 /*
-** ft_str_with_chevron()
+** ft_str_with_redirect()
 */
 
-int	ft_str_with_chevron(char *s, int *i, char **strs, int *str_i)
+int	ft_str_with_redirect(char *s, int *i, char **strs, int *str_i)
 {
-	if (!ft_new_str_chevron(s + *i, s[*i] == '>' ? ">" : "<", strs, str_i))
+	if (!ft_new_str_redirect(s + *i, s[*i] == '>' ? ">" : "<", strs, str_i))
 		return (0);
 	*i += (s[*i] == '>' && s[*i + 1] == '>' ? 1 : 0) + 1;
 	while (s[*i] && is_separator(s[*i]))

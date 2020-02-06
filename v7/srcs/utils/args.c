@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:27:04 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 11:05:51 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 18:12:21 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		nb_args_wo_offset(char **cmd_tab)
 	while (cmd_tab[i] && cmd_tab[i][0] != '|')
 	{
 		if (ft_strchr("<>", cmd_tab[i][0]) ||
-			(i > 0 && ft_strchr("<>", cmd_tab[i - 1][0])))
+			(i > 0 && (cmd_tab[i - 1][0] && ft_strchr("<>", cmd_tab[i - 1][0]))))
 			offset++;
 		i++;
 	}
@@ -46,16 +46,18 @@ void	parse_cmd_tab_left(char **cmd_tab, int i, char **left_args)
 	offset = 0;
 	while (cmd_tab[++i] && cmd_tab[i][0] != '|')
 	{
+		if (DEBUG)
+			printf("cmd_tab[%d] = %s\n", i, cmd_tab[i]);
 		if (i == 0)
 		{
 			left_args[0] = NULL;
 			if (cmd_is_builtin(cmd_tab))
 				left_args[i] = ft_strdup(cmd_tab[i]);
-			else if (!find_exec_path(cmd_tab, left_args))
+			else if (!find_exec_path(cmd_tab, left_args, 0))
 				return ;
 		}
 		else if (ft_strchr("<>", cmd_tab[i][0]) ||
-			ft_strchr("<>", cmd_tab[i - 1][0]))
+			(cmd_tab[i - 1][0] && ft_strchr("<>", cmd_tab[i - 1][0])))
 			offset++;
 		else
 			left_args[i - offset] = ft_strdup_wo_quotes(cmd_tab[i]);
@@ -98,7 +100,7 @@ void	parse_cmd_tab_right(char **cmd_tab, int j, int i, char **right_args)
 		{
 			if (cmd_is_builtin(cmd_tab + j))
 				right_args[j - i] = ft_strdup(cmd_tab[j]);
-			else if (!find_exec_path(cmd_tab + j, right_args))
+			else if (!find_exec_path(cmd_tab + j, right_args, 1))
 				return ;
 		}
 		else if (ft_strchr("<>", cmd_tab[j][0]) ||

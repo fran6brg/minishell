@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:45:47 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 17:28:50 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		is_separator(char c)
 	int		i;
 	char	*set;
 
-	set = " \t";
+	set = " \t\n";
 	i = -1;
 	while (set[++i])
 	{
@@ -49,7 +49,7 @@ int		ft_create_strs(char *s, char **strs, int *str_i)
 		if ((s[i] == '\'' || s[i] == '"') && !(flag = 0))
 			ft_str_with_quotes(s, &i, strs, str_i);
 		else if ((s[i] == '<' || s[i] == '>') && !(flag = 0))
-			ft_str_with_chevron(s, &i, strs, str_i);
+			ft_str_with_redirect(s, &i, strs, str_i);
 		else if (s[i] == '|')
 		{
 			flag = !is_separator(s[i + 1]);
@@ -71,7 +71,7 @@ int		ft_create_strs(char *s, char **strs, int *str_i)
 ** malloc and returns strs array
 */
 
-char	**ft_split_set_quotes_chevrons(char *s)
+char	**ft_split_set_quotes_redirects(char *s)
 {
 	char	**strs;
 	char	*trim_s;
@@ -84,8 +84,6 @@ char	**ft_split_set_quotes_chevrons(char *s)
 		ft_strdel(&trim_s);
 		return (NULL);
 	}
-	// if (PARSE)
-	// 	printf("nb_new_s(trim_s) = %d | %s", nb_new_s(trim_s), trim_s); // pour debug
 	str_i = 0;
 	if (!ft_create_strs(trim_s, strs, &str_i))
 	{
@@ -96,6 +94,6 @@ char	**ft_split_set_quotes_chevrons(char *s)
 	strs[str_i] = NULL;
 	ft_strdel(&trim_s);
 	if (PARSE)
-		ft_print_str_tab(strs, "ft_split_set_quotes_chevrons | strs"); // pour debug
+		ft_print_str_tab(strs, "ft_split_set_quotes_redirects | strs"); // pour debug
 	return (strs);
 }
