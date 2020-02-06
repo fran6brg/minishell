@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:26:03 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 12:45:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 */
 
 # include <stdio.h>
-# define PARSE	0
+# define PARSE	1
 # define DEBUG	0
 
 

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:41:10 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 10:13:55 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 12:57:11 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_inc_to_closing_quote(int *i, char *s)
 
 void	ft_inc_to_end_of_word(int *i, char *s)
 {
-	*i += ft_next_char_pos(s + *i + 1, " \t");
+	*i += ft_next_char_pos(s + *i + 1, " \t|><");
 }
 
 /*

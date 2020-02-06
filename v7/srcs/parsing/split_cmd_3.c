@@ -6,41 +6,11 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:13:54 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 10:16:11 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 12:48:41 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-** ft_new_str()
-*/
-
-// int	ft_new_str(char *s, char **strs, int *str_i)
-// {
-// 	int		i;
-
-// 	i = 0;
-// 	if (PARSE)
-// 		printf("ft_new_strs | s[%d] = %c\n", i, s[i]); // pour debug
-// 	while (s[i] && !is_separator(s[i]) && s[i] != '>'
-// 	&& s[i] != '<' && s[i] != '|')
-// 		i++;
-// 	if (!(strs[*str_i] = malloc(sizeof(char) * (i + 1))))
-// 		return (0);
-// 	i = 0;
-// 	while (s[i] && !is_separator(s[i]) && s[i] != '>'
-// 	&& s[i] != '<' && s[i] != '|')
-// 	{
-// 		strs[*str_i][i] = s[i];
-// 		i++;
-// 	}
-// 	strs[*str_i][i] = '\0';
-// 	if (PARSE)
-// 		printf("ft_new_strs | strs[%d] = %s\n", *str_i, strs[*str_i]); // pour debug
-// 	*str_i += 1;
-// 	return (1);
-// }
 
 /*
 ** ft_new_str()
