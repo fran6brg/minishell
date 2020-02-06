@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 15:47:53 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 11:51:31 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,5 @@ void	builtin_echo(char **cmd_tab)
 		write(1, "\n", no_option_n(args));
 		ft_free_str_tab(args);
 	}
+	*get_exit_status() = EXIT_SUCCESS;;
 }

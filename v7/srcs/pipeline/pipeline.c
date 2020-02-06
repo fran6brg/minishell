@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 13:36:09 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 11:52:57 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,6 @@ int		run_pipeline(char **cmd_tab, int recursive_call)
 	fork_left_cmd(cmd_tab, tube, left_args);
 	fork_right_cmd(cmd_tab, tube, right_args);
 	if (recursive_call)
-		exit(EXIT_SUCCESS);
+		exit(*get_exit_status());
 	return (1);
 }

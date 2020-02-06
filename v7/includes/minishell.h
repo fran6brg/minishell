@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 10:21:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 11:59:04 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 */
 
 # include <stdio.h>
-# define PARSE	1
-# define DEBUG	1
+# define PARSE	0
+# define DEBUG	0
 
 
 /*
@@ -128,6 +128,8 @@ void				remove_var(char *arg);
 **	exit.c
 */
 
+int					replace_by_status(char **cmd_tab, int i);
+int					*get_exit_status(void);
 void				exit_minishell(char **cmd_tab);
 
 /*
@@ -147,6 +149,7 @@ void				run_single_execv(char **cmd_tab);
 */
 
 int					path_to_exec_is_valid(char *tested_path);
+int					command_not_found_ret(char **cmd_tab);
 int					find_exec_path(char **cmd_tab, char **exec_path);
 
 /*

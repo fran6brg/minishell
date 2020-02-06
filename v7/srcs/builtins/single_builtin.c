@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 15:51:32 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 11:51:31 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ int		cmd_is_builtin(char **cmd_tab)
 int		reach_builtin_funct(char **cmd_tab)
 {
 	if (is_env_var(cmd_tab[0]))
+	{
 		ft_printf("%s\n", var_value(cmd_tab[0]));
+		*get_exit_status() = EXIT_SUCCESS;;
+	}
 	else if (ft_strequci(cmd_tab[0], "echo"))
 		builtin_echo(cmd_tab);
 	else if (ft_strequci(cmd_tab[0], "cd"))

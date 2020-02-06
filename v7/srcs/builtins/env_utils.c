@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 10:35:39 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 12:19:08 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	concat_and_replace(char **arg, int start, char *parsed_name, int end)
 		return ;
 	ft_strdel(arg);
 	if (DEBUG)
-		printf("prefix = %s, | tmp = %s | suffix = %s\n", prefix, tmp, suffix); // pour debug
+		printf("prefix = %s | tmp = %s | suffix = %s\n", prefix, tmp, suffix); // pour debug
 	*arg = ft_strjoin_ter(prefix, tmp, suffix);
 	ft_strdel(&prefix);
 	ft_strdel(&tmp);
@@ -65,17 +65,17 @@ void	replace_dollar_vars(char **cmd_tab)
 	char	*tmp;
 
 	i = 0;
+	replace_by_status(cmd_tab, 0);
 	while (!ft_strequ(cmd_tab[0], "unset") && cmd_tab[++i])
 	{
-		if (!ft_strchr(cmd_tab[i], '$') || ft_strstr(cmd_tab[i], "'$"))
+		if (!ft_strchr(cmd_tab[i], '$') || ft_strstr(cmd_tab[i], "'$")
+		|| replace_by_status(cmd_tab, i))
 			continue;
 		start = ft_next_char_pos(cmd_tab[i], "\"$") + 1;
 		start += cmd_tab[i][start + 1] == '$' ? 1 : 0;
 		start += cmd_tab[i][start + 1] == '(' ? 1 : 0;
 		end = ft_next_char_pos(cmd_tab[i] + start, ")\"");
 		tmp = ft_substr(cmd_tab[i], start, end);
-		if (DEBUG)
-			printf("tmp = %s | is_env_var(tmp) = %d\n", tmp, is_env_var(tmp)); // pour debug
 		if (is_env_var(tmp))
 			concat_and_replace(cmd_tab + i, start, tmp, end);
 		else

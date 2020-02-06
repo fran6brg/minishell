@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 16:10:19 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 12:15:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ void	run_single_execv(char **cmd_tab)
 		{
 			set_fd_for_single_cmd(cmd_tab, &fd);
 			ret = execv(args[0], args);
-			if (ret == -1 && !ft_str_start_with(args[0], "./"))
-				;
 			restore_std_for_single_cmd(cmd_tab, &fd);
-			exit(ret == -1 ? EXIT_FAILURE : EXIT_SUCCESS);
+			exit(ret);
 		}
 		else
 			waitpid_and_free_args(child, NULL, 0, args);

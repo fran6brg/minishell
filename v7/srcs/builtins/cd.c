@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:22 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 13:02:56 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 11:51:32 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int		change_dir(char **cmd_tab, char *dest)
 	int ret;
 
 	if ((ret = chdir(dest)) == 0)
+	{
+		*get_exit_status() = EXIT_SUCCESS;
 		return (1);
+	}
 	else
 	{
 		ft_printf("cd: ");
@@ -44,6 +47,7 @@ int		change_dir(char **cmd_tab, char *dest)
 		else
 			ft_printf("not a directory: ");
 		ft_printf("%s\n", cmd_tab[1] ? cmd_tab[1] : dest);
+		*get_exit_status() = EXIT_FAILURE;
 		return (0);
 	}
 }
@@ -95,6 +99,7 @@ void	print_cd_error(int nb_arg, char **cmd_tab)
 		ft_printf("cd: string not in pwd: %s\n", cmd_tab[1]);
 	else if (nb_arg > 3)
 		ft_printf("cd: too many arguments\n");
+	*get_exit_status() = EXIT_FAILURE;
 }
 
 /*
