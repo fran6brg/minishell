@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 11:59:04 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 12:26:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,7 @@ char				**format_args_after_pipe(char **cmd_tab);
 */
 
 void				put_nl_and_prompt(int signum);
+void				put_nothing(int signum);
 void				listen_sig(void);
 
 /*

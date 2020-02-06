@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 12:19:08 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/06 12:31:17 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	push_back_var(char *name, char *value)
 	{
 		if (ft_strequ(var->name, name))
 		{
+			ft_strdel(&var->value);
 			var->value = ft_strdup(value);
 			return ;
 		}
