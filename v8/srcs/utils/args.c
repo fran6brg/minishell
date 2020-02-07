@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:27:04 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:37:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/07 15:02:14 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void	parse_cmd_tab_left(char **cmd_tab, int i, char **left_args)
 	offset = 0;
 	while (cmd_tab[++i] && cmd_tab[i][0] != '|')
 	{
-		if (DEBUG)
-			printf("cmd_tab[%d] = %s\n", i, cmd_tab[i]);
 		if (i == 0)
 		{
 			left_args[0] = NULL;
