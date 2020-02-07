@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   env_utils_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 17:44:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/07 11:24:05 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	concat_and_replace(char **arg, int start, char *parsed_name, int end)
 		|| !(tmp = ft_strdup(var_value(parsed_name)))
 		|| !(suffix = ft_substr(*arg, start + end + 1, ft_strlen(*arg))))
 			return ;
+		ft_strdel(&parsed_name);
 		ft_strdel(arg);
 		*arg = ft_strjoin_ter(prefix, tmp, suffix);
 		ft_strdel(&prefix);
@@ -108,14 +109,16 @@ void	push_back_var(char *name, char *value)
 		{
 			ft_strdel(&var->value);
 			var->value = ft_strdup(value);
+			ft_strdel(&name);
+			ft_strdel(&value);
 			return ;
 		}
 		var = var->next;
 	}
 	if (!(new = (t_env *)malloc(sizeof(t_env))))
 		return ;
-	new->name = ft_strdup(name);
-	new->value = ft_strdup(value);
+	new->name = name;
+	new->value = value;
 	new->next = NULL;
 	var = g_env;
 	while (var->next)

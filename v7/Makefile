@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/02/05 11:52:01 by fberger          ###   ########.fr        #
+#    Updated: 2020/02/07 10:14:57 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ SRCS 	= 	srcs/main.c \
 			srcs/builtins/echo_utils.c \
 			srcs/builtins/cd.c \
 			srcs/builtins/env.c \
-			srcs/builtins/env_utils.c \
+			srcs/builtins/env_utils_1.c \
+			srcs/builtins/env_utils_2.c \
 			srcs/builtins/pwd.c \
 			srcs/builtins/exit.c \
 			srcs/exec/single_execv.c \

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 18:13:31 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/07 11:14:14 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int					builtin_export(char **cmds);
 void				builtins_env(char **cmds);
 
 /*
-**	env_utils.c
+**	env_utils_1.c
 */
 
 int					is_env_var(char *var);
@@ -123,6 +123,14 @@ void				replace_dollar_vars(char **cmd_tab);
 int					is_dollar_env_var(char *var);
 void				push_back_var(char *name, char *value);
 void				remove_var(char *arg);
+
+/*
+**	env_utils_2.c
+*/
+
+void				swap_sprite_data(t_env *var_j, t_env *var_j_next);
+void				sort_env_var(void);
+void				display_declared_vars(void);
 
 /*
 **	exit.c

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 04:29:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 14:32:46 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/07 09:59:48 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	builtin_env(void)
 		write(1, "\n", 1);
 		var = var->next;
 	}
-	*last_cmd_exit() = EXIT_SUCCESS;;
 }
 
 /*
@@ -100,7 +99,8 @@ int		builtin_export(char **cmd_tab)
 			push_back_var(name, value);
 		}
 	}
-	*last_cmd_exit() = EXIT_SUCCESS;;
+	if (i == 1)
+		display_declared_vars();
 	return (1);
 }
 
@@ -123,10 +123,7 @@ void	builtin_unsetenv(char **cmd_tab)
 			*last_cmd_exit() = EXIT_FAILURE;
 		}
 		else
-		{
 			remove_var(cmd_tab[i]);
-			*last_cmd_exit() = EXIT_SUCCESS;;
-		}
 	}
 }
 
