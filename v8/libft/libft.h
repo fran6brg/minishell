@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/08 12:02:55 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 16:09:19 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,5 +276,16 @@ int						add_nbr_to_output(t_options *option, intmax_t nbr,
 int						add_unbr_to_output(t_options *option, uintmax_t nbr,
 						char *base);
 void					ft_print_output(t_options *option);
+
+/*
+** signals --------------------------------------------------------------------
+*/
+
+#define MVCURSOR_BEGL	"\033[1G"	// Move cursor to beginning of line.
+#define MVCURSOR_LEFT	"\033[1D"	// Move cursor left by # characters.
+#define MVCURSOR_POS	"\033[#;#f"	// Move cursor to specific position. First # is row number, second # is column
+#define CLR_LINE		"\033[2K"	// Clear current line (but don"t move cursor).
+#define CLR_LINE_LEFT	"\033[1K"	// Clear line to the left of current position.
+#define CLR_LINE_RIGHT	"\033[0K"	// Clear line to the right of current position.
 
 #endif

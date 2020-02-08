@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 17:34:25 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:33:23 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 16:10:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,17 @@ void	put_nl_and_prompt(int signum)
 	}
 	else if (signum == SIGQUIT)
 	{
-		ft_putstr("\033[1K");
-		ft_putstr("\r");
-		if (!*shell_is_running_cmd())
-			put_prompt();
+		if (*shell_is_running_cmd())
+		{
+			ft_putstr(CLR_LINE);
+			ft_putstr(MVCURSOR_BEGL);
+		}
+		else
+		{
+			ft_putstr(MVCURSOR_LEFT);
+			ft_putstr(MVCURSOR_LEFT);
+			ft_putstr(CLR_LINE_RIGHT);
+		}		
 	}
 }
 
