@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:37:01 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 14:02:35 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,15 @@ void	builtin_echo(char **cmd_tab)
 		write(1, "\n", 1);
 	else
 	{
-		args = format_args(cmd_tab);
+		args = format_args(cmd_tab, 0);
 		i = 0;
 		while (args[++i])
 		{
+			if (DEBUG)
+				printf("%s is %d\n", args[i], is_n_option(i, args));
 			if (ft_strlen(args[i]) == 0 || is_n_option(i, args))
 				continue ;
-			if (i > 1 && !is_n_option(i - 1, args))
+			else if (i > 1 && !is_n_option(i - 1, args))
 				write(1, " ", 1);
 			write(1, args[i], ft_strlen(args[i]));
 		}

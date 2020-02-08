@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 04:57:46 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 15:42:11 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 13:39:36 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	fork_left_cmd(char **cmd_tab, int tube[2], char **left_args)
 ** fork_right_cmd
 */
 
-void	fork_right_cmd(char **cmd_tab, int tube[2], char **right_args)
+void	fork_right_cmd(char **cmd_tab, int tube[2], char **right_args, int recursive_call)
 {
 	int		fd;
 	pid_t	child_right;
@@ -117,7 +117,7 @@ void	fork_right_cmd(char **cmd_tab, int tube[2], char **right_args)
 			exit(ret);
 		}
 		else
-			run_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, 1);
+			run_pipeline(cmd_tab + next_pipe_pos_or_len(cmd_tab) + 1, recursive_call + 1);
 	}
 	else
 		waitpid_and_free_args(child_right, tube, 1, right_args);
@@ -135,14 +135,14 @@ int		run_pipeline(char **cmd_tab, int recursive_call)
 
 	left_args = NULL;
 	right_args = NULL;
-	if (!(left_args = format_args(cmd_tab)))
+	if (!(left_args = format_args(cmd_tab, count_pipe(cmd_tab) > 1)))
 		return (0);
 	if (!(right_args = format_args_after_pipe(cmd_tab)))
 		return (0);
 	if (pipe(tube) == -1)
 		return (0);
 	fork_left_cmd(cmd_tab, tube, left_args);
-	fork_right_cmd(cmd_tab, tube, right_args);
+	fork_right_cmd(cmd_tab, tube, right_args, recursive_call);
 	if (recursive_call)
 		exit(*last_cmd_exit());
 	return (1);

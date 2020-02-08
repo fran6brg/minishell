@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 23:50:20 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:36:07 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 11:42:50 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,10 @@ char	**ft_split_set_quotes_redirects(char *s)
 		return (NULL);
 	}
 	strs[str_i] = NULL;
+	if (PARSE)
+		printf("nb strs = %d\n", str_i); // pour debug
 	ft_strdel(&trim_s);
+	if (PARSE)
+		ft_print_str_tab(strs, "strs"); // pour debug
 	return (strs);
 }

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 02:55:13 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:34:05 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 13:41:59 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int		run_single_builtin(char **cmd_tab)
 {
 	int		fd;
 
+	if (DEBUG)
+		ft_print_str_tab(cmd_tab, "run_single_builtin > cmd_tab"); // pour debug
 	fd = get_fd(cmd_tab);
 	set_fd_for_single_cmd(cmd_tab, &fd);
 	reach_builtin_funct(cmd_tab);

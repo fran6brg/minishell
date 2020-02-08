@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 10:01:05 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 14:04:58 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,19 @@ int		is_n_option(int i, char **cmd_tab)
 	int	j;
 	int	k;
 
-	if (i == 1 && ft_strequ(cmd_tab[i], "-n"))
-		return (1);
-	else if (i > 1)
+	j = 0;
+	while (++j <= i)
 	{
-		j = 0;
-		while (++j <= i)
+		if (!ft_str_start_with(cmd_tab[j], "-n"))
+			return (0);
+		k = 1;
+		while (cmd_tab[j][++k])
 		{
-			if (!ft_str_start_with(cmd_tab[j], "-n"))
+			if (cmd_tab[j][k] != 'n')
 				return (0);
-			k = 1;
-			while (cmd_tab[j][++k])
-			{
-				if (cmd_tab[j][k] != 'n')
-					return (0);
-			}
 		}
-		return (1);
 	}
-	return (0);
+	return (1);
 }
 
 /*

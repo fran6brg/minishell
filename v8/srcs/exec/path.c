@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 03:16:52 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 15:08:50 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 14:10:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ int		path_to_exec_is_valid(char *tested_path)
 	return (0);
 }
 
-int		command_not_found_ret(char **cmd_tab, int side)
+int		command_not_found_ret(char **cmd_tab, int printnotfound)
 {
-	if (side)
+	if (printnotfound)
 		ft_printf("minishell: %s: command not found\n", cmd_tab[0]);
 	*last_cmd_exit() = 127;
 	return (0);
 }
 
-int		find_exec_path(char **cmd_tab, char **exec_path, int side)
+int		find_exec_path(char **cmd_tab, char **exec_path, int printnotfound)
 {
 	int		i;
 	char	**tab;
@@ -78,18 +78,20 @@ int		find_exec_path(char **cmd_tab, char **exec_path, int side)
 	{
 		*exec_path = ft_strdup(cmd_tab[0]);
 		if (!path_to_exec_is_valid(*exec_path))
-			return (command_not_found_ret(cmd_tab, side));
+			return (command_not_found_ret(cmd_tab, printnotfound));
 		return (1);
 	}
 	tab = ft_split(var_value("$PATH"), ':');
 	while (tab[++i])
 	{
-		if (!(*exec_path = ft_strjoin_ter(tab[i], "/", cmd_tab[0])))
-			return (ft_free_str_tab_ret(tab, 0));
+		*exec_path = ft_strjoin_ter(tab[i], "/", cmd_tab[0]);
 		if (path_to_exec_is_valid(*exec_path))
+		{
+			*last_cmd_exit() = EXIT_SUCCESS;
 			return (ft_free_str_tab_ret(tab, 1));
+		}
 		ft_strdel(exec_path);
 	}
 	ft_free_str_tab(tab);
-	return (command_not_found_ret(cmd_tab, side));
+	return (command_not_found_ret(cmd_tab, printnotfound));
 }

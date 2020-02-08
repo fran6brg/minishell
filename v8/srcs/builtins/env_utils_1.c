@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/19 01:53:31 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:56:44 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 13:56:33 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	concat_and_replace(char **arg, int start, char *parsed_name, int end)
 
 	if (is_env_var(parsed_name))
 	{
+		end -= (arg[0][start + end] == '/') ? 1 : 0;
 		if (!(prefix = ft_substr(*arg, 0, ft_next_char_pos(*arg, "\"$")))
 		|| !(tmp = ft_strdup(var_value(parsed_name)))
 		|| !(suffix = ft_substr(*arg, start + end + 1, ft_strlen(*arg))))
@@ -83,7 +84,7 @@ void	replace_dollar_vars(char **cmd_tab)
 		start = ft_next_char_pos(cmd_tab[i], "\"$") + 1;
 		start += cmd_tab[i][start + 1] == '$' ? 1 : 0;
 		start += cmd_tab[i][start + 1] == '(' ? 1 : 0;
-		end = ft_next_char_pos(cmd_tab[i] + start, ")\"");
+		end = ft_next_char_pos(cmd_tab[i] + start, ")\"/");
 		parsed_name = ft_substr(cmd_tab[i], start, end);
 		concat_and_replace(cmd_tab + i, start, parsed_name, end);
 	}

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:58:30 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 14:05:27 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <signal.h>
+
+/*
+**	pour debugger
+*/
+
+# include <stdio.h>
+# define PARSE	0
+# define DEBUG	0
 
 /*
 **	CONSTANTES
@@ -149,8 +157,8 @@ void				run_single_execv(char **cmd_tab);
 */
 
 int					path_to_exec_is_valid(char *tested_path);
-int					command_not_found_ret(char **cmd_tab, int side);
-int					find_exec_path(char **cmd_tab, char **exec_path, int side);
+int					command_not_found_ret(char **cmd_tab, int printnotfound);
+int					find_exec_path(char **cmd_tab, char **exec_path, int printnotfound);
 
 /*
 **	exec_utils.c
@@ -172,7 +180,7 @@ int					run_builtin_or_execv(char **cmd_tab);
 void				fork_left_cmd(char **cmd_tab, int tube[2],
 					char **left_args);
 void				fork_right_cmd(char **cmd_tab, int tube[2],
-					char **right_args);
+					char **right_args, int recursive_call);
 int					run_pipeline(char **cmd_tab, int recursive_call);
 
 /*
@@ -197,7 +205,10 @@ void				read_fd(void);
 */
 
 int					nb_args_wo_offset(char **cmd_tab);
-char				**format_args(char **cmd_tab);
+void				parse_cmd_tab_left(char **cmd_tab, int i, char **left_args, int printnotfound);
+char				**format_args(char **cmd_tab, int printnotfound);
+void				parse_cmd_tab_right(char **cmd_tab, int j, int i,
+					char **right_args);
 char				**format_args_after_pipe(char **cmd_tab);
 
 /*

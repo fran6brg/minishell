@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 22:18:15 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 09:39:43 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 12:02:55 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ int						ft_free_str_tab_ret(char **strs, int ret);
 void					ft_free_n_str_tab(char **strs, int str_i);
 int						ft_free_n_str_tab_ret(char **strs, int str_i, int ret);
 void					ft_print_str_tab(char **s, char *indication);
+char					**ft_malloc_str_tab(int nb_str);
 
 /*
 ** nbr

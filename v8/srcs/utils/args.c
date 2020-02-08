@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:27:04 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 15:02:14 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 13:23:29 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int		nb_args_wo_offset(char **cmd_tab)
 ** parse_cmd_tab_left()
 */
 
-void	parse_cmd_tab_left(char **cmd_tab, int i, char **left_args)
+void	parse_cmd_tab_left(char **cmd_tab, int i, char **left_args, int printnotfound)
 {
 	int		offset;
 
@@ -49,10 +49,9 @@ void	parse_cmd_tab_left(char **cmd_tab, int i, char **left_args)
 	{
 		if (i == 0)
 		{
-			left_args[0] = NULL;
 			if (cmd_is_builtin(cmd_tab))
 				left_args[i] = ft_strdup(cmd_tab[i]);
-			else if (!find_exec_path(cmd_tab, left_args, 0))
+			else if (!find_exec_path(cmd_tab, left_args, printnotfound))
 				return ;
 		}
 		else if (ft_strchr("<>", cmd_tab[i][0]) ||
@@ -70,17 +69,16 @@ void	parse_cmd_tab_left(char **cmd_tab, int i, char **left_args)
 ** here offset is used to skip '>' || '>>' || <filename> args
 */
 
-char	**format_args(char **cmd_tab)
+char	**format_args(char **cmd_tab, int printnotfound)
 {
 	int		i;
 	char	**left_args;
 
 	i = nb_args_wo_offset(cmd_tab);
-	if (!(left_args = malloc(sizeof(char *) * (i + 1))))
+	if (!(left_args = ft_malloc_str_tab(i + 1)))
 		return (NULL);
-	left_args[i] = NULL;
 	i = -1;
-	parse_cmd_tab_left(cmd_tab, i, left_args);
+	parse_cmd_tab_left(cmd_tab, i, left_args, printnotfound);
 	return (left_args);
 }
 
@@ -125,9 +123,8 @@ char	**format_args_after_pipe(char **cmd_tab)
 
 	i = next_pipe_pos_or_len(cmd_tab) + 1;
 	j = i + nb_args_wo_offset(cmd_tab + i);
-	if (!(right_args = malloc(sizeof(char *) * (j - i + 1))))
+	if (!(right_args = ft_malloc_str_tab(j - i + 1)))
 		return (NULL);
-	right_args[j - i] = NULL;
 	j = i - 1;
 	parse_cmd_tab_right(cmd_tab, j, i, right_args);
 	return (right_args);
