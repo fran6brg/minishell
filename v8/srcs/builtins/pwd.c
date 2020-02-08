@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 00:36:06 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/07 14:38:31 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/08 18:45:49 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@
 
 void	builtin_pwd(void)
 {
-	if (var_value("$PWD"))
+	if (var_value("$PWD") != NULL)
+	{
 		ft_printf("%s\n", var_value("$PWD"));
-	*last_cmd_exit() = EXIT_SUCCESS;
+		*last_cmd_exit() = EXIT_SUCCESS;
+	}
+	else
+		*last_cmd_exit() = EXIT_FAILURE;
 }
