@@ -6,13 +6,13 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/10 13:44:54 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/10 20:12:46 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int		is_separator_cmds(char *s, int i, char *set)
+static int		is_cmds_separator(char *s, int i, char *set)
 {
 	int j;
 
@@ -36,7 +36,9 @@ static int		nb_new_s_cmds(char *s, char *set)
 	flag = 1;
 	while (s[++i])
 	{
-		if (is_separator_cmds(s, i, set) && !is_in_quotes(s, i))
+		if (PARSE)
+			printf("nb_new_s_cmds | s[%d] = %c | is_in_quotes: %d\n", i, s[i], is_in_quotes(s, i));
+		if (is_cmds_separator(s, i, set) && is_in_quotes(s, i))
 			flag = 1;
 		else if (flag)
 		{
@@ -44,6 +46,8 @@ static int		nb_new_s_cmds(char *s, char *set)
 			nb++;
 		}
 	}
+	if (PARSE)
+		printf("nb = %d\n", nb);
 	return (nb);
 }
 
@@ -53,14 +57,31 @@ static char		*ft_create_new_s(char *s, char *set)
 	char	*new_s;
 
 	i = 0;
-	while (s[i] && !(is_separator_cmds(s, i, set) && !is_in_quotes(s, i)))
-		i++;
-	if (!(new_s = malloc(sizeof(char) * (i + 1))))
-		return ((char *)NULL);
+	if (PARSE)
+		printf("ft_create_new_s | s = %s\n", s);
+	while (s[i])
+	{
+		if (PARSE)
+			printf("ft_create_new_s | s[%d] = %c | is_in_quotes: %d\n", i, s[i], is_in_quotes(s, i));
+		if (is_cmds_separator(s, i, set) && !is_in_quotes(s, i))
+			break;
+		else
+			i++;
+	}
+	if (PARSE)
+		printf("ft_create_new_s | i = %d\n", i);
+	if (!(new_s = ft_malloc_str(i)))
+		return (NULL);
 	i = -1;
-	while (s[++i] && !(is_separator_cmds(s, i, set) && !is_in_quotes(s, i)))
-		new_s[i] = s[i];
-	new_s[i] = '\0';
+	while (s[++i])
+	{
+		if (is_cmds_separator(s, i, set) && !is_in_quotes(s, i))
+			break;
+		else
+			new_s[i] = s[i];
+	}
+	if (PARSE)
+		printf("ft_create_new_s | new_s = %s\n", new_s);
 	return (new_s);
 }
 
@@ -74,7 +95,8 @@ static int		ft_create_strs_cmds(char **strs, char *s, char *set)
 	str_i = 0;
 	flag = 1;
 	while (s[++i])
-		if (is_separator_cmds(s, i, set) && !is_in_quotes(s, i))
+	{
+		if (is_cmds_separator(s, i, set) && !is_in_quotes(s, i))
 			flag = 1;
 		else if (flag)
 		{
@@ -87,6 +109,7 @@ static int		ft_create_strs_cmds(char **strs, char *s, char *set)
 			}
 			str_i++;
 		}
+	}
 	return (1);
 }
 
@@ -102,14 +125,13 @@ char			**ft_split_cmds(char *s, char *set)
 	if (!s)
 		return (NULL);
 	trim_s = ft_strtrim(s, ";");
-	if (!(strs = malloc(sizeof(char *) * (nb_new_s_cmds(trim_s, set) + 1))))
+	if (!(strs = ft_malloc_str_tab(nb_new_s_cmds(trim_s, set))))
 		return (0);
 	if (!ft_create_strs_cmds(strs, trim_s, set))
 	{
 		free(strs);
 		return (NULL);
 	}
-	strs[nb_new_s_cmds(trim_s, set)] = 0;
 	ft_strdel(&trim_s);
 	if (PARSE)
 		ft_print_str_tab(strs, "ft_split_cmds | strs"); // pour debug
