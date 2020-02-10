@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/08 14:02:35 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/10 16:27:33 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	builtin_echo(char **cmd_tab)
 		i = 0;
 		while (args[++i])
 		{
-			if (DEBUG)
-				printf("%s is %d\n", args[i], is_n_option(i, args));
 			if (ft_strlen(args[i]) == 0 || is_n_option(i, args))
 				continue ;
 			else if (i > 1 && !is_n_option(i - 1, args))

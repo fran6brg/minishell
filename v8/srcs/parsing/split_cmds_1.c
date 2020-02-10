@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 10:34:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/10 13:44:54 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,7 @@ char			**ft_split_cmds(char *s, char *set)
 	}
 	strs[nb_new_s_cmds(trim_s, set)] = 0;
 	ft_strdel(&trim_s);
+	if (PARSE)
+		ft_print_str_tab(strs, "ft_split_cmds | strs"); // pour debug
 	return (strs);
 }

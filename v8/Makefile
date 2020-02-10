@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/01/07 17:41:37 by fberger           #+#    #+#              #
-#    Updated: 2020/02/07 10:14:57 by fberger          ###   ########.fr        #
+#    Updated: 2020/02/10 16:34:14 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,8 @@ SRCS 	= 	srcs/main.c \
 			srcs/parsing/split_cmd_1.c \
 			srcs/parsing/split_cmd_2.c \
 			srcs/parsing/split_cmd_3.c \
+			srcs/parsing/split_cmd_4.c \
+			srcs/parsing/split_cmd_5.c \
 			srcs/parsing/split_cmds_1.c \
 			srcs/parsing/split_cmds_2.c 
 

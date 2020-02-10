@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:49:28 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/08 15:22:46 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/10 16:48:21 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 */
 
 # include <stdio.h>
-# define PARSE	0
-# define DEBUG	0
+# define PARSE	1
+# define DEBUG	1
 
 /*
 **	CONSTANTES
@@ -264,7 +264,6 @@ int					multilines(char *s);
 **	split_cmd_1.c
 */
 
-int					is_separator(char c);
 char				**ft_split_set_quotes_redirects(char *s);
 int					ft_new_str_with_quotes(char *s, char *quote,
 					char **strs, int *str_i);
@@ -290,5 +289,18 @@ int					ft_str_with_quotes(char *s, int *i, char **strs,
 int					ft_str_with_redirect(char *s, int *i, char **strs,
 					int *str_i);
 int					ft_create_strs(char *s, char **strs, int *str_i);
+
+/*
+**	split_cmd_4.c
+*/
+
+
+/*
+**	split_cmd_5.c
+*/
+
+int					is_separator(char c);
+int					is_quote(char c);
+int					is_redirect(char c);
 
 #endif

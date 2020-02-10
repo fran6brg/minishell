@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:44:33 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/08 12:09:25 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/10 17:51:23 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,11 @@ void	parse_and_root_cmds(char **cmds)
 	{
 		if (!(cmd_tab = ft_split_set_quotes_redirects(cmds[i])))
 			continue ;
+		if (DEBUG)
+			ft_print_str_tab(cmd_tab, "before replace > cmd_tab"); // pour debug
 		replace_dollar_vars(cmd_tab);
+		if (DEBUG)
+			ft_print_str_tab(cmd_tab, "after replace > cmd_tab"); // pour debug
 		if (count_pipe(cmd_tab) > 0)
 			run_pipeline(cmd_tab, 0);
 		else if (cmd_is_builtin(cmd_tab))
@@ -136,3 +140,35 @@ int		main(int argc, char **argv, char **env_tab)
 	}
 	return (0);
 }
+
+/*
+~ v8 > echo " " ' ' "salut" ' ' " "
+minishell: �: command not found
+minishell(32303,0x106f415c0) malloc: *** error for object 0xb000000000000000: pointer being freed was not allocated
+minishell(32303,0x106f415c0) malloc: *** set a breakpoint in malloc_error_break to debug
+[1]    32303 abort      ./minishell
+➜  v8 git:(master) ✗ ./minishell
+~ v8 > echo "123"
+123
+~ v8 > echo "'123'"
+'123'
+~ v8 > echo "'"123"'"
+'"123"'
+
+echo "123 ; echo 456"
+minishell: �: command not found
+minishell(32584,0x1138ce5c0) malloc: *** error for object 0x7000000000000000: pointer being freed was not allocated
+minishell(32584,0x1138ce5c0) malloc: *** set a breakpoint in malloc_error_break to debug
+[1]    32584 abort      ./minishell
+
+echo "123 |"
+minishell: ": command not found
+minishell(32730,0x1132325c0) malloc: *** error for object 0xf000000000000000: pointer being freed was not allocated
+minishell(32730,0x1132325c0) malloc: *** set a breakpoint in malloc_error_break to debug
+[1]    32730 abort      ./minishell
+
+echo ""''""'' ';'
+"''""' ;
+pas le choix il faut tout rm -rf *
+je me suis tater de la faire 
+*/

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 21:28:47 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/06 08:40:15 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/10 15:45:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,17 @@ void	ft_print_str_tab(char **s, char *indication)
 	if (indication)
 		ft_putstr(indication);
 	ft_putstr("\n------------------\n");
-	while (s && s[++i])
+	while (s && s[++i] != NULL)
 	{
 		ft_putstr("str_tab[");
 		ft_putnbr(i);
 		ft_putstr("] = -");
 		ft_putstr(s[i]);
-		ft_putstr("-\n");
+		ft_putstr("- | len = ");
+		ft_putnbr(ft_strlen(s[i]));
+		ft_putstr(" | last char = ");
+		ft_putchar(s[i][ft_strlen(s[i]) - 1]);
+		ft_putstr("\n");
 	}
 	ft_putstr("__________________\n\n");
 }

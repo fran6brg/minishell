@@ -6,7 +6,7 @@
 #    By: fberger <fberger@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:33:34 by fberger           #+#    #+#              #
-#    Updated: 2020/02/08 12:03:20 by fberger          ###   ########.fr        #
+#    Updated: 2020/02/10 16:12:55 by fberger          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,6 +116,7 @@ SRCS=ft_putchar.c \
 	ft_free_n_str_tab.c \
 	ft_free_n_str_tab_ret.c \
 	ft_print_str_tab.c \
+	ft_malloc_str.c \
 	ft_malloc_str_tab.c
 
 OBJS=${SRCS:.c=.o}
