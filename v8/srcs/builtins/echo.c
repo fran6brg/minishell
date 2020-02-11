@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 03:52:42 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/10 16:27:33 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 14:56:33 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@ void	builtin_echo(char **cmd_tab)
 		write(1, "\n", 1);
 	else
 	{
+		if (DEBUG)
+			ft_print_str_tab(cmd_tab, "echo > cmd_tab"); // pour debug
 		args = format_args(cmd_tab, 0);
+		if (DEBUG)
+			ft_print_str_tab(args, "echo > args"); // pour debug
 		i = 0;
 		while (args[++i])
 		{

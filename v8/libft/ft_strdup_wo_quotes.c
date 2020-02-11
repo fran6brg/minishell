@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 23:28:03 by bihattay          #+#    #+#             */
-/*   Updated: 2020/02/05 09:38:07 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 16:08:07 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 char	*ft_strdup_wo_quotes(const char *s)
 {
-	int		i;
-	char	*dup;
-	int		len;
+	char	*trim;
+	char	*trim_quotes;
 
-	if (!s)
+	if (!s || !(trim = ft_strtrim(s, " \t")))
 		return (NULL);
-	len = ft_strlen(s);
-	if (s[0] == '\'' || s[0] == '"')
-		len -= 2;
-	if (!(dup = malloc(sizeof(char) * (len + 1))))
-		return (NULL);
-	i = 0;
-	while (s[i] && len--)
+	if (s[0] == '\'')
 	{
-		dup[i] = s[i + (s[0] == '\'' || s[0] == '"')];
-		i++;
+		trim_quotes = ft_strtrim(trim, "'");
+		ft_strdel(&trim);
+		return (trim_quotes);
 	}
-	dup[i] = '\0';
-	return (dup);
+	else if (s[0] == '"')
+	{
+		trim_quotes = ft_strtrim(trim, "\"");
+		ft_strdel(&trim);
+		return (trim_quotes);
+	}
+	else
+		return (trim);
 }

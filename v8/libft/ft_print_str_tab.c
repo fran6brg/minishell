@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/18 21:28:47 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/10 15:45:18 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 15:59:44 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_print_str_tab(char **s, char *indication)
 		ft_putstr("- | len = ");
 		ft_putnbr(ft_strlen(s[i]));
 		ft_putstr(" | last char = ");
-		ft_putchar(s[i][ft_strlen(s[i]) - 1]);
+		ft_putnbr(s[i][ft_strlen(s[i]) - 1]);
 		ft_putstr("\n");
 	}
 	ft_putstr("__________________\n\n");

@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:48:45 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/11 13:31:09 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 13:58:30 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	multilines(char *s)
 {
 	int i;
 
+	if (ft_str_end_with(s, "\\"))
+		return (ft_putstr_ret("multilines bonus not handled\n", 1));
 	i = -1;
 	while (s[++i])
 	{
