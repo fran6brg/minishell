@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 04:48:45 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/05 11:49:35 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 13:31:09 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,12 @@
 int	pattern_isnt_in_quotes(char *line, char *pattern)
 {
 	int		i;
-	int		inquotes;
-	char	lastquote;
 
 	i = -1;
-	inquotes = 0;
-	lastquote = 0;
 	while (line[++i])
 	{
-		if (!inquotes && ft_str_start_with(line + i, pattern))
-			return (1);
-		else if (inquotes && ft_str_start_with(line + i, pattern))
-			i += ft_strlen(pattern);
-		else if (!inquotes && (line[i] == '\'' || line[i] == '"')
-		&& !(i >= 1 && line[i - 1] == '\\'))
-		{
-			inquotes = 1;
-			lastquote = line[i];
-		}
-		else if (inquotes && line[i] == lastquote)
-			inquotes = 0;
+		if (ft_str_start_with(line + i, pattern))
+			return (!is_in_quotes(line, i));
 	}
 	return (0);
 }

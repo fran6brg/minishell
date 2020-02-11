@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/01 07:13:54 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/10 19:24:17 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 12:56:28 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,11 @@ int		ft_str_pipe(char **strs, int *str_i)
 int		ft_create_strs(char *s, char **strs, int *str_i)
 {
 	int i;
+	int	j;
 
 	i = -1;
-	while (s[++i])
+	j = ft_strlen(s);
+	while (++i < j)
 	{
 		if (PARSE)
 			printf(">> s[%d] = %c | *str_i = %d\n", i, s[i], *str_i); // pour debug

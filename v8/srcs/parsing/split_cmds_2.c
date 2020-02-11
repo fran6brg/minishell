@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/10 20:12:46 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 13:07:33 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,21 @@ int		is_in_quotes(char *s, int i)
 	lastquote = 0;
 	while (s[++j] && j < i)
 	{
-		if (!inquotes && is_quote(s[j]) && !(i >= 1 && s[j - 1] == '\\'))
+		if (!inquotes && is_quote(s[j]))
 		{
-			lastquote = s[j];
-			inquotes = 1;
+			if (j >= 1 && s[j - 1] == '\\')
+			{
+				inquotes = 0;
+			}
+			else
+			{
+				lastquote = s[j];
+				inquotes = 1;
+			}
 		}
 		else if (inquotes && s[j] == lastquote)
 		{
-			if (s[j - 1] != '\\' && lastquote == s[j])
+			if (s[j - 1] == '\\' && lastquote == s[j])
 				inquotes = 1;
 			else
 				inquotes = 0;

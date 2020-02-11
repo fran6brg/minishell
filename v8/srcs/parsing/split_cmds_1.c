@@ -6,7 +6,7 @@
 /*   By: fberger <fberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 06:33:14 by fberger           #+#    #+#             */
-/*   Updated: 2020/02/10 20:12:46 by fberger          ###   ########.fr       */
+/*   Updated: 2020/02/11 13:36:18 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int		nb_new_s_cmds(char *s, char *set)
 	{
 		if (PARSE)
 			printf("nb_new_s_cmds | s[%d] = %c | is_in_quotes: %d\n", i, s[i], is_in_quotes(s, i));
-		if (is_cmds_separator(s, i, set) && is_in_quotes(s, i))
+		if (is_cmds_separator(s, i, set) && !is_in_quotes(s, i))
 			flag = 1;
 		else if (flag)
 		{
