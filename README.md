@@ -15,6 +15,8 @@
 - file management
   - stat() http://manpagesfr.free.fr/man/man2/stat.2.html
   - access() https://pubs.opengroup.org/onlinepubs/007904975/functions/access.html
+- fd management
+  - dup, dup2 http://manpages.ubuntu.com/manpages/xenial/fr/man2/dup.2.html
 - process management
   - fork() https://www.geeksforgeeks.org/fork-system-call/
   - wait() http://manpagesfr.free.fr/man/man2/wait.2.html
