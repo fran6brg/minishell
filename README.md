@@ -29,8 +29,8 @@
 ### redirections
 - wiki https://fr.wikibooks.org/wiki/Le_syst%C3%A8me_d%27exploitation_GNU-Linux/Redirection_des_entr%C3%A9es/sorties
 - oc course https://openclassrooms.com/fr/courses/43538-reprenez-le-controle-a-laide-de-linux/40444-les-flux-de-redirection
-- > https://github.com/PimpMy42Sh/depot/blob/f45695ba20c6acece4fe722640f8b246156c43f0/REDIRECTIONS/chevron_droite.c
-- > and >> https://serverfault.com/questions/196734/bash-difference-between-and-operator
+- simple > https://github.com/PimpMy42Sh/depot/blob/f45695ba20c6acece4fe722640f8b246156c43f0/REDIRECTIONS/chevron_droite.c
+- simple > vs double >> https://serverfault.com/questions/196734/bash-difference-between-and-operator
 
 ### good to know
 - PATH_MAX https://stackoverflow.com/questions/9449241/where-is-path-max-defined-in-linux
